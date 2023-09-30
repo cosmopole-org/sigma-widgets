@@ -156,12 +156,6 @@ export let memory = {
     }
 };
 
-let arrayFunctions = {
-    push: (array, item) => {
-        array.push(item);
-    }
-}
-
 export function reserveMemoryVariable(key, value) {
     try {
         memory.variables[key] = value;

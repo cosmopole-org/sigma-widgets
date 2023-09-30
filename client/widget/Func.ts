@@ -10,11 +10,11 @@ class Func {
     public get code() { return this._code }
     public setCode(code: string) { this._code = code }
 
-    private _ast?: object
+    private _ast?: any
     public get ast() { return this._ast }
-    public setAst(ast: object) { this._ast = ast }
+    public setAst(ast: any) { this._ast = ast }
 
-    constructor(code: string, ast?: object) {
+    constructor(code: string, ast?: any) {
         this._key = Utils.generator.generateKey()
         this._code = code
         this._ast = ast

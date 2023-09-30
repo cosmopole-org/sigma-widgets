@@ -4,9 +4,10 @@ import BaseElement from './elements/BaseElement'
 
 class DOM {
 
-    _module: Module
+    private _module: Module
+    public get module() { return this._module }
 
-    _root?: BaseElement
+    private _root?: BaseElement
     public get root() { return this._root }
     public setRoot(root: BaseElement) { this._root = root }
 
