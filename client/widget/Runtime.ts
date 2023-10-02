@@ -13,12 +13,12 @@ class Runtime {
     private _native: INative
     public get native() { return this._native }
 
-    private _stack: Array<Memory>
-    public get stack() { return this._stack }
-    public pushOnStack(initialUnits?: { [id: string]: any }) { this._stack.push(new MemoryLayer(initialUnits)) }
-    public get stackTop() { return this._stack[this._stack.length - 1] }
+    public stack: Array<Memory> = []
+    public pushOnStack(initialUnits?: { [id: string]: any }) { this.stack.push(new MemoryLayer(initialUnits)) }
+    public popFromStack() { this.stack.pop() }
+    public get stackTop() { return this.stack[this.stack.length - 1] }
     public resetStack() {
-        this._stack = []
+        this.stack = []
         this.pushOnStack(this._native)
     }
 
@@ -34,10 +34,19 @@ class Runtime {
         this.execute(this.module.ast.body.body)
     }
 
-    constructor(module: Module) {
+    public clone() {
+        let copy = new Runtime(this.module, { native: this.native, stack: new Array(...this.stack) })
+        return copy
+    }
+
+    constructor(module: Module, reusableTools?: any) {
         this._module = module
-        this._native = this._module.applet._nativeBuilder(this._module)
-        this.reset()
+        this._native = reusableTools?.native ? reusableTools.native : this._module.applet._nativeBuilder(this._module)
+        if (reusableTools?.stack) {
+            this.stack = reusableTools.stack
+        } else {
+            this.reset()
+        }
     }
 }
 

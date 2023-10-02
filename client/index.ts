@@ -9,12 +9,15 @@ applet.instantiate(
     `
     class Button {
         constructor() {
-            console.log('hello world !')
+            let a = 1
+            setInterval(() => {
+                function test() {
+                    console.log(a)
+                }
+                a++
+                test()
+            }, 1000)
         }
-    }
-
-    class Box {
-
     }
 `
 )

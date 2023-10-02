@@ -12,6 +12,9 @@ class Native extends INative {
             console.log(...strs)
         }
     }
+    public readonly setInterval = (callback: any, period: number) => {
+        this.intervals = setInterval(callback, period)
+    }
 }
 
 export default Native

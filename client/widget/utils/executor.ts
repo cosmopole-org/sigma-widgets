@@ -6,11 +6,13 @@ class ExecutionMeta {
     module: Module
     declaration?: boolean
     declarationType?: string
+    returnIdParent?: boolean
 
     constructor(metaDict: any) {
         this.module = metaDict.module
         this.declaration = (metaDict.declaration === true)
         this.declarationType = metaDict.declarationType
+        this.returnIdParent = metaDict.returnIdParent
         if (this.declaration && !this.declarationType) {
             // TODO: throw invalid execution metadata exception
         }
@@ -37,7 +39,7 @@ let executeBlock = (codes: Array<any>, meta: ExecutionMeta) => {
 }
 
 let findLayer = (meta: ExecutionMeta, id: string) => {
-    for (let i = 0; i < meta.module.runtime.stack.length; i++) {
+    for (let i = meta.module.runtime.stack.length - 1; i >= 0; i--) {
         let r = meta.module.runtime.stack[i].findUnit(id)
         if (r) {
             return meta.module.runtime.stack[i]
@@ -55,15 +57,32 @@ let codeCallbacks = {
         return code.value
     },
     FunctionExpression: (code: any, meta: ExecutionMeta) => {
-        let r = (...args: Array<any>) => {
+        let newModuleBranch = { ...meta.module, runtime: meta.module.runtime.clone() }
+        let newMetaBranch = new ExecutionMeta({ ...meta, module: newModuleBranch })
+        return (...args: Array<any>) => {
             let parameters = {}
             code.params.forEach((param: any, index: number) => {
                 parameters[param.name] = args[index + 1]
             })
-            meta.module.runtime.pushOnStack(parameters)
-            return executeSingle(code.body, meta);
+            newMetaBranch.module.runtime.pushOnStack(parameters)
+            let result = executeSingle(code.body, newMetaBranch)
+            newMetaBranch.module.runtime.popFromStack()
+            return result
         }
-        return r
+    },
+    FunctionDeclaration: (code: any, meta: ExecutionMeta) => {
+        let newModuleBranch = { ...meta.module, runtime: meta.module.runtime.clone() }
+        let newMetaBranch = new ExecutionMeta({ ...meta, module: newModuleBranch })
+        meta.module.runtime.stackTop.putUnit(code.id.name, (...args: Array<any>) => {
+            let parameters = {}
+            code.params.forEach((param: any, index: number) => {
+                parameters[param.name] = args[index + 1]
+            })
+            newMetaBranch.module.runtime.pushOnStack(parameters)
+            let result = executeSingle(code.body, newMetaBranch)
+            newMetaBranch.module.runtime.popFromStack()
+            return result
+        })
     },
     MethodDefinition: (code: any, meta: ExecutionMeta) => {
         meta.module.runtime.stackTop.putUnit(code.key.name, executeSingle(code.value, meta))
@@ -81,10 +100,17 @@ let codeCallbacks = {
         }
     },
     Identifier: (code: any, meta: ExecutionMeta) => {
-        for (let i = 0; i < meta.module.runtime.stack.length; i++) {
-            let r = meta.module.runtime.stack[i].findUnit(code.name)
-            if (r) {
-                return r
+        for (let i = meta.module.runtime.stack.length - 1; i >= 0; i--) {
+            if (meta.returnIdParent) {
+                let wrapper = findLayer(meta, code.name)
+                if (wrapper) {
+                    return { parent: wrapper.units, id: code.name }
+                }
+            } else {
+                let r = meta.module.runtime.stack[i].findUnit(code.name)
+                if (r) {
+                    return r
+                }
             }
         }
     },
@@ -171,14 +197,26 @@ let codeCallbacks = {
     },
     UpdateExpression: (code: any, meta: ExecutionMeta) => {
         if (['++', '--'].includes(code.operator)) {
-            let layer = findLayer(meta, code.name)
-            if (layer) {
-                let r = layer.findUnit(code.name)
-                if (r) {
-                    if (typeof r === 'number') {
-                        if (code.operator === '++') r++
-                        else if (code.operator === '--') r--
-                        layer.putUnit(code.name, r)
+            let wrapper = executeSingle(code.argument, { ...meta, returnIdParent: true })
+            if (wrapper) {
+                if (wrapper.parent !== undefined) {
+                    let before = wrapper.parent[wrapper.id]
+                    if (typeof before === 'number') {
+                        if (code.operator === '++') before++
+                        else if (code.operator === '--') before--
+                        wrapper.parent[wrapper.id] = before
+                    }
+                } else {
+                    let layer = findLayer(meta, wrapper.id)
+                    if (layer) {
+                        let r = layer.findUnit(wrapper.id)
+                        if (r) {
+                            if (typeof r === 'number') {
+                                if (code.operator === '++') r++
+                                else if (code.operator === '--') r--
+                                layer.putUnit(code.name, r)
+                            }
+                        }
                     }
                 }
             }
@@ -201,7 +239,11 @@ let codeCallbacks = {
         let prop = undefined
         if (code.property === undefined) {
             let r = executeSingle(code.object, meta);
-            return r;
+            if (meta.returnIdParent) {
+                return { parent: undefined, id: code.name }
+            } else {
+                return r;
+            }
         } else {
             if (code.property.type === 'Identifier') {
                 if (code.computed) {
@@ -214,7 +256,9 @@ let codeCallbacks = {
                     }
                 }
             }
-            let r = executeSingle(code.object, meta);
+            let filteredMeta = { ...meta }
+            delete filteredMeta['returnIdParent']
+            let r = executeSingle(code.object, filteredMeta);
             if (Array.isArray(r)) {
                 let p = r[prop];
                 if (typeof p === 'function') {
@@ -235,10 +279,18 @@ let codeCallbacks = {
                         }
                     }
                 } else {
-                    return p;
+                    if (meta.returnIdParent) {
+                        return { parent: r, id: prop }
+                    } else {
+                        return r[prop];
+                    }
                 }
             } else {
-                return r[prop];
+                if (meta.returnIdParent) {
+                    return { parent: r, id: prop }
+                } else {
+                    return r[prop];
+                }
             }
         }
     },
@@ -259,13 +311,17 @@ let codeCallbacks = {
         }
     },
     ArrowFunctionExpression: (code: any, meta: ExecutionMeta) => {
+        let newModuleBranch = { ...meta.module, runtime: meta.module.runtime.clone() }
+        let newMetaBranch = new ExecutionMeta({ ...meta, module: newModuleBranch })
         return (...args: Array<any>) => {
             let parameters = {}
             code.params.forEach((param: any, index: number) => {
                 parameters[param.name] = args[index + 1]
             })
-            meta.module.runtime.pushOnStack(parameters)
-            return executeSingle(code.body, meta);
+            newMetaBranch.module.runtime.pushOnStack(parameters)
+            let result = executeSingle(code.body, newMetaBranch)
+            newMetaBranch.module.runtime.popFromStack()
+            return result
         }
     },
     ObjectExpression: (code: any, meta: ExecutionMeta) => {
