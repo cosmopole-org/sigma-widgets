@@ -1,15 +1,17 @@
 
-import Module from "../Module";
+import BaseElement from "../elements/BaseElement"
+import Creature from "../Creature"
+import Controls from '../controls/index'
 
 class ExecutionMeta {
 
-    module: Module
+    creature: Creature
     declaration?: boolean
     declarationType?: string
     returnIdParent?: boolean
 
     constructor(metaDict: any) {
-        this.module = metaDict.module
+        this.creature = metaDict.creature
         this.declaration = (metaDict.declaration === true)
         this.declarationType = metaDict.declarationType
         this.returnIdParent = metaDict.returnIdParent
@@ -39,15 +41,28 @@ let executeBlock = (codes: Array<any>, meta: ExecutionMeta) => {
 }
 
 let findLayer = (meta: ExecutionMeta, id: string) => {
-    for (let i = meta.module.runtime.stack.length - 1; i >= 0; i--) {
-        let r = meta.module.runtime.stack[i].findUnit(id)
+    for (let i = meta.creature.runtime.stack.length - 1; i >= 0; i--) {
+        let r = meta.creature.runtime.stack[i].findUnit(id)
         if (r) {
-            return meta.module.runtime.stack[i]
+            return meta.creature.runtime.stack[i]
         }
     }
 }
 
 let codeCallbacks = {
+    JSXElement: (code: any, meta: ExecutionMeta) => {
+        let Control = Controls[code.openingElement.name.name]
+        if (!Control) {
+            Control = meta.creature.module.applet.findModule(code.openingElement.name.name)
+        }
+        let attrs = {}
+        code.openingElement.attributes.forEach((attr: any) => {
+            attrs[attr.name.name] = executeSingle(attr.value, meta)
+        })
+        let c = Control.instantiate(attrs, attrs['style'])
+        if (c instanceof BaseElement) return c
+        else return c._runtime.stack[0].findUnit('render')()
+    },
     Program: (code: any, meta: ExecutionMeta) => {
         code.body.forEach((child: any) => {
             executeSingle(child, meta)
@@ -57,35 +72,35 @@ let codeCallbacks = {
         return code.value
     },
     FunctionExpression: (code: any, meta: ExecutionMeta) => {
-        let newModuleBranch = { ...meta.module, runtime: meta.module.runtime.clone() }
-        let newMetaBranch = new ExecutionMeta({ ...meta, module: newModuleBranch })
+        let newCreatureBranch = new Creature(meta.creature.module, { ...meta.creature, runtime: meta.creature.runtime.clone() })
+        let newMetaBranch = new ExecutionMeta({ ...meta, creature: newCreatureBranch })
         return (...args: Array<any>) => {
             let parameters = {}
             code.params.forEach((param: any, index: number) => {
                 parameters[param.name] = args[index + 1]
             })
-            newMetaBranch.module.runtime.pushOnStack(parameters)
+            newMetaBranch.creature.runtime.pushOnStack(parameters)
             let result = executeSingle(code.body, newMetaBranch)
-            newMetaBranch.module.runtime.popFromStack()
-            return result
+            newMetaBranch.creature.runtime.popFromStack()
+            return result?.value
         }
     },
     FunctionDeclaration: (code: any, meta: ExecutionMeta) => {
-        let newModuleBranch = { ...meta.module, runtime: meta.module.runtime.clone() }
-        let newMetaBranch = new ExecutionMeta({ ...meta, module: newModuleBranch })
-        meta.module.runtime.stackTop.putUnit(code.id.name, (...args: Array<any>) => {
+        let newCreatureBranch = new Creature(meta.creature.module, { ...meta.creature, runtime: meta.creature.runtime.clone() })
+        let newMetaBranch = new ExecutionMeta({ ...meta, creature: newCreatureBranch })
+        meta.creature.runtime.stackTop.putUnit(code.id.name, (...args: Array<any>) => {
             let parameters = {}
             code.params.forEach((param: any, index: number) => {
                 parameters[param.name] = args[index + 1]
             })
-            newMetaBranch.module.runtime.pushOnStack(parameters)
+            newMetaBranch.creature.runtime.pushOnStack(parameters)
             let result = executeSingle(code.body, newMetaBranch)
-            newMetaBranch.module.runtime.popFromStack()
-            return result
+            newMetaBranch.creature.runtime.popFromStack()
+            return result?.value
         })
     },
     MethodDefinition: (code: any, meta: ExecutionMeta) => {
-        meta.module.runtime.stackTop.putUnit(code.key.name, executeSingle(code.value, meta))
+        meta.creature.runtime.stackTop.putUnit(code.key.name, executeSingle(code.value, meta))
     },
     VariableDeclaration: (code: any, meta: ExecutionMeta) => {
         if (code.kind === 'let') {
@@ -96,18 +111,18 @@ let codeCallbacks = {
     },
     VariableDeclarator: (code: any, meta: ExecutionMeta) => {
         if (meta?.declaration) {
-            meta.module.runtime.stackTop.putUnit(code.id.name, executeSingle(code.init, meta))
+            meta.creature.runtime.stackTop.putUnit(code.id.name, executeSingle(code.init, meta))
         }
     },
     Identifier: (code: any, meta: ExecutionMeta) => {
-        for (let i = meta.module.runtime.stack.length - 1; i >= 0; i--) {
+        for (let i = meta.creature.runtime.stack.length - 1; i >= 0; i--) {
             if (meta.returnIdParent) {
                 let wrapper = findLayer(meta, code.name)
                 if (wrapper) {
                     return { parent: wrapper.units, id: code.name }
                 }
             } else {
-                let r = meta.module.runtime.stack[i].findUnit(code.name)
+                let r = meta.creature.runtime.stack[i].findUnit(code.name)
                 if (r) {
                     return r
                 }
@@ -311,17 +326,17 @@ let codeCallbacks = {
         }
     },
     ArrowFunctionExpression: (code: any, meta: ExecutionMeta) => {
-        let newModuleBranch = { ...meta.module, runtime: meta.module.runtime.clone() }
-        let newMetaBranch = new ExecutionMeta({ ...meta, module: newModuleBranch })
+        let newCreatureBranch = new Creature(meta.creature.module, { ...meta.creature, runtime: meta.creature.runtime.clone() })
+        let newMetaBranch = new ExecutionMeta({ ...meta, creature: newCreatureBranch })
         return (...args: Array<any>) => {
             let parameters = {}
             code.params.forEach((param: any, index: number) => {
                 parameters[param.name] = args[index + 1]
             })
-            newMetaBranch.module.runtime.pushOnStack(parameters)
+            newMetaBranch.creature.runtime.pushOnStack(parameters)
             let result = executeSingle(code.body, newMetaBranch)
-            newMetaBranch.module.runtime.popFromStack()
-            return result
+            newMetaBranch.creature.runtime.popFromStack()
+            return result?.value
         }
     },
     ObjectExpression: (code: any, meta: ExecutionMeta) => {
@@ -337,7 +352,7 @@ let codeCallbacks = {
         return code.elements.map((arrEl: any) => executeSingle(arrEl, meta));
     },
     ReturnStatement: (code: any, meta: ExecutionMeta) => {
-        return executeSingle(code.argument, meta);
+        return { value: executeSingle(code.argument, meta), returnFired: true }
     }
 }
 

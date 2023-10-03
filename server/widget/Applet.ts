@@ -1,6 +1,5 @@
 
 import Module from './Module'
-import Func from './Func'
 import Utils from './utils'
 import INative from './INative'
 
@@ -21,18 +20,16 @@ class Applet {
 
     public instantiate(jsxCode: string) {
         let middleCode = Utils.compiler.parse(jsxCode)
-        // console.log(Utils.json.prettify(middleCode))
+        //console.log(Utils.json.prettify(middleCode))
         let r = Utils.compiler.extractModules(middleCode, this);
         r.forEach((module: Module) => this.putModule(module))
     }
 
     run(genesis: string, nativeBuilder: (mod: Module) => INative) {
         this._nativeBuilder = nativeBuilder
-        Object.keys(this._modules).forEach((moduleKey: string) => {
-            this._modules[moduleKey].instantiate()
-        })
         let genesisMod = this._modules[genesis]
-        genesisMod.runtime.stackTop.findUnit('constructor')()
+        let genesisCreature = genesisMod.instantiate()
+        return genesisCreature.runtime.stack[0].findUnit('render')()
     }
 
     constructor(key: string, modules?: { [id: string]: Module }) {

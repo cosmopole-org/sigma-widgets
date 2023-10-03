@@ -1,4 +1,5 @@
 
+import Creature from './Creature'
 import INative from './INative'
 import MemoryLayer from './MemoryLayer'
 import Memory from './MemoryLayer'
@@ -9,6 +10,9 @@ class Runtime {
 
     private _module: Module
     public get module() { return this._module }
+
+    private _creature: Creature
+    public get creature() { return this._creature }
 
     private _native: INative
     public get native() { return this._native }
@@ -27,7 +31,7 @@ class Runtime {
     }
 
     public execute(ast: any) {
-        Utils.executor.executeBlock(ast, new Utils.executor.ExecutionMeta({ module: this._module }))
+        Utils.executor.executeBlock(ast, new Utils.executor.ExecutionMeta({ creature: this._creature }))
     }
 
     public load() {
@@ -35,12 +39,13 @@ class Runtime {
     }
 
     public clone() {
-        let copy = new Runtime(this.module, { native: this.native, stack: new Array(...this.stack) })
+        let copy = new Runtime(this.module, this.creature, { native: this.native, stack: new Array(...this.stack) })
         return copy
     }
 
-    constructor(module: Module, reusableTools?: any) {
+    constructor(module: Module, creature?: Creature, reusableTools?: any) {
         this._module = module
+        this._creature = creature
         this._native = reusableTools?.native ? reusableTools.native : this._module.applet._nativeBuilder(this._module)
         if (reusableTools?.stack) {
             this.stack = reusableTools.stack

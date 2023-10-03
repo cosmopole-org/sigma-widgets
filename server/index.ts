@@ -7,6 +7,14 @@ let applet = new Applet('frame')
 
 applet.instantiate(
     `
+    class Test {
+        constructor() {
+            console.log('creating test...')
+        }
+        render() {
+            return <text text='hello world' />
+        }
+    }
     class Button {
         constructor() {
             let a = 1
@@ -18,8 +26,12 @@ applet.instantiate(
                 test()
             }, 1000)
         }
+        render() {
+            return <Test />
+        }
     }
 `
 )
 
-applet.run('Button', (mod: Module) => new Native(mod))
+let view = applet.run('Button', (mod: Module) => new Native(mod))
+console.log(view)

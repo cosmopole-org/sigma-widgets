@@ -1,6 +1,9 @@
 
 import Applet from "./Applet"
+import Creature from "./Creature"
+import CreatureStore from "./CreatureStore"
 import DOM from "./DOM"
+import FuncStore from "./FuncStore"
 import Runtime from "./Runtime"
 import Utils from './utils'
 
@@ -10,11 +13,14 @@ class Module {
     public get applet() { return this._applet }
     public setApplet(applet: Applet) { this._applet = applet }
 
+    private _creatures: CreatureStore
+    public get creatures() { return this._creatures }
+
     private _key: string
     get key() { return this._key }
 
-    private _runtime: Runtime
-    public get runtime() { return this._runtime }
+    private _funcs: FuncStore
+    public get funcs() { return this._funcs }
 
     private _dom: DOM
     public get dom() { return this._dom }
@@ -24,15 +30,18 @@ class Module {
     public setAst(ast: any) { this._ast = ast }
 
     public instantiate() {
-        this._dom = new DOM(this)
-        this._runtime = new Runtime(this)
-        this.runtime.load()
+        let creature = new Creature(this)
+        this._creatures.putFCreature(creature)
+        return creature
     }
 
     constructor(key: string, applet: Applet, ast?: any) {
         this._key = key
         this._applet = applet
         this._ast = ast
+        this._creatures = new CreatureStore()
+        this._funcs = new FuncStore()
+        this._dom = new DOM(this)
     }
 }
 

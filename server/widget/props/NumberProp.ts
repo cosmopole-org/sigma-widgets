@@ -1,19 +1,20 @@
 
 import BaseProp from './BaseProp'
 
-class FuncProp extends BaseProp {
+class NumberProp extends BaseProp {
 
-    _value?: string
+    _value?: number
     public get value() { return this._value }
+    public setValue(v: any) { this._value = v}
 
-    _defaultValue: string
+    _defaultValue: number
     public get defaultValue() { return this._defaultValue }
 
-    constructor(defaultValue: string) {
-        super('function')
+    constructor(defaultValue: number) {
+        super('number')
         this._value = defaultValue
         this._defaultValue = defaultValue
     }
 }
 
-export default FuncProp
+export default NumberProp

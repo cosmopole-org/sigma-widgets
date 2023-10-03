@@ -2,7 +2,6 @@
 import { Parser as AcornParser } from 'acorn';
 import * as jsx from 'acorn-jsx';
 import Applet from '../Applet';
-import Func from '../Func';
 import Module from '../Module';
 
 let jsxCompiler = AcornParser.extend(jsx());
