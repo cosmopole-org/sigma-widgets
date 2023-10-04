@@ -5,33 +5,27 @@ import Applet from './widget/Applet'
 
 let applet = new Applet('frame')
 
-applet.instantiate(
+applet.fill(
     `
     class Test {
         constructor() {
-            console.log('creating test...')
+            console.log('ok')
+            this.name = 'keyhan'
         }
         render() {
-            return <text text='hello world' />
+            console.log('welcome', this.name, '!')
+            return <text />
         }
     }
     class Button {
-        constructor() {
-            let a = 1
-            setInterval(() => {
-                function test() {
-                    console.log(a)
-                }
-                a++
-                test()
-            }, 1000)
-        }
+        constructor() {}
         render() {
-            return <Test />
+            return (
+                <Test key='1' />
+            )
         }
     }
 `
 )
 
-let view = applet.run('Button', (mod: Module) => new Native(mod))
-console.log(view)
+console.log(applet.run('Button', (mod: Module) => new Native(mod)))

@@ -23,7 +23,7 @@ class Runtime {
     public get stackTop() { return this.stack[this.stack.length - 1] }
     public resetStack() {
         this.stack = []
-        this.pushOnStack(this._native)
+        this.pushOnStack({ ...this._native })
     }
 
     public reset() {

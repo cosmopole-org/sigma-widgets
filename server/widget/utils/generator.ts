@@ -1,7 +1,8 @@
-import NumberProp from "../props/NumberProp";
+
 import BaseElement from "../elements/BaseElement";
 import BaseProp from "../props/BaseProp";
-import StringProp from "../props/StringProp";
+import ExecutionMeta from "../ExecutionMeta";
+import Creature from "../Creature";
 
 let generateKey = () => {
     return Math.random().toString().substring(2)
@@ -13,7 +14,7 @@ function clone<T>(instance: T): T {
     return copy;
 }
 
-let prepareElement = (
+const prepareElement = (
     typeName: string,
     defaultProps: { [id: string]: BaseProp },
     overridenProps: { [id: string]: any },
@@ -34,4 +35,12 @@ let prepareElement = (
     return new BaseElement(typeName, finalProps, finalStyles, [])
 }
 
-export default { generateKey, prepareElement }
+const nestedContext = (creature: Creature, otherMetas?: ExecutionMeta) => {
+    if (otherMetas) {
+        return new ExecutionMeta({ ...otherMetas, creature, isAnotherCreature: true })
+    } else {
+        return new ExecutionMeta({ creature, isAnotherCreature: true })
+    }
+}
+
+export default { generateKey, prepareElement, nestedContext }

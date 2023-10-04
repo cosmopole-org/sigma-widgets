@@ -31,7 +31,7 @@ class Module {
 
     public instantiate() {
         let creature = new Creature(this)
-        this._creatures.putFCreature(creature)
+        this._creatures.putCreature(creature)
         return creature
     }
 

@@ -2,24 +2,8 @@
 import BaseElement from "../elements/BaseElement"
 import Creature from "../Creature"
 import Controls from '../controls/index'
-
-class ExecutionMeta {
-
-    creature: Creature
-    declaration?: boolean
-    declarationType?: string
-    returnIdParent?: boolean
-
-    constructor(metaDict: any) {
-        this.creature = metaDict.creature
-        this.declaration = (metaDict.declaration === true)
-        this.declarationType = metaDict.declarationType
-        this.returnIdParent = metaDict.returnIdParent
-        if (this.declaration && !this.declarationType) {
-            // TODO: throw invalid execution metadata exception
-        }
-    }
-}
+import ExecutionMeta from "../ExecutionMeta"
+import Utils from '../utils'
 
 let executeSingle = (code: any, meta: ExecutionMeta) => {
     let callback = codeCallbacks[code.type]
@@ -30,7 +14,6 @@ let executeSingle = (code: any, meta: ExecutionMeta) => {
         return code
     }
 }
-
 
 let executeBlock = (codes: Array<any>, meta: ExecutionMeta) => {
     for (let i = 0; i < codes.length; i++) {
@@ -49,7 +32,32 @@ let findLayer = (meta: ExecutionMeta, id: string) => {
     }
 }
 
+const generateCallbackFunction = (code: any, meta: ExecutionMeta) => {
+    let newMetaBranch = meta
+    return (...args: Array<any>) => {
+        let parameters = {}
+        code.params.forEach((param: any, index: number) => {
+            parameters[param.name] = args[index + 1]
+        })
+        let firstParam = args[0]
+        if (firstParam && (firstParam instanceof ExecutionMeta) && firstParam.isAnotherCreature) {
+            newMetaBranch = firstParam
+        }
+        newMetaBranch.creature.runtime.pushOnStack(parameters)
+        let result = executeSingle(code.body, newMetaBranch)
+        newMetaBranch.creature.runtime.popFromStack()
+        return result?.value
+    }
+}
+
+let cache = {
+    elements: {}
+}
+
 let codeCallbacks = {
+    ThisExpression: (code: any, meta: ExecutionMeta) => {
+        return meta.creature.thisObj
+    },
     JSXElement: (code: any, meta: ExecutionMeta) => {
         let Control = Controls[code.openingElement.name.name]
         if (!Control) {
@@ -59,9 +67,20 @@ let codeCallbacks = {
         code.openingElement.attributes.forEach((attr: any) => {
             attrs[attr.name.name] = executeSingle(attr.value, meta)
         })
-        let c = Control.instantiate(attrs, attrs['style'])
+        let c = cache.elements[attrs['key']];
+        let isNew = (c === undefined)
+        if (!c) {
+            c = Control.instantiate(attrs, attrs['style'])
+            cache.elements[attrs['key']] = c
+            c._children = code.children.map((child: any) => executeSingle(child, meta))
+        }
         if (c instanceof BaseElement) return c
-        else return c._runtime.stack[0].findUnit('render')()
+        else {
+            let newCreatureBranch = new Creature(c.module, { ...c, runtime: c.runtime.clone() })
+            let newMetaBranch = Utils.generator.nestedContext(newCreatureBranch, meta)
+            if (isNew) c.runtime.stack[0].findUnit('constructor')(newMetaBranch)
+            return c._runtime.stack[0].findUnit('render')(newMetaBranch)
+        }
     },
     Program: (code: any, meta: ExecutionMeta) => {
         code.body.forEach((child: any) => {
@@ -74,30 +93,12 @@ let codeCallbacks = {
     FunctionExpression: (code: any, meta: ExecutionMeta) => {
         let newCreatureBranch = new Creature(meta.creature.module, { ...meta.creature, runtime: meta.creature.runtime.clone() })
         let newMetaBranch = new ExecutionMeta({ ...meta, creature: newCreatureBranch })
-        return (...args: Array<any>) => {
-            let parameters = {}
-            code.params.forEach((param: any, index: number) => {
-                parameters[param.name] = args[index + 1]
-            })
-            newMetaBranch.creature.runtime.pushOnStack(parameters)
-            let result = executeSingle(code.body, newMetaBranch)
-            newMetaBranch.creature.runtime.popFromStack()
-            return result?.value
-        }
+        return generateCallbackFunction(code, newMetaBranch)
     },
     FunctionDeclaration: (code: any, meta: ExecutionMeta) => {
         let newCreatureBranch = new Creature(meta.creature.module, { ...meta.creature, runtime: meta.creature.runtime.clone() })
         let newMetaBranch = new ExecutionMeta({ ...meta, creature: newCreatureBranch })
-        meta.creature.runtime.stackTop.putUnit(code.id.name, (...args: Array<any>) => {
-            let parameters = {}
-            code.params.forEach((param: any, index: number) => {
-                parameters[param.name] = args[index + 1]
-            })
-            newMetaBranch.creature.runtime.pushOnStack(parameters)
-            let result = executeSingle(code.body, newMetaBranch)
-            newMetaBranch.creature.runtime.popFromStack()
-            return result?.value
-        })
+        meta.creature.runtime.stackTop.putUnit(code.id.name, generateCallbackFunction(code, newMetaBranch))
     },
     MethodDefinition: (code: any, meta: ExecutionMeta) => {
         meta.creature.runtime.stackTop.putUnit(code.key.name, executeSingle(code.value, meta))
@@ -184,22 +185,49 @@ let codeCallbacks = {
         return executeSingle(code.expression, meta)
     },
     AssignmentExpression: (code: any, meta: ExecutionMeta) => {
-        let layer = findLayer(meta, code.name)
-        if (layer) {
-            if (code.operator === '=') {
-                layer.putUnit(code.left.name, executeSingle(code.right, meta))
-            } else if (code.operator === '+=') {
-                layer.putUnit(code.left.name, executeSingle(code.left, meta) + executeSingle(code.right, meta))
-            } else if (code.operator === '-=') {
-                layer.putUnit(code.left.name, executeSingle(code.left, meta) - executeSingle(code.right, meta))
-            } else if (code.operator === '*=') {
-                layer.putUnit(code.left.name, executeSingle(code.left, meta) * executeSingle(code.right, meta))
-            } else if (code.operator === '/=') {
-                layer.putUnit(code.left.name, executeSingle(code.left, meta) / executeSingle(code.right, meta))
-            } else if (code.operator === '^=') {
-                layer.putUnit(code.left.name, Math.pow(executeSingle(code.left, meta), executeSingle(code.right, meta)))
-            } else if (code.operator === '%=') {
-                layer.putUnit(code.left.name, executeSingle(code.left, meta) % executeSingle(code.right, meta))
+        let right = executeSingle(code.right, meta)
+        let wrapper = executeSingle(code.left, { ...meta, returnIdParent: true })
+        if (wrapper) {
+            if (wrapper.parent !== undefined) {
+                let before = wrapper.parent[wrapper.id]
+                if (code.operator === '=') {
+                    wrapper.parent[wrapper.id] = right
+                } else if (code.operator === '+=') {
+                    wrapper.parent[wrapper.id] = before + right
+                } else if (code.operator === '-=') {
+                    wrapper.parent[wrapper.id] = before - right
+                } else if (code.operator === '*=') {
+                    wrapper.parent[wrapper.id] = before * right
+                } else if (code.operator === '/=') {
+                    wrapper.parent[wrapper.id] = before / right
+                } else if (code.operator === '^=') {
+                    wrapper.parent[wrapper.id] = Math.pow(before, right)
+                } else if (code.operator === '%=') {
+                    wrapper.parent[wrapper.id] = before % right
+                }
+            } else {
+                let layer = findLayer(meta, wrapper.id)
+                if (layer) {
+                    let r = layer.findUnit(wrapper.id)
+                    if (r) {
+                        if (code.operator === '=') {
+                            r = right
+                        } else if (code.operator === '+=') {
+                            r += right
+                        } else if (code.operator === '-=') {
+                            r -= right
+                        } else if (code.operator === '*=') {
+                            r *= right
+                        } else if (code.operator === '/=') {
+                            r /= right
+                        } else if (code.operator === '^=') {
+                            r = Math.pow(r, right)
+                        } else if (code.operator === '%=') {
+                            r %= right
+                        }
+                        layer.putUnit(code.name, r)
+                    }
+                }
             }
         }
     },
@@ -328,16 +356,7 @@ let codeCallbacks = {
     ArrowFunctionExpression: (code: any, meta: ExecutionMeta) => {
         let newCreatureBranch = new Creature(meta.creature.module, { ...meta.creature, runtime: meta.creature.runtime.clone() })
         let newMetaBranch = new ExecutionMeta({ ...meta, creature: newCreatureBranch })
-        return (...args: Array<any>) => {
-            let parameters = {}
-            code.params.forEach((param: any, index: number) => {
-                parameters[param.name] = args[index + 1]
-            })
-            newMetaBranch.creature.runtime.pushOnStack(parameters)
-            let result = executeSingle(code.body, newMetaBranch)
-            newMetaBranch.creature.runtime.popFromStack()
-            return result?.value
-        }
+        return generateCallbackFunction(code, newMetaBranch)
     },
     ObjectExpression: (code: any, meta: ExecutionMeta) => {
         let obj = {}

@@ -5,7 +5,7 @@ import Func from "./Func"
 class CreatureStore {
 
     private _store: { [id: string]: Creature }
-    public putFCreature(creature: Creature) { this._store[creature.key] = creature }
+    public putCreature(creature: Creature) { this._store[creature.key] = creature }
     public removeCreature(key: string) { delete this._store[key] }
     public findCreature(key: string) { return this._store[key] }
 

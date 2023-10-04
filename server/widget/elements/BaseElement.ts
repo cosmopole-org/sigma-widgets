@@ -5,13 +5,13 @@ class BaseElement {
     private _controlType: string
     public get controlType() { return this._controlType }
 
-    private _props: { [key: string]: BaseProp }
+    public _props: { [key: string]: BaseProp }
     get props() { return this._props }
 
-    private _styles: { [key: string]: any }
+    public _styles: { [key: string]: any }
     get styles() { return this._styles }
 
-    private _children: Array<BaseElement>
+    public _children: Array<BaseElement>
     get children() { return this._children }
 
     constructor(

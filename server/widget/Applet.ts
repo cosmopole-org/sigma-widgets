@@ -2,11 +2,15 @@
 import Module from './Module'
 import Utils from './utils'
 import INative from './INative'
+import Creature from './Creature'
+import ExecutionMeta from './ExecutionMeta'
 
 class Applet {
 
     _key: string
     public get key() { return this._key }
+
+    _genesisCreature: Creature
 
     _nativeBuilder: (mod: Module) => INative
 
@@ -18,9 +22,9 @@ class Applet {
     }
     public removeModule(key: string) { delete this._modules[key] }
 
-    public instantiate(jsxCode: string) {
+    public fill(jsxCode: string) {
         let middleCode = Utils.compiler.parse(jsxCode)
-        //console.log(Utils.json.prettify(middleCode))
+        // console.log(Utils.json.prettify(middleCode))
         let r = Utils.compiler.extractModules(middleCode, this);
         r.forEach((module: Module) => this.putModule(module))
     }
@@ -28,8 +32,10 @@ class Applet {
     run(genesis: string, nativeBuilder: (mod: Module) => INative) {
         this._nativeBuilder = nativeBuilder
         let genesisMod = this._modules[genesis]
-        let genesisCreature = genesisMod.instantiate()
-        return genesisCreature.runtime.stack[0].findUnit('render')()
+        this._genesisCreature = genesisMod.instantiate()
+        let genesisMetaContext = Utils.generator.nestedContext(this._genesisCreature)
+        this._genesisCreature.runtime.stack[0].findUnit('constructor')(genesisMetaContext)
+        return this._genesisCreature.runtime.stack[0].findUnit('render')(genesisMetaContext)
     }
 
     constructor(key: string, modules?: { [id: string]: Module }) {
