@@ -5,6 +5,7 @@ import CreatureStore from "./CreatureStore"
 import DOM from "./DOM"
 import FuncStore from "./FuncStore"
 import Runtime from "./Runtime"
+import BaseElement from "./elements/BaseElement"
 import Utils from './utils'
 
 class Module {
@@ -29,8 +30,17 @@ class Module {
     public get ast() { return this._ast }
     public setAst(ast: any) { this._ast = ast }
 
-    public instantiate() {
-        let creature = new Creature(this)
+    public instantiate(props?: { [id: string]: any }, styles?: { [id: string]: any }, children?: Array<BaseElement>) {
+        let creature = new Creature(
+            this,
+            {
+                thisObj: {
+                    props: props ? props : {},
+                    styles: styles ? styles : {},
+                    children: children ? children : []
+                }
+            }
+        )
         this._creatures.putCreature(creature)
         return creature
     }

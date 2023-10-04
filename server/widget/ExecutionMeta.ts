@@ -7,6 +7,7 @@ class ExecutionMeta {
     declarationType?: string
     returnIdParent?: boolean
     isAnotherCreature?: boolean
+    parentJsxKey: string
 
     constructor(metaDict: any) {
         this.creature = metaDict.creature
@@ -14,6 +15,7 @@ class ExecutionMeta {
         this.declarationType = metaDict.declarationType
         this.returnIdParent = metaDict.returnIdParent
         this.isAnotherCreature = metaDict.isAnotherCreature
+        this.parentJsxKey = metaDict.parentJsxKey
         if (this.declaration && !this.declarationType) {
             // TODO: throw invalid execution metadata exception
         }

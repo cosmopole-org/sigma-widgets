@@ -58,7 +58,14 @@ let codeCallbacks = {
     ThisExpression: (code: any, meta: ExecutionMeta) => {
         return meta.creature.thisObj
     },
+    JSXExpressionContainer: (code: any, meta: ExecutionMeta) => {
+        return executeSingle(code.expression, meta)
+    },
+    JSXText: (code: any, meta: ExecutionMeta) => {
+        return code.value.trim();
+    },
     JSXElement: (code: any, meta: ExecutionMeta) => {
+        if (!code.cosmoId) code.cosmoId = Utils.generator.generateKey()
         let Control = Controls[code.openingElement.name.name]
         if (!Control) {
             Control = meta.creature.module.applet.findModule(code.openingElement.name.name)
@@ -67,17 +74,22 @@ let codeCallbacks = {
         code.openingElement.attributes.forEach((attr: any) => {
             attrs[attr.name.name] = executeSingle(attr.value, meta)
         })
-        let c = cache.elements[attrs['key']];
+        let key = attrs['key']
+        if (!key) {
+            key = code.cosmoId
+            if (meta.parentJsxKey) key = meta.parentJsxKey + key
+            attrs['key'] = key
+        }
+        let c = cache.elements[key];
         let isNew = (c === undefined)
         if (!c) {
-            c = Control.instantiate(attrs, attrs['style'])
-            cache.elements[attrs['key']] = c
-            c._children = code.children.map((child: any) => executeSingle(child, meta))
+            let children = code.children.map((child: any) => executeSingle(child, meta)).flat(Infinity).filter((child: any) => (child !== ''))
+            c = Control.instantiate(attrs, attrs['style'], children)
+            cache.elements[key] = c
         }
         if (c instanceof BaseElement) return c
         else {
-            let newCreatureBranch = new Creature(c.module, { ...c, runtime: c.runtime.clone() })
-            let newMetaBranch = Utils.generator.nestedContext(newCreatureBranch, meta)
+            let newMetaBranch = Utils.generator.nestedContext(c, { ...meta, parentJsxKey: key })
             if (isNew) c.runtime.stack[0].findUnit('constructor')(newMetaBranch)
             return c._runtime.stack[0].findUnit('render')(newMetaBranch)
         }

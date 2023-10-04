@@ -2,6 +2,7 @@
 import Module from './widget/Module'
 import Native from './Native'
 import Applet from './widget/Applet'
+import Utils from './widget/utils'
 
 let applet = new Applet('frame')
 
@@ -13,19 +14,55 @@ applet.fill(
             this.name = 'keyhan'
         }
         render() {
-            console.log('welcome', this.name, '!')
-            return <text />
+            console.log('name:', this.name)
+            return (
+                <text text='5'>
+                    {this.children}
+                </text>
+            )
+        }
+    }
+    class Middle {
+        constructor() {
+            this.lastName = 'mohammadi'
+        }
+        render() {
+            console.log('lastName:', this.lastName)
+            return (
+                <text text='6'>
+                    {this.children}
+                </text>
+            )
         }
     }
     class Button {
-        constructor() {}
+        constructor() { }
         render() {
             return (
-                <Test key='1' />
+                <Test hello='1'>
+                    <text text='2' />
+                    <Middle>
+                        <Test>
+                            <text text='4' />
+                        </Test>
+                    </Middle>
+                    <Middle>
+                        <Test>
+                            <text text='4' />
+                        </Test>
+                    </Middle>
+                </Test>
             )
         }
     }
 `
 )
 
-console.log(applet.run('Button', (mod: Module) => new Native(mod)))
+// <text>
+//     <text/>
+//     <text>
+//         <text/>
+//     </text>
+// </text>
+
+console.log(Utils.json.prettify(applet.run('Button', (mod: Module) => new Native(mod))))

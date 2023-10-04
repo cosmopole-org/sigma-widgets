@@ -19,7 +19,8 @@ const prepareElement = (
     defaultProps: { [id: string]: BaseProp },
     overridenProps: { [id: string]: any },
     defaultStyles: { [id: string]: any },
-    overridenStyles: { [id: string]: any }
+    overridenStyles: { [id: string]: any },
+    children: Array<BaseElement>
 ) => {
     let finalProps = {}
     Object.keys(defaultProps).forEach(propKey => {
@@ -32,7 +33,7 @@ const prepareElement = (
     });
     let finalStyles = { ...defaultStyles }
     if (overridenStyles) finalStyles = { ...finalStyles, ...overridenStyles }
-    return new BaseElement(typeName, finalProps, finalStyles, [])
+    return new BaseElement(typeName, finalProps, finalStyles, children)
 }
 
 const nestedContext = (creature: Creature, otherMetas?: ExecutionMeta) => {

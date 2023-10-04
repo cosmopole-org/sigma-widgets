@@ -22,10 +22,11 @@ class Applet {
     }
     public removeModule(key: string) { delete this._modules[key] }
 
+    middleCode: acorn.Node
+
     public fill(jsxCode: string) {
-        let middleCode = Utils.compiler.parse(jsxCode)
-        // console.log(Utils.json.prettify(middleCode))
-        let r = Utils.compiler.extractModules(middleCode, this);
+        this.middleCode = Utils.compiler.parse(jsxCode)
+        let r = Utils.compiler.extractModules(this.middleCode, this);
         r.forEach((module: Module) => this.putModule(module))
     }
 
@@ -35,7 +36,8 @@ class Applet {
         this._genesisCreature = genesisMod.instantiate()
         let genesisMetaContext = Utils.generator.nestedContext(this._genesisCreature)
         this._genesisCreature.runtime.stack[0].findUnit('constructor')(genesisMetaContext)
-        return this._genesisCreature.runtime.stack[0].findUnit('render')(genesisMetaContext)
+        let view = this._genesisCreature.runtime.stack[0].findUnit('render')(genesisMetaContext)
+        return view
     }
 
     constructor(key: string, modules?: { [id: string]: Module }) {

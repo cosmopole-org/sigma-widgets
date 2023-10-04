@@ -2,6 +2,7 @@
 import BaseControl from './BaseControl';
 import StringProp from '../props/StringProp'
 import Utils from '../utils';
+import BaseElement from '../elements/BaseElement';
 
 class TextControl extends BaseControl {
 
@@ -14,8 +15,8 @@ class TextControl extends BaseControl {
         height: 'auto'
     }
 
-    public static instantiate(overridenProps: { [id: string]: any }, overridenStyles: { [id: string]: any }) {
-        return Utils.generator.prepareElement(TextControl.TYPE, this.defaultProps, overridenProps, this.defaultStyles, overridenStyles)
+    public static instantiate(overridenProps: { [id: string]: any }, overridenStyles: { [id: string]: any }, children: Array<BaseElement>) {
+        return Utils.generator.prepareElement(TextControl.TYPE, this.defaultProps, overridenProps, this.defaultStyles, overridenStyles, children)
     }
 }
 
