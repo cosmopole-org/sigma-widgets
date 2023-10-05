@@ -50,10 +50,6 @@ const generateCallbackFunction = (code: any, meta: ExecutionMeta) => {
     }
 }
 
-let cache = {
-    elements: {}
-}
-
 let codeCallbacks = {
     ThisExpression: (code: any, meta: ExecutionMeta) => {
         return meta.creature.thisObj
@@ -77,19 +73,20 @@ let codeCallbacks = {
         let key = attrs['key']
         if (!key) {
             key = code.cosmoId
-            if (meta.parentJsxKey) key = meta.parentJsxKey + key
+            if (meta.parentJsxKey) key = meta.parentJsxKey + '-' + key
             attrs['key'] = key
         }
-        let c = cache.elements[key];
+        let c = meta.creature.module.applet.cache.elements[key];
         let isNew = (c === undefined)
         if (!c) {
             let children = code.children.map((child: any) => executeSingle(child, meta)).flat(Infinity).filter((child: any) => (child !== ''))
             c = Control.instantiate(attrs, attrs['style'], children)
-            cache.elements[key] = c
+            meta.creature.module.applet.cache.elements[key] = c
         }
         if (c instanceof BaseElement) return c
         else {
             let newMetaBranch = Utils.generator.nestedContext(c, { ...meta, parentJsxKey: key })
+            meta.creature.module.applet.cache.mounts.push(() => c.runtime.stack[0].findUnit('onMount')(newMetaBranch))
             if (isNew) c.runtime.stack[0].findUnit('constructor')(newMetaBranch)
             return c._runtime.stack[0].findUnit('render')(newMetaBranch)
         }

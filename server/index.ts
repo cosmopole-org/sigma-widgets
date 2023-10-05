@@ -1,20 +1,20 @@
 
 import Module from './widget/Module'
 import Native from './Native'
-import Applet from './widget/Applet'
+import Applet, { Runnable } from './widget/Applet'
 import Utils from './widget/utils'
+import BaseOrder from 'widget/orders/BaseOrder'
 
 let applet = new Applet('frame')
 
 applet.fill(
     `
     class Test {
-        constructor() {
-            console.log('ok')
-            this.name = 'keyhan'
+        constructor() { }
+        onMount() {
+            console.log('Test mounted....')
         }
         render() {
-            console.log('name:', this.name)
             return (
                 <text text='5'>
                     {this.children}
@@ -22,35 +22,20 @@ applet.fill(
             )
         }
     }
-    class Middle {
-        constructor() {
-            this.lastName = 'mohammadi'
-        }
-        render() {
-            console.log('lastName:', this.lastName)
-            return (
-                <text text='6'>
-                    {this.children}
-                </text>
-            )
-        }
-    }
     class Button {
-        constructor() { }
+        constructor() {
+            this.state = {
+                name: 'keyhan'
+            }
+        }
+        onMount() {
+            console.log('main mounted....')
+            this.setState({ name: 'keyhan' })
+        }
         render() {
             return (
-                <Test hello='1'>
-                    <text text='2' />
-                    <Middle>
-                        <Test>
-                            <text text='4' />
-                        </Test>
-                    </Middle>
-                    <Middle>
-                        <Test>
-                            <text text='4' />
-                        </Test>
-                    </Middle>
+                <Test>
+                    {this.state.name}
                 </Test>
             )
         }
@@ -58,11 +43,11 @@ applet.fill(
 `
 )
 
-// <text>
-//     <text/>
-//     <text>
-//         <text/>
-//     </text>
-// </text>
+const update = (u: BaseOrder) => {
+    console.log(u)
+}
 
-console.log(Utils.json.prettify(applet.run('Button', (mod: Module) => new Native(mod))))
+applet.run('Button', (mod: Module) => new Native(mod), update).then((runnable: Runnable) => {
+    console.log(Utils.json.prettify(runnable.root))
+    runnable.mount()
+})

@@ -33,7 +33,7 @@ const prepareElement = (
     });
     let finalStyles = { ...defaultStyles }
     if (overridenStyles) finalStyles = { ...finalStyles, ...overridenStyles }
-    return new BaseElement(typeName, finalProps, finalStyles, children)
+    return new BaseElement(overridenProps['key'], typeName, finalProps, finalStyles, children)
 }
 
 const nestedContext = (creature: Creature, otherMetas?: ExecutionMeta) => {

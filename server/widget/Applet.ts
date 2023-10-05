@@ -3,7 +3,19 @@ import Module from './Module'
 import Utils from './utils'
 import INative from './INative'
 import Creature from './Creature'
-import ExecutionMeta from './ExecutionMeta'
+import BaseElement from './elements/BaseElement'
+import BaseOrder from './orders/BaseOrder'
+
+export class Runnable {
+
+    root: BaseElement
+    mount: () => void
+
+    constructor(root: BaseElement, mount: () => void) {
+        this.root = root
+        this.mount = mount
+    }
+}
 
 class Applet {
 
@@ -30,14 +42,34 @@ class Applet {
         r.forEach((module: Module) => this.putModule(module))
     }
 
-    run(genesis: string, nativeBuilder: (mod: Module) => INative) {
-        this._nativeBuilder = nativeBuilder
-        let genesisMod = this._modules[genesis]
-        this._genesisCreature = genesisMod.instantiate()
-        let genesisMetaContext = Utils.generator.nestedContext(this._genesisCreature)
-        this._genesisCreature.runtime.stack[0].findUnit('constructor')(genesisMetaContext)
-        let view = this._genesisCreature.runtime.stack[0].findUnit('render')(genesisMetaContext)
-        return view
+    cache = {
+        elements: {},
+        mounts: []
+    }
+
+    update: (u: BaseOrder) => void
+
+    public run(genesis: string, nativeBuilder: (mod: Module) => INative, update: (u: BaseOrder) => void) {
+        return new Promise(resolve => {
+            this._nativeBuilder = nativeBuilder
+            this.update = update
+            this.cache.elements = {}
+            this.cache.mounts = []
+            let genesisMod = this._modules[genesis]
+            this._genesisCreature = genesisMod.instantiate()
+            let genesisMetaContext = Utils.generator.nestedContext(this._genesisCreature)
+            this.cache.mounts.push(() => this._genesisCreature.runtime.stack[0].findUnit('onMount')(genesisMetaContext))
+            this._genesisCreature.runtime.stack[0].findUnit('constructor')(genesisMetaContext)
+            let view = this._genesisCreature.runtime.stack[0].findUnit('render')(genesisMetaContext)
+            resolve(
+                new Runnable(
+                    view,
+                    () => {
+                        this.cache.mounts.reverse().forEach((onMount: any) => onMount())
+                    }
+                )
+            )
+        })
     }
 
     constructor(key: string, modules?: { [id: string]: Module }) {

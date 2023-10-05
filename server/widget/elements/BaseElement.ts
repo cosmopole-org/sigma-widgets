@@ -2,6 +2,9 @@ import BaseProp from "../props/BaseProp";
 
 class BaseElement {
 
+    public _key: string
+    public get key() { return this._key }
+
     private _controlType: string
     public get controlType() { return this._controlType }
 
@@ -15,11 +18,13 @@ class BaseElement {
     get children() { return this._children }
 
     constructor(
+        key: string,
         controlType: string,
         props: { [key: string]: BaseProp },
         styles: { [key: string]: any },
         children?: Array<BaseElement>
     ) {
+        this._key = key
         this._controlType = controlType
         this._props = props;
         this._styles = styles

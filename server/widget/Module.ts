@@ -34,6 +34,7 @@ class Module {
         let creature = new Creature(
             this,
             {
+                cosmoId: props?.key,
                 thisObj: {
                     props: props ? props : {},
                     styles: styles ? styles : {},
