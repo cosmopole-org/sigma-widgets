@@ -1,4 +1,5 @@
 
+import Creature from "widget/Creature"
 import INative from "./widget/INative"
 
 class Native extends INative {
@@ -13,7 +14,10 @@ class Native extends INative {
         }
     }
     public readonly setInterval = (callback: any, period: number) => {
-        this.intervals = setInterval(callback, period)
+        this.intervals[setInterval(callback, period) + ''] = true 
+    }
+    public readonly setTimeout = (callback: any, timeout: number) => {
+        this.timeouts[setTimeout(callback, timeout) + ''] = true
     }
 }
 

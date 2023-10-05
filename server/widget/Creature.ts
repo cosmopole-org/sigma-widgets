@@ -1,6 +1,5 @@
 
 import DOM from "./DOM"
-import MemoryLayer from "./MemoryLayer"
 import Module from "./Module"
 import Runtime from "./Runtime"
 import Create from "./orders/Create"
@@ -26,6 +25,10 @@ class Creature {
 
     public thisObj: { [id: string]: any }
 
+    public getBaseMethod(methodId: string) {
+        return this._runtime.stack[0].findUnit(methodId)
+    }
+
     constructor(module: Module, defaultValues?: any) {
         this._key = defaultValues?.key ? defaultValues.key : Utils.generator.generateKey()
         this._cosmoId = defaultValues?.cosmoId
@@ -43,9 +46,13 @@ class Creature {
                     this.thisObj[k] = this._runtime.stack[0].units[k]
                 }
             })
+            this.thisObj = {}
         }
         this.thisObj['setState'] = (stateUpdate: { [id: string]: any }) => {
-            module.applet.update(new Create())
+            this.thisObj['state'] = { ...this.thisObj['state'], ...stateUpdate }
+            let newMetaBranch = Utils.generator.nestedContext(this)
+            let newRender = this.getBaseMethod('render')(newMetaBranch)
+            module.applet.update(new Create(newRender))
         }
     }
 }

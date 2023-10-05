@@ -9,11 +9,9 @@ let applet = new Applet('frame')
 
 applet.fill(
     `
-    class Test {
+    class Inner {
         constructor() { }
-        onMount() {
-            console.log('Test mounted....')
-        }
+        onMount() { }
         render() {
             return (
                 <text text='5'>
@@ -23,20 +21,19 @@ applet.fill(
         }
     }
     class Button {
-        constructor() {
+        constructor() { 
             this.state = {
-                name: 'keyhan'
+                name: 'kasper'
             }
         }
         onMount() {
-            console.log('main mounted....')
-            this.setState({ name: 'keyhan' })
+            this.setState({name: 'keyhan'})
         }
         render() {
             return (
-                <Test>
+                <Inner text='5'>
                     {this.state.name}
-                </Test>
+                </Inner>
             )
         }
     }

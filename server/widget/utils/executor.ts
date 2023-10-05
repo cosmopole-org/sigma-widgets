@@ -78,17 +78,20 @@ let codeCallbacks = {
         }
         let c = meta.creature.module.applet.cache.elements[key];
         let isNew = (c === undefined)
+        let children = code.children.map((child: any) => executeSingle(child, meta)).flat(Infinity).filter((child: any) => (child !== ''))
         if (!c) {
-            let children = code.children.map((child: any) => executeSingle(child, meta)).flat(Infinity).filter((child: any) => (child !== ''))
             c = Control.instantiate(attrs, attrs['style'], children)
-            meta.creature.module.applet.cache.elements[key] = c
+        } else {
+            let cThisObj = c.thisObj
+            c = Control.instantiate(attrs, attrs['style'], children, cThisObj)
         }
+        meta.creature.module.applet.cache.elements[key] = c
         if (c instanceof BaseElement) return c
         else {
             let newMetaBranch = Utils.generator.nestedContext(c, { ...meta, parentJsxKey: key })
-            meta.creature.module.applet.cache.mounts.push(() => c.runtime.stack[0].findUnit('onMount')(newMetaBranch))
-            if (isNew) c.runtime.stack[0].findUnit('constructor')(newMetaBranch)
-            return c._runtime.stack[0].findUnit('render')(newMetaBranch)
+            meta.creature.module.applet.cache.mounts.push(() => c.getBaseMethod('onMount')(newMetaBranch))
+            if (isNew) c.getBaseMethod('constructor')(newMetaBranch)
+            return c.getBaseMethod('render')(newMetaBranch)
         }
     },
     Program: (code: any, meta: ExecutionMeta) => {

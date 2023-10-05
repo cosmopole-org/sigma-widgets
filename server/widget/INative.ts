@@ -3,7 +3,7 @@ import Module from "./Module"
 
 class INative {
     
-    private _module: Module
+    public _module: Module
     public get key() { return this._module.key }
 
     constructor(module: Module) {

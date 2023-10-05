@@ -30,16 +30,22 @@ class Module {
     public get ast() { return this._ast }
     public setAst(ast: any) { this._ast = ast }
 
-    public instantiate(props?: { [id: string]: any }, styles?: { [id: string]: any }, children?: Array<BaseElement>) {
+    public instantiate(props?: { [id: string]: any }, styles?: { [id: string]: any }, children?: Array<BaseElement>, thisObj?: any) {
         let creature = new Creature(
             this,
             {
                 cosmoId: props?.key,
-                thisObj: {
-                    props: props ? props : {},
-                    styles: styles ? styles : {},
-                    children: children ? children : []
-                }
+                thisObj: thisObj ?
+                    {
+                        ...thisObj,
+                        props: props ? props : {},
+                        styles: styles ? styles : {},
+                        children: children ? children : []
+                    } : {
+                        props: props ? props : {},
+                        styles: styles ? styles : {},
+                        children: children ? children : []
+                    }
             }
         )
         this._creatures.putCreature(creature)
