@@ -38,6 +38,7 @@ class Applet {
 
     public fill(jsxCode: string) {
         this.middleCode = Utils.compiler.parse(jsxCode)
+        // console.log(Utils.json.prettify(this.middleCode))
         let r = Utils.compiler.extractModules(this.middleCode, this);
         r.forEach((module: Module) => this.putModule(module))
     }

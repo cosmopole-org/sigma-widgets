@@ -9,39 +9,22 @@ let applet = new Applet('frame')
 
 applet.fill(
     `
-    class Inner {
-        constructor() { }
-        onMount() { }
-        render() {
-            return (
-                <text text='5'>
-                    {this.children}
-                </text>
-            )
-        }
-    }
     class Button {
-        constructor() { 
-            this.state = {
-                name: 'kasper'
-            }
+        constructor() {
+
         }
         onMount() {
-            this.setState({name: 'keyhan'})
+            
         }
         render() {
-            return (
-                <Inner text='5'>
-                    {this.state.name}
-                </Inner>
-            )
+            return null
         }
     }
 `
 )
 
 const update = (u: BaseOrder) => {
-    console.log(u)
+    console.log(Utils.json.prettify(u))
 }
 
 applet.run('Button', (mod: Module) => new Native(mod), update).then((runnable: Runnable) => {

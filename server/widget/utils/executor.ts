@@ -37,7 +37,7 @@ const generateCallbackFunction = (code: any, meta: ExecutionMeta) => {
     return (...args: Array<any>) => {
         let parameters = {}
         code.params.forEach((param: any, index: number) => {
-            parameters[param.name] = args[index + 1]
+            parameters[param.name] = args[index]
         })
         let firstParam = args[0]
         if (firstParam && (firstParam instanceof ExecutionMeta) && firstParam.isAnotherCreature) {
@@ -300,15 +300,13 @@ let codeCallbacks = {
                 return r;
             }
         } else {
-            if (code.property.type === 'Identifier') {
-                if (code.computed) {
-                    prop = executeSingle(code.property, meta);
-                } else {
-                    if (code.property.type === 'Identifier') {
-                        prop = code.property.name
-                    } else if (code.property.type === 'Literal') {
-                        prop = code.property.value;
-                    }
+            if (code.computed) {
+                prop = executeSingle(code.property, meta);
+            } else {
+                if (code.property.type === 'Identifier') {
+                    prop = code.property.name
+                } else if (code.property.type === 'Literal') {
+                    prop = code.property.value;
                 }
             }
             let filteredMeta = { ...meta }
@@ -320,13 +318,13 @@ let codeCallbacks = {
                     return (...args: Array<any>) => {
                         switch (prop) {
                             case 'push': {
-                                return r.push(args[0]);
+                                return r.push(...args);
                             }
                             case 'map': {
-                                return r.map(args[0]);
+                                return r.map(...args)
                             }
                             case 'forEach': {
-                                return r.forEach(args[0]);
+                                return r.forEach(...args);
                             }
                             default: {
 
@@ -373,14 +371,37 @@ let codeCallbacks = {
     ObjectExpression: (code: any, meta: ExecutionMeta) => {
         let obj = {}
         code.properties.forEach((property: any) => {
-            if (property.key.type === 'Identifier') {
-                obj[property.key.name] = executeSingle(property.value, meta)
+            if (property.type === 'Property') {
+                if (property.key.type === 'Identifier') {
+                    obj[property.key.name] = executeSingle(property.value, meta)
+                }
+            } else {
+                if (property.type === 'SpreadElement') {
+                    obj[property.argument.name] = executeSingle(property, meta)
+                }
             }
         })
         return obj
     },
     ArrayExpression: (code: any, meta: ExecutionMeta) => {
-        return code.elements.map((arrEl: any) => executeSingle(arrEl, meta));
+        let result = []
+        code.elements.forEach((arrEl: any) => {
+            let r = executeSingle(arrEl, meta)
+            if ((arrEl.type === 'SpreadElement') && Array.isArray(r)) {
+                result.push(...r)
+            } else {
+                result.push(r)
+            }
+        })
+        return result
+    },
+    SpreadElement: (code: any, meta: ExecutionMeta) => {
+        let source = executeSingle(code.argument, meta)
+        if (Array.isArray(source)) {
+            return [...source]
+        } else {
+            return { ...source }
+        }
     },
     ReturnStatement: (code: any, meta: ExecutionMeta) => {
         return { value: executeSingle(code.argument, meta), returnFired: true }
