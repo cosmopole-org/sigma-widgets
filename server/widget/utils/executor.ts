@@ -91,7 +91,8 @@ let codeCallbacks = {
             let newMetaBranch = Utils.generator.nestedContext(c, { ...meta, parentJsxKey: key })
             meta.creature.module.applet.cache.mounts.push(() => c.getBaseMethod('onMount')(newMetaBranch))
             if (isNew) c.getBaseMethod('constructor')(newMetaBranch)
-            return c.getBaseMethod('render')(newMetaBranch)
+            let r = c.getBaseMethod('render')(newMetaBranch)
+            return r
         }
     },
     Program: (code: any, meta: ExecutionMeta) => {

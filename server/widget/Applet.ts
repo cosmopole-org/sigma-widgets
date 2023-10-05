@@ -48,7 +48,15 @@ class Applet {
         mounts: []
     }
 
-    update: (u: BaseOrder) => void
+    onCreatureStateChange(creature: Creature, newVersion: BaseElement) {
+        let oldVersion = creature._oldVersion
+        if (this._genesisCreature.key === creature.key) {
+            this._genesisCreature._oldVersion = newVersion
+        }
+        this.update(Utils.json.diff(oldVersion, newVersion))
+    }
+
+    update: (u: any) => void
 
     public run(genesis: string, nativeBuilder: (mod: Module) => INative, update: (u: BaseOrder) => void) {
         return new Promise(resolve => {
@@ -62,6 +70,7 @@ class Applet {
             this.cache.mounts.push(() => this._genesisCreature.getBaseMethod('onMount')(genesisMetaContext))
             this._genesisCreature.getBaseMethod('constructor')(genesisMetaContext)
             let view = this._genesisCreature.getBaseMethod('render')(genesisMetaContext)
+            this._genesisCreature._oldVersion = view
             resolve(
                 new Runnable(
                     view,

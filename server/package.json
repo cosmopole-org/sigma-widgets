@@ -4,7 +4,8 @@
   "private": true,
   "dependencies": {
     "acorn": "^8.10.0",
-    "acorn-jsx": "^5.3.2"
+    "acorn-jsx": "^5.3.2",
+    "deep-object-diff": "^1.1.9"
   },
   "devDependencies": {
     "ts-node-dev": "^2.0.0",

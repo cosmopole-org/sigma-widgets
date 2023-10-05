@@ -2,12 +2,13 @@
 import DOM from "./DOM"
 import Module from "./Module"
 import Runtime from "./Runtime"
+import BaseElement from "./elements/BaseElement"
 import Create from "./orders/Create"
 import Utils from './utils'
 
 class Creature {
 
-    private _key: string
+    public _key: string
     public get key() { return this._key }
 
     private _cosmoId: string
@@ -29,12 +30,15 @@ class Creature {
         return this._runtime.stack[0].findUnit(methodId)
     }
 
+    _oldVersion: BaseElement
+
     constructor(module: Module, defaultValues?: any) {
-        this._key = defaultValues?.key ? defaultValues.key : Utils.generator.generateKey()
+        this._key = defaultValues?._key ? defaultValues._key : Utils.generator.generateKey()
         this._cosmoId = defaultValues?.cosmoId
         this._module = module
         this._dom = defaultValues?.dom ? defaultValues.dom : new DOM(this._module, this)
         this._runtime = defaultValues?.runtime ? defaultValues.runtime : new Runtime(this._module, this)
+        this._oldVersion = defaultValues?._oldVersion
         this.thisObj = defaultValues?.thisObj
         if (!defaultValues?.runtime) {
             this._runtime.load()
@@ -52,7 +56,7 @@ class Creature {
             this.thisObj['state'] = { ...this.thisObj['state'], ...stateUpdate }
             let newMetaBranch = Utils.generator.nestedContext(this)
             let newRender = this.getBaseMethod('render')(newMetaBranch)
-            module.applet.update(new Create(newRender))
+            this._module.applet.onCreatureStateChange(this, newRender)
         }
     }
 }

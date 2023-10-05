@@ -9,21 +9,55 @@ let applet = new Applet('frame')
 
 applet.fill(
     `
-    class Button {
+    class Test {
         constructor() {
-
+            
         }
         onMount() {
             
         }
         render() {
-            return null
+            return (
+                <text>
+                    {this.children}
+                </text>
+            )
+        }
+    }
+    class Button {
+        constructor() {
+            this.state = {
+                items: [],
+                count: 0
+            }
+        }
+        onMount() {
+            setInterval(() => {
+                this.state.count++
+                this.state.items.push(this.state.count)
+                this.setState({...this.state, counterName: this.state.count})
+            }, 1000)
+        }
+        render() {
+            return (
+                <text>
+                    {
+                        this.state.items.map(item => {
+                            return (
+                                <text key={'text-' + item}>
+                                    {item}
+                                </text>
+                            )
+                        })
+                    }
+                </text>
+            )
         }
     }
 `
 )
 
-const update = (u: BaseOrder) => {
+const update = (u: any) => {
     console.log(Utils.json.prettify(u))
 }
 
