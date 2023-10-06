@@ -38,7 +38,7 @@ class Applet {
 
     public fill(jsxCode: string) {
         this.middleCode = Utils.compiler.parse(jsxCode)
-        // console.log(Utils.json.prettify(this.middleCode))
+        console.log(Utils.json.prettify(this.middleCode))
         let r = Utils.compiler.extractModules(this.middleCode, this);
         r.forEach((module: Module) => this.putModule(module))
     }
@@ -48,11 +48,11 @@ class Applet {
         mounts: []
     }
 
+    oldVersions = {}
+
     onCreatureStateChange(creature: Creature, newVersion: BaseElement) {
-        let oldVersion = creature._oldVersion
-        if (this._genesisCreature.key === creature.key) {
-            this._genesisCreature._oldVersion = newVersion
-        }
+        let oldVersion = this.oldVersions[creature._key]
+        this.oldVersions[creature._key] = newVersion
         this.update(Utils.json.diff(oldVersion, newVersion))
     }
 
@@ -70,7 +70,7 @@ class Applet {
             this.cache.mounts.push(() => this._genesisCreature.getBaseMethod('onMount')(genesisMetaContext))
             this._genesisCreature.getBaseMethod('constructor')(genesisMetaContext)
             let view = this._genesisCreature.getBaseMethod('render')(genesisMetaContext)
-            this._genesisCreature._oldVersion = view
+            this.oldVersions[this._genesisCreature._key] = view
             resolve(
                 new Runnable(
                     view,

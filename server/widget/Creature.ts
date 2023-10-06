@@ -30,15 +30,12 @@ class Creature {
         return this._runtime.stack[0].findUnit(methodId)
     }
 
-    _oldVersion: BaseElement
-
     constructor(module: Module, defaultValues?: any) {
         this._key = defaultValues?._key ? defaultValues._key : Utils.generator.generateKey()
         this._cosmoId = defaultValues?.cosmoId
         this._module = module
         this._dom = defaultValues?.dom ? defaultValues.dom : new DOM(this._module, this)
         this._runtime = defaultValues?.runtime ? defaultValues.runtime : new Runtime(this._module, this)
-        this._oldVersion = defaultValues?._oldVersion
         this.thisObj = defaultValues?.thisObj
         if (!defaultValues?.runtime) {
             this._runtime.load()

@@ -9,49 +9,20 @@ let applet = new Applet('frame')
 
 applet.fill(
     `
-    class Test {
-        constructor() {
-            
-        }
-        onMount() {
-            
-        }
-        render() {
-            return (
-                <text>
-                    {this.children}
-                </text>
-            )
-        }
-    }
     class Button {
         constructor() {
             this.state = {
-                items: [],
-                count: 0
+                counter: 0
             }
         }
         onMount() {
             setInterval(() => {
-                this.state.count++
-                this.state.items.push(this.state.count)
-                this.setState({...this.state, counterName: this.state.count})
+                this.state.counter++
+                this.setState(this.state)
             }, 1000)
         }
         render() {
-            return (
-                <text>
-                    {
-                        this.state.items.map(item => {
-                            return (
-                                <text key={'text-' + item}>
-                                    {item}
-                                </text>
-                            )
-                        })
-                    }
-                </text>
-            )
+            return this.state.counter % 2 === 0 ? this.state.counter : null
         }
     }
 `

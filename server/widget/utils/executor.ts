@@ -51,6 +51,9 @@ const generateCallbackFunction = (code: any, meta: ExecutionMeta) => {
 }
 
 let codeCallbacks = {
+    ConditionalExpression: (code: any, meta: ExecutionMeta) => {
+        return executeSingle(code.test, meta) ? executeSingle(code.consequent, meta) : executeSingle(code.alternate, meta)
+    },
     ThisExpression: (code: any, meta: ExecutionMeta) => {
         return meta.creature.thisObj
     },
@@ -92,6 +95,9 @@ let codeCallbacks = {
             meta.creature.module.applet.cache.mounts.push(() => c.getBaseMethod('onMount')(newMetaBranch))
             if (isNew) c.getBaseMethod('constructor')(newMetaBranch)
             let r = c.getBaseMethod('render')(newMetaBranch)
+            if (!meta.creature.module.applet.oldVersions[c._key]) {
+                meta.creature.module.applet.oldVersions[c._key] = r
+            }
             return r
         }
     },
@@ -167,14 +173,12 @@ let codeCallbacks = {
     IfStatement: (code: any, meta: ExecutionMeta) => {
         if (executeSingle(code.test, meta)) {
             let r = executeSingle(code.consequent, meta)
-            if (r?.breakFired === true) {
-                return r
-            }
+            if (r?.breakFired) return r
+            else if (r?.returnFired) return r
         } else if (code.alternate) {
             let r = executeSingle(code.alternate, meta)
-            if (r?.breakFired === true) {
-                return r
-            }
+            if (r?.breakFired) return r
+            else if (r?.returnFired) return r
         }
     },
     BreakStatement: (code: any, meta: ExecutionMeta) => {
@@ -183,8 +187,8 @@ let codeCallbacks = {
     WhileStatement: (code: any, meta: ExecutionMeta) => {
         while (executeSingle(code.test, meta)) {
             let r = executeSingle(code.body, meta)
-            if (r.breakFired) break
-            else if (r.returnFired) return r
+            if (r?.breakFired) break
+            else if (r?.returnFired) return r
         }
     },
     BlockStatement: (code: any, meta: ExecutionMeta) => {
