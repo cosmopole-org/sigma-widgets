@@ -51,6 +51,18 @@ const generateCallbackFunction = (code: any, meta: ExecutionMeta) => {
 }
 
 let codeCallbacks = {
+    UnaryExpression: (code: any, meta: ExecutionMeta) => {
+        if (code.operator === '!') {
+            return !executeSingle(code.argument, meta)
+        }
+    },
+    LogicalExpression: (code: any, meta: ExecutionMeta) => {
+        if (code.operator === '&&') {
+            return executeSingle(code.left, meta) && executeSingle(code.right, meta)
+        } else if (code.operator === '||') {
+            return executeSingle(code.left, meta) || executeSingle(code.right, meta)
+        }
+    },
     ConditionalExpression: (code: any, meta: ExecutionMeta) => {
         return executeSingle(code.test, meta) ? executeSingle(code.consequent, meta) : executeSingle(code.alternate, meta)
     },
@@ -168,6 +180,10 @@ let codeCallbacks = {
             return executeSingle(code.left, meta) < executeSingle(code.right, meta)
         } else if (code.operator === '>') {
             return executeSingle(code.left, meta) > executeSingle(code.right, meta)
+        } else if (code.operator === '&') {
+            return executeSingle(code.left, meta) & executeSingle(code.right, meta)
+        } else if (code.operator === '|') {
+            return executeSingle(code.left, meta) | executeSingle(code.right, meta)
         }
     },
     IfStatement: (code: any, meta: ExecutionMeta) => {

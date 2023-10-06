@@ -3,7 +3,6 @@ import Module from './widget/Module'
 import Native from './Native'
 import Applet, { Runnable } from './widget/Applet'
 import Utils from './widget/utils'
-import BaseOrder from 'widget/orders/BaseOrder'
 
 let applet = new Applet('frame')
 
@@ -17,12 +16,11 @@ applet.fill(
         }
         onMount() {
             setInterval(() => {
-                this.state.counter++
-                this.setState(this.state)
+                this.setState({ counter: this.state.counter + 1 })
             }, 1000)
         }
         render() {
-            return this.state.counter % 2 === 0 ? this.state.counter : null
+            return this.state.counter
         }
     }
 `

@@ -1,0 +1,1 @@
+{"version":3,"file":"INative.js","sourceRoot":"","sources":["../../widget/INative.ts"],"names":[],"mappings":";;AAGA,MAAM,OAAO;IAGT,IAAW,GAAG,KAAK,OAAO,IAAI,CAAC,OAAO,CAAC,GAAG,CAAA,CAAC,CAAC;IAE5C,YAAY,MAAc;QACtB,IAAI,CAAC,OAAO,GAAG,MAAM,CAAA;IACzB,CAAC;CACJ;AAED,kBAAe,OAAO,CAAA"}

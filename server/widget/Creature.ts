@@ -3,7 +3,6 @@ import DOM from "./DOM"
 import Module from "./Module"
 import Runtime from "./Runtime"
 import BaseElement from "./elements/BaseElement"
-import Create from "./orders/Create"
 import Utils from './utils'
 
 class Creature {

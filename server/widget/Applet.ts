@@ -4,7 +4,6 @@ import Utils from './utils'
 import INative from './INative'
 import Creature from './Creature'
 import BaseElement from './elements/BaseElement'
-import BaseOrder from './orders/BaseOrder'
 
 export class Runnable {
 
@@ -34,11 +33,11 @@ class Applet {
     }
     public removeModule(key: string) { delete this._modules[key] }
 
-    middleCode: acorn.Node
+    middleCode: any
 
-    public fill(jsxCode: string) {
+    public fill(jsxCode: any) {
         this.middleCode = Utils.compiler.parse(jsxCode)
-        console.log(Utils.json.prettify(this.middleCode))
+        console.log(JSON.stringify(this.middleCode))
         let r = Utils.compiler.extractModules(this.middleCode, this);
         r.forEach((module: Module) => this.putModule(module))
     }
@@ -58,7 +57,7 @@ class Applet {
 
     update: (u: any) => void
 
-    public run(genesis: string, nativeBuilder: (mod: Module) => INative, update: (u: BaseOrder) => void) {
+    public run(genesis: string, nativeBuilder: (mod: Module) => INative, update: (u) => void) {
         return new Promise(resolve => {
             this._nativeBuilder = nativeBuilder
             this.update = update
