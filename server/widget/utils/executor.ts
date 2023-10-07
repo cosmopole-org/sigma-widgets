@@ -81,6 +81,7 @@ let codeCallbacks = {
         if (!Control) {
             Control = meta.creature.module.applet.findModule(code.openingElement.name.name)
         }
+        console.log(code.openingElement.name.name)
         let attrs = {}
         code.openingElement.attributes.forEach((attr: any) => {
             attrs[attr.name.name] = executeSingle(attr.value, meta)

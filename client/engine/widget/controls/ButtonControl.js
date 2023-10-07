@@ -7,7 +7,8 @@ class ButtonControl extends BaseControl {
 
     static TYPE = 'button'
     static defaultProps = {
-        caption: new StringProp('')
+        caption: new StringProp(''),
+        variant: new StringProp('filled')
     }
     static defaultStyles = {
         width: 150,

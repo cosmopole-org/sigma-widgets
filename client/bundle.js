@@ -52,19 +52,25 @@ const i$5=(i,e)=>"method"===e.kind&&e.descriptor&&!("value"in e.descriptor)?{...
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const o$5=({finisher:e,descriptor:t})=>(o,n)=>{var r;if(void 0===n){const n=null!==(r=o.originalKey)&&void 0!==r?r:o.key,i=null!=t?{kind:"method",placement:"prototype",key:n,descriptor:t(o.key)}:{...o,key:n};return null!=e&&(i.finisher=function(t){e(t,n);}),i}{const r=o.constructor;void 0!==t&&Object.defineProperty(o,n,t(n)),null==e||e(r,n);}};
+const o$6=({finisher:e,descriptor:t})=>(o,n)=>{var r;if(void 0===n){const n=null!==(r=o.originalKey)&&void 0!==r?r:o.key,i=null!=t?{kind:"method",placement:"prototype",key:n,descriptor:t(o.key)}:{...o,key:n};return null!=e&&(i.finisher=function(t){e(t,n);}),i}{const r=o.constructor;void 0!==t&&Object.defineProperty(o,n,t(n)),null==e||e(r,n);}};
 
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */function i$4(i,n){return o$5({descriptor:o=>{const t={get(){var o,n;return null!==(n=null===(o=this.renderRoot)||void 0===o?void 0:o.querySelector(i))&&void 0!==n?n:null},enumerable:!0,configurable:!0};if(n){const n="symbol"==typeof o?Symbol():"__"+o;t.get=function(){var o,t;return void 0===this[n]&&(this[n]=null!==(t=null===(o=this.renderRoot)||void 0===o?void 0:o.querySelector(i))&&void 0!==t?t:null),this[n]};}return t}})}
+ */function i$4(i,n){return o$6({descriptor:o=>{const t={get(){var o,n;return null!==(n=null===(o=this.renderRoot)||void 0===o?void 0:o.querySelector(i))&&void 0!==n?n:null},enumerable:!0,configurable:!0};if(n){const n="symbol"==typeof o?Symbol():"__"+o;t.get=function(){var o,t;return void 0===this[n]&&(this[n]=null!==(t=null===(o=this.renderRoot)||void 0===o?void 0:o.querySelector(i))&&void 0!==t?t:null),this[n]};}return t}})}
 
 /**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */var n$5;const e$5=null!=(null===(n$5=window.HTMLSlotElement)||void 0===n$5?void 0:n$5.prototype.assignedElements)?(o,n)=>o.assignedElements(n):(o,n)=>o.assignedNodes(n).filter((o=>o.nodeType===Node.ELEMENT_NODE));function l$4(n){const{slot:l,selector:t}=null!=n?n:{};return o$5({descriptor:o=>({get(){var o;const r="slot"+(l?`[name=${l}]`:":not([name])"),i=null===(o=this.renderRoot)||void 0===o?void 0:o.querySelector(r),s=null!=i?e$5(i,n):[];return t?s.filter((o=>o.matches(t))):s},enumerable:!0,configurable:!0})})}
+ */var n$5;const e$5=null!=(null===(n$5=window.HTMLSlotElement)||void 0===n$5?void 0:n$5.prototype.assignedElements)?(o,n)=>o.assignedElements(n):(o,n)=>o.assignedNodes(n).filter((o=>o.nodeType===Node.ELEMENT_NODE));function l$4(n){const{slot:l,selector:t}=null!=n?n:{};return o$6({descriptor:o=>({get(){var o;const r="slot"+(l?`[name=${l}]`:":not([name])"),i=null===(o=this.renderRoot)||void 0===o?void 0:o.querySelector(r),s=null!=i?e$5(i,n):[];return t?s.filter((o=>o.matches(t))):s},enumerable:!0,configurable:!0})})}
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */function o$5(o,n,r){let l,s=o;return "object"==typeof o?(s=o.slot,l=o):l={flatten:n},r?l$4({slot:s,flatten:n,selector:r}):o$6({descriptor:e=>({get(){var e,t;const o="slot"+(s?`[name=${s}]`:":not([name])"),n=null===(e=this.renderRoot)||void 0===e?void 0:e.querySelector(o);return null!==(t=null==n?void 0:n.assignedNodes(l))&&void 0!==t?t:[]},enumerable:!0,configurable:!0})})}
 
 /**
  * @license
@@ -117,7 +123,7 @@ class Elevation extends s$1 {
   * Copyright 2022 Google LLC
   * SPDX-License-Identifier: Apache-2.0
   */
-const styles$7 = i$3 `:host{--_level: var(--md-elevation-level, 0);--_shadow-color: var(--md-elevation-shadow-color, var(--md-sys-color-shadow, #000));display:flex;pointer-events:none}:host,.shadow,.shadow::before,.shadow::after{border-radius:inherit;inset:0;position:absolute;transition-duration:inherit;transition-property:inherit;transition-timing-function:inherit}.shadow::before,.shadow::after{content:"";transition-property:box-shadow,opacity}.shadow::before{box-shadow:0px calc(1px*(clamp(0,var(--_level),1) + clamp(0,var(--_level) - 3,1) + 2*clamp(0,var(--_level) - 4,1))) calc(1px*(2*clamp(0,var(--_level),1) + clamp(0,var(--_level) - 2,1) + clamp(0,var(--_level) - 4,1))) 0px var(--_shadow-color);opacity:.3}.shadow::after{box-shadow:0px calc(1px*(clamp(0,var(--_level),1) + clamp(0,var(--_level) - 1,1) + 2*clamp(0,var(--_level) - 2,3))) calc(1px*(3*clamp(0,var(--_level),2) + 2*clamp(0,var(--_level) - 2,3))) calc(1px*(clamp(0,var(--_level),4) + 2*clamp(0,var(--_level) - 4,1))) var(--_shadow-color);opacity:.15}/*# sourceMappingURL=elevation-styles.css.map */
+const styles$b = i$3 `:host{--_level: var(--md-elevation-level, 0);--_shadow-color: var(--md-elevation-shadow-color, var(--md-sys-color-shadow, #000));display:flex;pointer-events:none}:host,.shadow,.shadow::before,.shadow::after{border-radius:inherit;inset:0;position:absolute;transition-duration:inherit;transition-property:inherit;transition-timing-function:inherit}.shadow::before,.shadow::after{content:"";transition-property:box-shadow,opacity}.shadow::before{box-shadow:0px calc(1px*(clamp(0,var(--_level),1) + clamp(0,var(--_level) - 3,1) + 2*clamp(0,var(--_level) - 4,1))) calc(1px*(2*clamp(0,var(--_level),1) + clamp(0,var(--_level) - 2,1) + clamp(0,var(--_level) - 4,1))) 0px var(--_shadow-color);opacity:.3}.shadow::after{box-shadow:0px calc(1px*(clamp(0,var(--_level),1) + clamp(0,var(--_level) - 1,1) + 2*clamp(0,var(--_level) - 2,3))) calc(1px*(3*clamp(0,var(--_level),2) + 2*clamp(0,var(--_level) - 2,3))) calc(1px*(clamp(0,var(--_level),4) + 2*clamp(0,var(--_level) - 4,1))) var(--_shadow-color);opacity:.15}/*# sourceMappingURL=elevation-styles.css.map */
 `;
 
 /**
@@ -132,7 +138,7 @@ const styles$7 = i$3 `:host{--_level: var(--md-elevation-level, 0);--_shadow-col
  */
 let MdElevation = class MdElevation extends Elevation {
 };
-MdElevation.styles = [styles$7];
+MdElevation.styles = [styles$b];
 MdElevation = __decorate([
     e$7('md-elevation')
 ], MdElevation);
@@ -358,7 +364,7 @@ const HANDLED_BY_FOCUS_RING = Symbol('handledByFocusRing');
   * Copyright 2022 Google LLC
   * SPDX-License-Identifier: Apache-2.0
   */
-const styles$6 = i$3 `:host{animation-delay:0s,calc(var(--md-focus-ring-duration, 600ms)*.25);animation-duration:calc(var(--md-focus-ring-duration, 600ms)*.25),calc(var(--md-focus-ring-duration, 600ms)*.75);animation-timing-function:cubic-bezier(0.2, 0, 0, 1);box-sizing:border-box;color:var(--md-focus-ring-color, var(--md-sys-color-secondary, #625b71));display:none;pointer-events:none;position:absolute}:host([visible]){display:flex}:host(:not([inward])){animation-name:outward-grow,outward-shrink;border-end-end-radius:calc(var(--md-focus-ring-shape-end-end, var(--md-focus-ring-shape, 9999px)) + var(--md-focus-ring-outward-offset, 2px));border-end-start-radius:calc(var(--md-focus-ring-shape-end-start, var(--md-focus-ring-shape, 9999px)) + var(--md-focus-ring-outward-offset, 2px));border-start-end-radius:calc(var(--md-focus-ring-shape-start-end, var(--md-focus-ring-shape, 9999px)) + var(--md-focus-ring-outward-offset, 2px));border-start-start-radius:calc(var(--md-focus-ring-shape-start-start, var(--md-focus-ring-shape, 9999px)) + var(--md-focus-ring-outward-offset, 2px));inset:calc(-1*var(--md-focus-ring-outward-offset, 2px));outline:var(--md-focus-ring-width, 3px) solid currentColor}:host([inward]){animation-name:inward-grow,inward-shrink;border-end-end-radius:calc(var(--md-focus-ring-shape-end-end, var(--md-focus-ring-shape, 9999px)) - var(--md-focus-ring-inward-offset, 0px));border-end-start-radius:calc(var(--md-focus-ring-shape-end-start, var(--md-focus-ring-shape, 9999px)) - var(--md-focus-ring-inward-offset, 0px));border-start-end-radius:calc(var(--md-focus-ring-shape-start-end, var(--md-focus-ring-shape, 9999px)) - var(--md-focus-ring-inward-offset, 0px));border-start-start-radius:calc(var(--md-focus-ring-shape-start-start, var(--md-focus-ring-shape, 9999px)) - var(--md-focus-ring-inward-offset, 0px));border:var(--md-focus-ring-width, 3px) solid currentColor;inset:var(--md-focus-ring-inward-offset, 0px)}@keyframes outward-grow{from{outline-width:0}to{outline-width:var(--md-focus-ring-active-width, 8px)}}@keyframes outward-shrink{from{outline-width:var(--md-focus-ring-active-width, 8px)}}@keyframes inward-grow{from{border-width:0}to{border-width:var(--md-focus-ring-active-width, 8px)}}@keyframes inward-shrink{from{border-width:var(--md-focus-ring-active-width, 8px)}}@media(prefers-reduced-motion){:host{animation:none}}/*# sourceMappingURL=focus-ring-styles.css.map */
+const styles$a = i$3 `:host{animation-delay:0s,calc(var(--md-focus-ring-duration, 600ms)*.25);animation-duration:calc(var(--md-focus-ring-duration, 600ms)*.25),calc(var(--md-focus-ring-duration, 600ms)*.75);animation-timing-function:cubic-bezier(0.2, 0, 0, 1);box-sizing:border-box;color:var(--md-focus-ring-color, var(--md-sys-color-secondary, #625b71));display:none;pointer-events:none;position:absolute}:host([visible]){display:flex}:host(:not([inward])){animation-name:outward-grow,outward-shrink;border-end-end-radius:calc(var(--md-focus-ring-shape-end-end, var(--md-focus-ring-shape, 9999px)) + var(--md-focus-ring-outward-offset, 2px));border-end-start-radius:calc(var(--md-focus-ring-shape-end-start, var(--md-focus-ring-shape, 9999px)) + var(--md-focus-ring-outward-offset, 2px));border-start-end-radius:calc(var(--md-focus-ring-shape-start-end, var(--md-focus-ring-shape, 9999px)) + var(--md-focus-ring-outward-offset, 2px));border-start-start-radius:calc(var(--md-focus-ring-shape-start-start, var(--md-focus-ring-shape, 9999px)) + var(--md-focus-ring-outward-offset, 2px));inset:calc(-1*var(--md-focus-ring-outward-offset, 2px));outline:var(--md-focus-ring-width, 3px) solid currentColor}:host([inward]){animation-name:inward-grow,inward-shrink;border-end-end-radius:calc(var(--md-focus-ring-shape-end-end, var(--md-focus-ring-shape, 9999px)) - var(--md-focus-ring-inward-offset, 0px));border-end-start-radius:calc(var(--md-focus-ring-shape-end-start, var(--md-focus-ring-shape, 9999px)) - var(--md-focus-ring-inward-offset, 0px));border-start-end-radius:calc(var(--md-focus-ring-shape-start-end, var(--md-focus-ring-shape, 9999px)) - var(--md-focus-ring-inward-offset, 0px));border-start-start-radius:calc(var(--md-focus-ring-shape-start-start, var(--md-focus-ring-shape, 9999px)) - var(--md-focus-ring-inward-offset, 0px));border:var(--md-focus-ring-width, 3px) solid currentColor;inset:var(--md-focus-ring-inward-offset, 0px)}@keyframes outward-grow{from{outline-width:0}to{outline-width:var(--md-focus-ring-active-width, 8px)}}@keyframes outward-shrink{from{outline-width:var(--md-focus-ring-active-width, 8px)}}@keyframes inward-grow{from{border-width:0}to{border-width:var(--md-focus-ring-active-width, 8px)}}@keyframes inward-shrink{from{border-width:var(--md-focus-ring-active-width, 8px)}}@media(prefers-reduced-motion){:host{animation:none}}/*# sourceMappingURL=focus-ring-styles.css.map */
 `;
 
 /**
@@ -374,7 +380,7 @@ const styles$6 = i$3 `:host{animation-delay:0s,calc(var(--md-focus-ring-duration
  */
 let MdFocusRing = class MdFocusRing extends FocusRing {
 };
-MdFocusRing.styles = [styles$6];
+MdFocusRing.styles = [styles$a];
 MdFocusRing = __decorate([
     e$7('md-focus-ring')
 ], MdFocusRing);
@@ -816,7 +822,7 @@ __decorate([
   * Copyright 2022 Google LLC
   * SPDX-License-Identifier: Apache-2.0
   */
-const styles$5 = i$3 `:host{--_hover-color: var(--md-ripple-hover-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-opacity: var(--md-ripple-hover-opacity, 0.08);--_pressed-color: var(--md-ripple-pressed-color, var(--md-sys-color-on-surface, #1d1b20));--_pressed-opacity: var(--md-ripple-pressed-opacity, 0.12);display:flex;margin:auto;pointer-events:none}:host([disabled]){display:none}@media(forced-colors: active){:host{display:none}}:host,.surface{border-radius:inherit;position:absolute;inset:0;overflow:hidden}.surface{-webkit-tap-highlight-color:rgba(0,0,0,0)}.surface::before,.surface::after{content:"";opacity:0;position:absolute}.surface::before{background-color:var(--_hover-color);inset:0;transition:opacity 15ms linear,background-color 15ms linear}.surface::after{background:radial-gradient(closest-side, var(--_pressed-color) max(100% - 70px, 65%), transparent 100%);transform-origin:center center;transition:opacity 375ms linear}.hovered::before{background-color:var(--_hover-color);opacity:var(--_hover-opacity)}.pressed::after{opacity:var(--_pressed-opacity);transition-duration:105ms}/*# sourceMappingURL=ripple-styles.css.map */
+const styles$9 = i$3 `:host{--_hover-color: var(--md-ripple-hover-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-opacity: var(--md-ripple-hover-opacity, 0.08);--_pressed-color: var(--md-ripple-pressed-color, var(--md-sys-color-on-surface, #1d1b20));--_pressed-opacity: var(--md-ripple-pressed-opacity, 0.12);display:flex;margin:auto;pointer-events:none}:host([disabled]){display:none}@media(forced-colors: active){:host{display:none}}:host,.surface{border-radius:inherit;position:absolute;inset:0;overflow:hidden}.surface{-webkit-tap-highlight-color:rgba(0,0,0,0)}.surface::before,.surface::after{content:"";opacity:0;position:absolute}.surface::before{background-color:var(--_hover-color);inset:0;transition:opacity 15ms linear,background-color 15ms linear}.surface::after{background:radial-gradient(closest-side, var(--_pressed-color) max(100% - 70px, 65%), transparent 100%);transform-origin:center center;transition:opacity 375ms linear}.hovered::before{background-color:var(--_hover-color);opacity:var(--_hover-opacity)}.pressed::after{opacity:var(--_pressed-opacity);transition-duration:105ms}/*# sourceMappingURL=ripple-styles.css.map */
 `;
 
 /**
@@ -839,7 +845,7 @@ const styles$5 = i$3 `:host{--_hover-color: var(--md-ripple-hover-color, var(--m
  */
 let MdRipple = class MdRipple extends Ripple {
 };
-MdRipple.styles = [styles$5];
+MdRipple.styles = [styles$9];
 MdRipple = __decorate([
     e$7('md-ripple')
 ], MdRipple);
@@ -916,6 +922,164 @@ function ariaPropertyToAttribute(property) {
         // IDREF attributes also include an "Element" or "Elements" suffix
         .replace(/Elements?/g, '')
         .toLowerCase();
+}
+/**
+ * Enables a host custom element to be the target for aria roles and attributes.
+ * Components should set the `elementInternals.role` property.
+ *
+ * By default, aria components are tab focusable. Provide a `focusable: false`
+ * option for components that should not be tab focusable, such as
+ * `role="listbox"`.
+ *
+ * This function will also polyfill aria `ElementInternals` properties for
+ * Firefox.
+ *
+ * @param ctor The `ReactiveElement` constructor to set up.
+ * @param options Options to configure the element's host aria.
+ */
+function setupHostAria(ctor, { focusable } = {}) {
+    if (focusable !== false) {
+        ctor.addInitializer(host => {
+            host.addController({
+                hostConnected() {
+                    if (host.hasAttribute('tabindex')) {
+                        return;
+                    }
+                    host.tabIndex = 0;
+                }
+            });
+        });
+    }
+    if ('role' in Element.prototype) {
+        return;
+    }
+    // Polyfill reflective aria properties for Firefox
+    for (const ariaProperty of ARIA_PROPERTIES) {
+        ctor.createProperty(ariaProperty, {
+            attribute: ariaPropertyToAttribute(ariaProperty),
+            reflect: true,
+        });
+    }
+    ctor.createProperty('role', { reflect: true });
+}
+/**
+ * Polyfills an element and its `ElementInternals` to support `ARIAMixin`
+ * properties on internals. This is needed for Firefox.
+ *
+ * `setupHostAria()` must be called for the element class.
+ *
+ * @example
+ * class XButton extends LitElement {
+ *   static {
+ *     setupHostAria(XButton);
+ *   }
+ *
+ *   private internals =
+ *       polyfillElementInternalsAria(this, this.attachInternals());
+ *
+ *   constructor() {
+ *     super();
+ *     this.internals.role = 'button';
+ *   }
+ * }
+ */
+function polyfillElementInternalsAria(host, internals) {
+    if (checkIfElementInternalsSupportsAria(internals)) {
+        return internals;
+    }
+    if (!('role' in host)) {
+        throw new Error('Missing setupHostAria()');
+    }
+    let firstConnectedCallbacks = [];
+    let hasBeenConnected = false;
+    // Add support for Firefox, which has not yet implement ElementInternals aria
+    for (const ariaProperty of ARIA_PROPERTIES) {
+        let internalAriaValue = null;
+        Object.defineProperty(internals, ariaProperty, {
+            enumerable: true,
+            configurable: true,
+            get() {
+                return internalAriaValue;
+            },
+            set(value) {
+                const setValue = () => {
+                    internalAriaValue = value;
+                    if (!hasBeenConnected) {
+                        firstConnectedCallbacks.push({ property: ariaProperty, callback: setValue });
+                        return;
+                    }
+                    // Dynamic lookup rather than hardcoding all properties.
+                    // tslint:disable-next-line:no-dict-access-on-struct-type
+                    host[ariaProperty] = value;
+                };
+                setValue();
+            },
+        });
+    }
+    let internalRoleValue = null;
+    Object.defineProperty(internals, 'role', {
+        enumerable: true,
+        configurable: true,
+        get() {
+            return internalRoleValue;
+        },
+        set(value) {
+            const setRole = () => {
+                internalRoleValue = value;
+                if (!hasBeenConnected) {
+                    firstConnectedCallbacks.push({
+                        property: 'role',
+                        callback: setRole,
+                    });
+                    return;
+                }
+                if (value === null) {
+                    host.removeAttribute('role');
+                }
+                else {
+                    host.setAttribute('role', value);
+                }
+            };
+            setRole();
+        },
+    });
+    host.addController({
+        hostConnected() {
+            if (hasBeenConnected) {
+                return;
+            }
+            hasBeenConnected = true;
+            const propertiesSetByUser = new Set();
+            // See which properties were set by the user on host before we apply
+            // internals values as attributes to host. Needs to be done in another
+            // for loop because the callbacks set these attributes on host.
+            for (const { property } of firstConnectedCallbacks) {
+                const wasSetByUser = host.getAttribute(ariaPropertyToAttribute(property)) !== null ||
+                    // Dynamic lookup rather than hardcoding all properties.
+                    // tslint:disable-next-line:no-dict-access-on-struct-type
+                    host[property] !== undefined;
+                if (wasSetByUser) {
+                    propertiesSetByUser.add(property);
+                }
+            }
+            for (const { property, callback } of firstConnectedCallbacks) {
+                // If the user has set the attribute or property, do not override the
+                // user's value
+                if (propertiesSetByUser.has(property)) {
+                    continue;
+                }
+                callback();
+            }
+            // Remove strong callback references
+            firstConnectedCallbacks = [];
+        }
+    });
+    return internals;
+}
+// Separate function so that typescript doesn't complain about internals being
+// "never".
+function checkIfElementInternalsSupportsAria(internals) {
+    return 'role' in internals;
 }
 
 /**
@@ -1020,19 +1184,6 @@ const internals = Symbol('internals');
  * @param event The event to re-dispatch.
  * @return Whether or not the event was dispatched (if cancelable).
  */
-function redispatchEvent(element, event) {
-    // For bubbling events in SSR light DOM (or composed), stop their propagation
-    // and dispatch the copy.
-    if (event.bubbles && (!element.shadowRoot || event.composed)) {
-        event.stopPropagation();
-    }
-    const copy = Reflect.construct(event.constructor, [event.type, event]);
-    const dispatched = element.dispatchEvent(copy);
-    if (!dispatched) {
-        event.preventDefault();
-    }
-    return dispatched;
-}
 /**
  * Dispatches a click event to the given element that triggers a native action,
  * but is not composed and therefore is not seen outside the element.
@@ -1195,7 +1346,7 @@ function setupFormSubmitter(ctor) {
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
-var _a;
+var _a$1;
 /**
  * A button component.
  */
@@ -1241,7 +1392,7 @@ class Button extends s$1 {
         this.type = 'submit';
         this.value = '';
         /** @private */
-        this[_a] = this /* needed for closure */.attachInternals();
+        this[_a$1] = this /* needed for closure */.attachInternals();
         this.handleActivationClick = (event) => {
             if (!isActivationClick((event)) || !this.buttonElement) {
                 return;
@@ -1301,7 +1452,7 @@ class Button extends s$1 {
         this.hasIcon = this.assignedIcons.length > 0;
     }
 }
-_a = internals;
+_a$1 = internals;
 (() => {
     requestUpdateOnAriaChange(Button);
     setupFormSubmitter(Button);
@@ -1357,7 +1508,7 @@ class FilledButton extends Button {
   * Copyright 2022 Google LLC
   * SPDX-License-Identifier: Apache-2.0
   */
-const styles$4 = i$3 `:host{--_container-color: var(--md-filled-button-container-color, var(--md-sys-color-primary, #6750a4));--_container-elevation: var(--md-filled-button-container-elevation, 0);--_container-height: var(--md-filled-button-container-height, 40px);--_container-shadow-color: var(--md-filled-button-container-shadow-color, var(--md-sys-color-shadow, #000));--_container-shape: var(--md-filled-button-container-shape, 9999px);--_disabled-container-color: var(--md-filled-button-disabled-container-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-container-elevation: var(--md-filled-button-disabled-container-elevation, 0);--_disabled-container-opacity: var(--md-filled-button-disabled-container-opacity, 0.12);--_disabled-label-text-color: var(--md-filled-button-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-filled-button-disabled-label-text-opacity, 0.38);--_focus-container-elevation: var(--md-filled-button-focus-container-elevation, 0);--_focus-label-text-color: var(--md-filled-button-focus-label-text-color, var(--md-sys-color-on-primary, #fff));--_hover-container-elevation: var(--md-filled-button-hover-container-elevation, 1);--_hover-label-text-color: var(--md-filled-button-hover-label-text-color, var(--md-sys-color-on-primary, #fff));--_hover-state-layer-color: var(--md-filled-button-hover-state-layer-color, var(--md-sys-color-on-primary, #fff));--_hover-state-layer-opacity: var(--md-filled-button-hover-state-layer-opacity, 0.08);--_label-text-color: var(--md-filled-button-label-text-color, var(--md-sys-color-on-primary, #fff));--_label-text-font: var(--md-filled-button-label-text-font, var(--md-sys-typescale-label-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-filled-button-label-text-line-height, var(--md-sys-typescale-label-large-line-height, 1.25rem));--_label-text-size: var(--md-filled-button-label-text-size, var(--md-sys-typescale-label-large-size, 0.875rem));--_label-text-weight: var(--md-filled-button-label-text-weight, var(--md-sys-typescale-label-large-weight, var(--md-ref-typeface-weight-medium, 500)));--_pressed-container-elevation: var(--md-filled-button-pressed-container-elevation, 0);--_pressed-label-text-color: var(--md-filled-button-pressed-label-text-color, var(--md-sys-color-on-primary, #fff));--_pressed-state-layer-color: var(--md-filled-button-pressed-state-layer-color, var(--md-sys-color-on-primary, #fff));--_pressed-state-layer-opacity: var(--md-filled-button-pressed-state-layer-opacity, 0.12);--_disabled-icon-color: var(--md-filled-button-disabled-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-icon-opacity: var(--md-filled-button-disabled-icon-opacity, 0.38);--_focus-icon-color: var(--md-filled-button-focus-icon-color, var(--md-sys-color-on-primary, #fff));--_hover-icon-color: var(--md-filled-button-hover-icon-color, var(--md-sys-color-on-primary, #fff));--_icon-color: var(--md-filled-button-icon-color, var(--md-sys-color-on-primary, #fff));--_icon-size: var(--md-filled-button-icon-size, 18px);--_pressed-icon-color: var(--md-filled-button-pressed-icon-color, var(--md-sys-color-on-primary, #fff));--_leading-space: var(--md-filled-button-leading-space, 24px);--_trailing-space: var(--md-filled-button-trailing-space, 24px);--_with-leading-icon-leading-space: var(--md-filled-button-with-leading-icon-leading-space, 16px);--_with-leading-icon-trailing-space: var(--md-filled-button-with-leading-icon-trailing-space, 24px);--_with-trailing-icon-leading-space: var(--md-filled-button-with-trailing-icon-leading-space, 24px);--_with-trailing-icon-trailing-space: var(--md-filled-button-with-trailing-icon-trailing-space, 16px);--_container-shape-start-start: var( --md-filled-button-container-shape-start-start, var(--_container-shape) );--_container-shape-start-end: var( --md-filled-button-container-shape-start-end, var(--_container-shape) );--_container-shape-end-end: var( --md-filled-button-container-shape-end-end, var(--_container-shape) );--_container-shape-end-start: var( --md-filled-button-container-shape-end-start, var(--_container-shape) )}/*# sourceMappingURL=filled-styles.css.map */
+const styles$8 = i$3 `:host{--_container-color: var(--md-filled-button-container-color, var(--md-sys-color-primary, #6750a4));--_container-elevation: var(--md-filled-button-container-elevation, 0);--_container-height: var(--md-filled-button-container-height, 40px);--_container-shadow-color: var(--md-filled-button-container-shadow-color, var(--md-sys-color-shadow, #000));--_container-shape: var(--md-filled-button-container-shape, 9999px);--_disabled-container-color: var(--md-filled-button-disabled-container-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-container-elevation: var(--md-filled-button-disabled-container-elevation, 0);--_disabled-container-opacity: var(--md-filled-button-disabled-container-opacity, 0.12);--_disabled-label-text-color: var(--md-filled-button-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-filled-button-disabled-label-text-opacity, 0.38);--_focus-container-elevation: var(--md-filled-button-focus-container-elevation, 0);--_focus-label-text-color: var(--md-filled-button-focus-label-text-color, var(--md-sys-color-on-primary, #fff));--_hover-container-elevation: var(--md-filled-button-hover-container-elevation, 1);--_hover-label-text-color: var(--md-filled-button-hover-label-text-color, var(--md-sys-color-on-primary, #fff));--_hover-state-layer-color: var(--md-filled-button-hover-state-layer-color, var(--md-sys-color-on-primary, #fff));--_hover-state-layer-opacity: var(--md-filled-button-hover-state-layer-opacity, 0.08);--_label-text-color: var(--md-filled-button-label-text-color, var(--md-sys-color-on-primary, #fff));--_label-text-font: var(--md-filled-button-label-text-font, var(--md-sys-typescale-label-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-filled-button-label-text-line-height, var(--md-sys-typescale-label-large-line-height, 1.25rem));--_label-text-size: var(--md-filled-button-label-text-size, var(--md-sys-typescale-label-large-size, 0.875rem));--_label-text-weight: var(--md-filled-button-label-text-weight, var(--md-sys-typescale-label-large-weight, var(--md-ref-typeface-weight-medium, 500)));--_pressed-container-elevation: var(--md-filled-button-pressed-container-elevation, 0);--_pressed-label-text-color: var(--md-filled-button-pressed-label-text-color, var(--md-sys-color-on-primary, #fff));--_pressed-state-layer-color: var(--md-filled-button-pressed-state-layer-color, var(--md-sys-color-on-primary, #fff));--_pressed-state-layer-opacity: var(--md-filled-button-pressed-state-layer-opacity, 0.12);--_disabled-icon-color: var(--md-filled-button-disabled-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-icon-opacity: var(--md-filled-button-disabled-icon-opacity, 0.38);--_focus-icon-color: var(--md-filled-button-focus-icon-color, var(--md-sys-color-on-primary, #fff));--_hover-icon-color: var(--md-filled-button-hover-icon-color, var(--md-sys-color-on-primary, #fff));--_icon-color: var(--md-filled-button-icon-color, var(--md-sys-color-on-primary, #fff));--_icon-size: var(--md-filled-button-icon-size, 18px);--_pressed-icon-color: var(--md-filled-button-pressed-icon-color, var(--md-sys-color-on-primary, #fff));--_leading-space: var(--md-filled-button-leading-space, 24px);--_trailing-space: var(--md-filled-button-trailing-space, 24px);--_with-leading-icon-leading-space: var(--md-filled-button-with-leading-icon-leading-space, 16px);--_with-leading-icon-trailing-space: var(--md-filled-button-with-leading-icon-trailing-space, 24px);--_with-trailing-icon-leading-space: var(--md-filled-button-with-trailing-icon-leading-space, 24px);--_with-trailing-icon-trailing-space: var(--md-filled-button-with-trailing-icon-trailing-space, 16px);--_container-shape-start-start: var( --md-filled-button-container-shape-start-start, var(--_container-shape) );--_container-shape-start-end: var( --md-filled-button-container-shape-start-end, var(--_container-shape) );--_container-shape-end-end: var( --md-filled-button-container-shape-end-end, var(--_container-shape) );--_container-shape-end-start: var( --md-filled-button-container-shape-end-start, var(--_container-shape) )}/*# sourceMappingURL=filled-styles.css.map */
 `;
 
 /**
@@ -1365,7 +1516,7 @@ const styles$4 = i$3 `:host{--_container-color: var(--md-filled-button-container
   * Copyright 2022 Google LLC
   * SPDX-License-Identifier: Apache-2.0
   */
-const styles$3 = i$3 `md-elevation{transition-duration:280ms}.button:disabled md-elevation{transition:none}.button{--md-elevation-level: var(--_container-elevation);--md-elevation-shadow-color: var(--_container-shadow-color)}.button:focus{--md-elevation-level: var(--_focus-container-elevation)}.button:hover{--md-elevation-level: var(--_hover-container-elevation)}.button:active{--md-elevation-level: var(--_pressed-container-elevation)}.button:disabled{--md-elevation-level: var(--_disabled-container-elevation)}/*# sourceMappingURL=shared-elevation-styles.css.map */
+const styles$7 = i$3 `md-elevation{transition-duration:280ms}.button:disabled md-elevation{transition:none}.button{--md-elevation-level: var(--_container-elevation);--md-elevation-shadow-color: var(--_container-shadow-color)}.button:focus{--md-elevation-level: var(--_focus-container-elevation)}.button:hover{--md-elevation-level: var(--_hover-container-elevation)}.button:active{--md-elevation-level: var(--_pressed-container-elevation)}.button:disabled{--md-elevation-level: var(--_disabled-container-elevation)}/*# sourceMappingURL=shared-elevation-styles.css.map */
 `;
 
 /**
@@ -1373,7 +1524,7 @@ const styles$3 = i$3 `md-elevation{transition-duration:280ms}.button:disabled md
   * Copyright 2022 Google LLC
   * SPDX-License-Identifier: Apache-2.0
   */
-const styles$2 = i$3 `:host{display:inline-flex;height:var(--_container-height);outline:none;font-family:var(--_label-text-font);font-size:var(--_label-text-size);line-height:var(--_label-text-line-height);font-weight:var(--_label-text-weight);-webkit-tap-highlight-color:rgba(0,0,0,0);vertical-align:top;--md-ripple-hover-color: var(--_hover-state-layer-color);--md-ripple-pressed-color: var(--_pressed-state-layer-color);--md-ripple-hover-opacity: var(--_hover-state-layer-opacity);--md-ripple-pressed-opacity: var(--_pressed-state-layer-opacity)}:host([touch-target=wrapper]){margin:max(0px,(48px - var(--_container-height))/2) 0}md-focus-ring{--md-focus-ring-shape-start-start: var(--_container-shape-start-start);--md-focus-ring-shape-start-end: var(--_container-shape-start-end);--md-focus-ring-shape-end-end: var(--_container-shape-end-end);--md-focus-ring-shape-end-start: var(--_container-shape-end-start)}:host([disabled]){cursor:default;pointer-events:none}.button{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-inline-size:64px;border:none;outline:none;user-select:none;-webkit-appearance:none;vertical-align:middle;background:rgba(0,0,0,0);text-decoration:none;inline-size:100%;position:relative;z-index:0;height:100%;font:inherit;color:var(--_label-text-color);padding-inline-start:var(--_leading-space);padding-inline-end:var(--_trailing-space);gap:8px}.button::before{background-color:var(--_container-color);border-radius:inherit;content:"";inset:0;position:absolute}.button::-moz-focus-inner{padding:0;border:0}.button:hover{color:var(--_hover-label-text-color);cursor:pointer}.button:focus{color:var(--_focus-label-text-color)}.button:active{color:var(--_pressed-label-text-color);outline:none}.button:disabled .button__label{color:var(--_disabled-label-text-color);opacity:var(--_disabled-label-text-opacity)}.button:disabled::before{background-color:var(--_disabled-container-color);opacity:var(--_disabled-container-opacity)}@media(forced-colors: active){.button::before{content:"";box-sizing:border-box;border:1px solid CanvasText;border-radius:inherit;inset:0;pointer-events:none;position:absolute}.button:disabled{--_disabled-icon-opacity: 1;--_disabled-container-opacity: 1;--_disabled-label-text-opacity: 1}}.button,.button__ripple{border-start-start-radius:var(--_container-shape-start-start);border-start-end-radius:var(--_container-shape-start-end);border-end-start-radius:var(--_container-shape-end-start);border-end-end-radius:var(--_container-shape-end-end)}.button::after,.button::before,md-elevation,.button__ripple{z-index:-1}.button--icon-leading{padding-inline-start:var(--_with-leading-icon-leading-space);padding-inline-end:var(--_with-leading-icon-trailing-space)}.button--icon-trailing{padding-inline-start:var(--_with-trailing-icon-leading-space);padding-inline-end:var(--_with-trailing-icon-trailing-space)}.link-button-wrapper{inline-size:100%}.button ::slotted([slot=icon]){display:inline-flex;position:relative;writing-mode:horizontal-tb;fill:currentColor;color:var(--_icon-color);font-size:var(--_icon-size);inline-size:var(--_icon-size);block-size:var(--_icon-size)}.button:hover ::slotted([slot=icon]){color:var(--_hover-icon-color)}.button:focus ::slotted([slot=icon]){color:var(--_focus-icon-color)}.button:active ::slotted([slot=icon]){color:var(--_pressed-icon-color)}.button:disabled ::slotted([slot=icon]){color:var(--_disabled-icon-color);opacity:var(--_disabled-icon-opacity)}.touch{position:absolute;top:50%;height:48px;left:0;right:0;transform:translateY(-50%)}:host([touch-target=none]) .touch{display:none}/*# sourceMappingURL=shared-styles.css.map */
+const styles$6 = i$3 `:host{display:inline-flex;height:var(--_container-height);outline:none;font-family:var(--_label-text-font);font-size:var(--_label-text-size);line-height:var(--_label-text-line-height);font-weight:var(--_label-text-weight);-webkit-tap-highlight-color:rgba(0,0,0,0);vertical-align:top;--md-ripple-hover-color: var(--_hover-state-layer-color);--md-ripple-pressed-color: var(--_pressed-state-layer-color);--md-ripple-hover-opacity: var(--_hover-state-layer-opacity);--md-ripple-pressed-opacity: var(--_pressed-state-layer-opacity)}:host([touch-target=wrapper]){margin:max(0px,(48px - var(--_container-height))/2) 0}md-focus-ring{--md-focus-ring-shape-start-start: var(--_container-shape-start-start);--md-focus-ring-shape-start-end: var(--_container-shape-start-end);--md-focus-ring-shape-end-end: var(--_container-shape-end-end);--md-focus-ring-shape-end-start: var(--_container-shape-end-start)}:host([disabled]){cursor:default;pointer-events:none}.button{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-inline-size:64px;border:none;outline:none;user-select:none;-webkit-appearance:none;vertical-align:middle;background:rgba(0,0,0,0);text-decoration:none;inline-size:100%;position:relative;z-index:0;height:100%;font:inherit;color:var(--_label-text-color);padding-inline-start:var(--_leading-space);padding-inline-end:var(--_trailing-space);gap:8px}.button::before{background-color:var(--_container-color);border-radius:inherit;content:"";inset:0;position:absolute}.button::-moz-focus-inner{padding:0;border:0}.button:hover{color:var(--_hover-label-text-color);cursor:pointer}.button:focus{color:var(--_focus-label-text-color)}.button:active{color:var(--_pressed-label-text-color);outline:none}.button:disabled .button__label{color:var(--_disabled-label-text-color);opacity:var(--_disabled-label-text-opacity)}.button:disabled::before{background-color:var(--_disabled-container-color);opacity:var(--_disabled-container-opacity)}@media(forced-colors: active){.button::before{content:"";box-sizing:border-box;border:1px solid CanvasText;border-radius:inherit;inset:0;pointer-events:none;position:absolute}.button:disabled{--_disabled-icon-opacity: 1;--_disabled-container-opacity: 1;--_disabled-label-text-opacity: 1}}.button,.button__ripple{border-start-start-radius:var(--_container-shape-start-start);border-start-end-radius:var(--_container-shape-start-end);border-end-start-radius:var(--_container-shape-end-start);border-end-end-radius:var(--_container-shape-end-end)}.button::after,.button::before,md-elevation,.button__ripple{z-index:-1}.button--icon-leading{padding-inline-start:var(--_with-leading-icon-leading-space);padding-inline-end:var(--_with-leading-icon-trailing-space)}.button--icon-trailing{padding-inline-start:var(--_with-trailing-icon-leading-space);padding-inline-end:var(--_with-trailing-icon-trailing-space)}.link-button-wrapper{inline-size:100%}.button ::slotted([slot=icon]){display:inline-flex;position:relative;writing-mode:horizontal-tb;fill:currentColor;color:var(--_icon-color);font-size:var(--_icon-size);inline-size:var(--_icon-size);block-size:var(--_icon-size)}.button:hover ::slotted([slot=icon]){color:var(--_hover-icon-color)}.button:focus ::slotted([slot=icon]){color:var(--_focus-icon-color)}.button:active ::slotted([slot=icon]){color:var(--_pressed-icon-color)}.button:disabled ::slotted([slot=icon]){color:var(--_disabled-icon-color);opacity:var(--_disabled-icon-opacity)}.touch{position:absolute;top:50%;height:48px;left:0;right:0;transform:translateY(-50%)}:host([touch-target=none]) .touch{display:none}/*# sourceMappingURL=shared-styles.css.map */
 `;
 
 /**
@@ -1403,7 +1554,7 @@ const styles$2 = i$3 `:host{display:inline-flex;height:var(--_container-height);
  */
 let MdFilledButton = class MdFilledButton extends FilledButton {
 };
-MdFilledButton.styles = [styles$2, styles$3, styles$4];
+MdFilledButton.styles = [styles$6, styles$7, styles$8];
 MdFilledButton = __decorate([
     e$7('md-filled-button')
 ], MdFilledButton);
@@ -1427,7 +1578,7 @@ class OutlinedButton extends Button {
   * Copyright 2022 Google LLC
   * SPDX-License-Identifier: Apache-2.0
   */
-const styles$1 = i$3 `:host{--_container-height: var(--md-outlined-button-container-height, 40px);--_container-shape: var(--md-outlined-button-container-shape, 9999px);--_disabled-label-text-color: var(--md-outlined-button-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-outlined-button-disabled-label-text-opacity, 0.38);--_disabled-outline-color: var(--md-outlined-button-disabled-outline-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-outline-opacity: var(--md-outlined-button-disabled-outline-opacity, 0.12);--_focus-label-text-color: var(--md-outlined-button-focus-label-text-color, var(--md-sys-color-primary, #6750a4));--_hover-label-text-color: var(--md-outlined-button-hover-label-text-color, var(--md-sys-color-primary, #6750a4));--_hover-state-layer-color: var(--md-outlined-button-hover-state-layer-color, var(--md-sys-color-primary, #6750a4));--_hover-state-layer-opacity: var(--md-outlined-button-hover-state-layer-opacity, 0.08);--_label-text-color: var(--md-outlined-button-label-text-color, var(--md-sys-color-primary, #6750a4));--_label-text-font: var(--md-outlined-button-label-text-font, var(--md-sys-typescale-label-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-outlined-button-label-text-line-height, var(--md-sys-typescale-label-large-line-height, 1.25rem));--_label-text-size: var(--md-outlined-button-label-text-size, var(--md-sys-typescale-label-large-size, 0.875rem));--_label-text-weight: var(--md-outlined-button-label-text-weight, var(--md-sys-typescale-label-large-weight, var(--md-ref-typeface-weight-medium, 500)));--_outline-color: var(--md-outlined-button-outline-color, var(--md-sys-color-outline, #79747e));--_outline-width: var(--md-outlined-button-outline-width, 1px);--_pressed-label-text-color: var(--md-outlined-button-pressed-label-text-color, var(--md-sys-color-primary, #6750a4));--_pressed-outline-color: var(--md-outlined-button-pressed-outline-color, var(--md-sys-color-outline, #79747e));--_pressed-state-layer-color: var(--md-outlined-button-pressed-state-layer-color, var(--md-sys-color-primary, #6750a4));--_pressed-state-layer-opacity: var(--md-outlined-button-pressed-state-layer-opacity, 0.12);--_disabled-icon-color: var(--md-outlined-button-disabled-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-icon-opacity: var(--md-outlined-button-disabled-icon-opacity, 0.38);--_focus-icon-color: var(--md-outlined-button-focus-icon-color, var(--md-sys-color-primary, #6750a4));--_hover-icon-color: var(--md-outlined-button-hover-icon-color, var(--md-sys-color-primary, #6750a4));--_icon-color: var(--md-outlined-button-icon-color, var(--md-sys-color-primary, #6750a4));--_icon-size: var(--md-outlined-button-icon-size, 18px);--_pressed-icon-color: var(--md-outlined-button-pressed-icon-color, var(--md-sys-color-primary, #6750a4));--_leading-space: var(--md-outlined-button-leading-space, 24px);--_trailing-space: var(--md-outlined-button-trailing-space, 24px);--_with-leading-icon-leading-space: var(--md-outlined-button-with-leading-icon-leading-space, 16px);--_with-leading-icon-trailing-space: var(--md-outlined-button-with-leading-icon-trailing-space, 24px);--_with-trailing-icon-leading-space: var(--md-outlined-button-with-trailing-icon-leading-space, 24px);--_with-trailing-icon-trailing-space: var(--md-outlined-button-with-trailing-icon-trailing-space, 16px);--_container-color: none;--_disabled-container-color: none;--_disabled-container-opacity: 0;--_container-shape-start-start: var( --md-outlined-button-container-shape-start-start, var(--_container-shape) );--_container-shape-start-end: var( --md-outlined-button-container-shape-start-end, var(--_container-shape) );--_container-shape-end-end: var( --md-outlined-button-container-shape-end-end, var(--_container-shape) );--_container-shape-end-start: var( --md-outlined-button-container-shape-end-start, var(--_container-shape) )}.button__outline{inset:0;border-style:solid;position:absolute;box-sizing:border-box;border-color:var(--_outline-color);border-start-start-radius:var(--_container-shape-start-start);border-start-end-radius:var(--_container-shape-start-end);border-end-start-radius:var(--_container-shape-end-start);border-end-end-radius:var(--_container-shape-end-end)}.button:active .button__outline{border-color:var(--_pressed-outline-color)}.button:disabled .button__outline{border-color:var(--_disabled-outline-color);opacity:var(--_disabled-outline-opacity)}@media(forced-colors: active){.button:disabled .button__outline{opacity:1}}.button__outline,.button__ripple{border-width:var(--_outline-width)}.button__ripple{inline-size:calc(100% - 2*var(--_outline-width));block-size:calc(100% - 2*var(--_outline-width));border-style:solid;border-color:rgba(0,0,0,0)}/*# sourceMappingURL=outlined-styles.css.map */
+const styles$5 = i$3 `:host{--_container-height: var(--md-outlined-button-container-height, 40px);--_container-shape: var(--md-outlined-button-container-shape, 9999px);--_disabled-label-text-color: var(--md-outlined-button-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-outlined-button-disabled-label-text-opacity, 0.38);--_disabled-outline-color: var(--md-outlined-button-disabled-outline-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-outline-opacity: var(--md-outlined-button-disabled-outline-opacity, 0.12);--_focus-label-text-color: var(--md-outlined-button-focus-label-text-color, var(--md-sys-color-primary, #6750a4));--_hover-label-text-color: var(--md-outlined-button-hover-label-text-color, var(--md-sys-color-primary, #6750a4));--_hover-state-layer-color: var(--md-outlined-button-hover-state-layer-color, var(--md-sys-color-primary, #6750a4));--_hover-state-layer-opacity: var(--md-outlined-button-hover-state-layer-opacity, 0.08);--_label-text-color: var(--md-outlined-button-label-text-color, var(--md-sys-color-primary, #6750a4));--_label-text-font: var(--md-outlined-button-label-text-font, var(--md-sys-typescale-label-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-outlined-button-label-text-line-height, var(--md-sys-typescale-label-large-line-height, 1.25rem));--_label-text-size: var(--md-outlined-button-label-text-size, var(--md-sys-typescale-label-large-size, 0.875rem));--_label-text-weight: var(--md-outlined-button-label-text-weight, var(--md-sys-typescale-label-large-weight, var(--md-ref-typeface-weight-medium, 500)));--_outline-color: var(--md-outlined-button-outline-color, var(--md-sys-color-outline, #79747e));--_outline-width: var(--md-outlined-button-outline-width, 1px);--_pressed-label-text-color: var(--md-outlined-button-pressed-label-text-color, var(--md-sys-color-primary, #6750a4));--_pressed-outline-color: var(--md-outlined-button-pressed-outline-color, var(--md-sys-color-outline, #79747e));--_pressed-state-layer-color: var(--md-outlined-button-pressed-state-layer-color, var(--md-sys-color-primary, #6750a4));--_pressed-state-layer-opacity: var(--md-outlined-button-pressed-state-layer-opacity, 0.12);--_disabled-icon-color: var(--md-outlined-button-disabled-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-icon-opacity: var(--md-outlined-button-disabled-icon-opacity, 0.38);--_focus-icon-color: var(--md-outlined-button-focus-icon-color, var(--md-sys-color-primary, #6750a4));--_hover-icon-color: var(--md-outlined-button-hover-icon-color, var(--md-sys-color-primary, #6750a4));--_icon-color: var(--md-outlined-button-icon-color, var(--md-sys-color-primary, #6750a4));--_icon-size: var(--md-outlined-button-icon-size, 18px);--_pressed-icon-color: var(--md-outlined-button-pressed-icon-color, var(--md-sys-color-primary, #6750a4));--_leading-space: var(--md-outlined-button-leading-space, 24px);--_trailing-space: var(--md-outlined-button-trailing-space, 24px);--_with-leading-icon-leading-space: var(--md-outlined-button-with-leading-icon-leading-space, 16px);--_with-leading-icon-trailing-space: var(--md-outlined-button-with-leading-icon-trailing-space, 24px);--_with-trailing-icon-leading-space: var(--md-outlined-button-with-trailing-icon-leading-space, 24px);--_with-trailing-icon-trailing-space: var(--md-outlined-button-with-trailing-icon-trailing-space, 16px);--_container-color: none;--_disabled-container-color: none;--_disabled-container-opacity: 0;--_container-shape-start-start: var( --md-outlined-button-container-shape-start-start, var(--_container-shape) );--_container-shape-start-end: var( --md-outlined-button-container-shape-start-end, var(--_container-shape) );--_container-shape-end-end: var( --md-outlined-button-container-shape-end-end, var(--_container-shape) );--_container-shape-end-start: var( --md-outlined-button-container-shape-end-start, var(--_container-shape) )}.button__outline{inset:0;border-style:solid;position:absolute;box-sizing:border-box;border-color:var(--_outline-color);border-start-start-radius:var(--_container-shape-start-start);border-start-end-radius:var(--_container-shape-start-end);border-end-start-radius:var(--_container-shape-end-start);border-end-end-radius:var(--_container-shape-end-end)}.button:active .button__outline{border-color:var(--_pressed-outline-color)}.button:disabled .button__outline{border-color:var(--_disabled-outline-color);opacity:var(--_disabled-outline-opacity)}@media(forced-colors: active){.button:disabled .button__outline{opacity:1}}.button__outline,.button__ripple{border-width:var(--_outline-width)}.button__ripple{inline-size:calc(100% - 2*var(--_outline-width));block-size:calc(100% - 2*var(--_outline-width));border-style:solid;border-color:rgba(0,0,0,0)}/*# sourceMappingURL=outlined-styles.css.map */
 `;
 
 /**
@@ -1459,339 +1610,653 @@ const styles$1 = i$3 `:host{--_container-height: var(--md-outlined-button-contai
  */
 let MdOutlinedButton = class MdOutlinedButton extends OutlinedButton {
 };
-MdOutlinedButton.styles = [styles$2, styles$1];
+MdOutlinedButton.styles = [styles$6, styles$5];
 MdOutlinedButton = __decorate([
     e$7('md-outlined-button')
 ], MdOutlinedButton);
 
 /**
  * @license
- * Copyright 2019 Google LLC
+ * Copyright 2023 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 /**
- * A checkbox component.
+ * A divider component.
  */
-class Checkbox extends s$1 {
-    /**
-     * The HTML name to use in form submission.
-     */
-    get name() {
-        return this.getAttribute('name') ?? '';
-    }
-    set name(name) {
-        this.setAttribute('name', name);
-    }
-    /**
-     * The associated form element with which this element's value will submit.
-     */
-    get form() {
-        return this.internals.form;
-    }
-    /**
-     * The labels this element is associated with.
-     */
-    get labels() {
-        return this.internals.labels;
-    }
-    /**
-     * Returns a ValidityState object that represents the validity states of the
-     * checkbox.
-     *
-     * Note that checkboxes will only set `valueMissing` if `required` and not
-     * checked.
-     *
-     * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#validation
-     */
-    get validity() {
-        this.syncValidity();
-        return this.internals.validity;
-    }
-    /**
-     * Returns the native validation error message.
-     *
-     * https://developer.mozilla.org/en-US/docs/Web/HTML/Constraint_validation#constraint_validation_process
-     */
-    get validationMessage() {
-        this.syncValidity();
-        return this.internals.validationMessage;
-    }
-    /**
-     * Returns whether an element will successfully validate based on forms
-     * validation rules and constraints.
-     *
-     * https://developer.mozilla.org/en-US/docs/Web/HTML/Constraint_validation#constraint_validation_process
-     */
-    get willValidate() {
-        this.syncValidity();
-        return this.internals.willValidate;
-    }
+class Divider extends s$1 {
     constructor() {
-        super();
+        super(...arguments);
         /**
-         * Whether or not the checkbox is selected.
+         * Indents the divider with equal padding on both sides.
          */
-        this.checked = false;
+        this.inset = false;
         /**
-         * Whether or not the checkbox is disabled.
+         * Indents the divider with padding on the leading side.
          */
-        this.disabled = false;
+        this.insetStart = false;
         /**
-         * Whether or not the checkbox is indeterminate.
-         *
-         * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes
+         * Indents the divider with padding on the trailing side.
          */
-        this.indeterminate = false;
-        /**
-         * When true, require the checkbox to be selected when participating in
-         * form submission.
-         *
-         * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#validation
-         */
-        this.required = false;
-        /**
-         * The value of the checkbox that is submitted with a form when selected.
-         *
-         * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#value
-         */
-        this.value = 'on';
-        this.prevChecked = false;
-        this.prevDisabled = false;
-        this.prevIndeterminate = false;
-        // Needed for Safari, see https://bugs.webkit.org/show_bug.cgi?id=261432
-        // Replace with this.internals.validity.customError when resolved.
-        this.hasCustomValidityError = false;
-        this.internals = this /* needed for closure */.attachInternals();
-        {
-            this.addEventListener('click', (event) => {
-                if (!isActivationClick(event)) {
-                    return;
-                }
-                this.focus();
-                dispatchActivationClick(this.input);
-            });
-        }
-    }
-    /**
-     * Checks the checkbox's native validation and returns whether or not the
-     * element is valid.
-     *
-     * If invalid, this method will dispatch the `invalid` event.
-     *
-     * https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/checkValidity
-     *
-     * @return true if the checkbox is valid, or false if not.
-     */
-    checkValidity() {
-        this.syncValidity();
-        return this.internals.checkValidity();
-    }
-    /**
-     * Checks the checkbox's native validation and returns whether or not the
-     * element is valid.
-     *
-     * If invalid, this method will dispatch the `invalid` event.
-     *
-     * The `validationMessage` is reported to the user by the browser. Use
-     * `setCustomValidity()` to customize the `validationMessage`.
-     *
-     * https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/reportValidity
-     *
-     * @return true if the checkbox is valid, or false if not.
-     */
-    reportValidity() {
-        this.syncValidity();
-        return this.internals.reportValidity();
-    }
-    /**
-     * Sets the checkbox's native validation error message. This is used to
-     * customize `validationMessage`.
-     *
-     * When the error is not an empty string, the checkbox is considered invalid
-     * and `validity.customError` will be true.
-     *
-     * https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/setCustomValidity
-     *
-     * @param error The error message to display.
-     */
-    setCustomValidity(error) {
-        this.hasCustomValidityError = !!error;
-        this.internals.setValidity({ customError: !!error }, error, this.getInput());
-    }
-    update(changed) {
-        if (changed.has('checked') || changed.has('disabled') ||
-            changed.has('indeterminate')) {
-            this.prevChecked = changed.get('checked') ?? this.checked;
-            this.prevDisabled = changed.get('disabled') ?? this.disabled;
-            this.prevIndeterminate =
-                changed.get('indeterminate') ?? this.indeterminate;
-        }
-        const shouldAddFormValue = this.checked && !this.indeterminate;
-        const state = String(this.checked);
-        this.internals.setFormValue(shouldAddFormValue ? this.value : null, state);
-        super.update(changed);
-    }
-    render() {
-        const prevNone = !this.prevChecked && !this.prevIndeterminate;
-        const prevChecked = this.prevChecked && !this.prevIndeterminate;
-        const prevIndeterminate = this.prevIndeterminate;
-        const isChecked = this.checked && !this.indeterminate;
-        const isIndeterminate = this.indeterminate;
-        const containerClasses = o({
-            'disabled': this.disabled,
-            'selected': isChecked || isIndeterminate,
-            'unselected': !isChecked && !isIndeterminate,
-            'checked': isChecked,
-            'indeterminate': isIndeterminate,
-            'prev-unselected': prevNone,
-            'prev-checked': prevChecked,
-            'prev-indeterminate': prevIndeterminate,
-            'prev-disabled': this.prevDisabled,
-        });
-        // Needed for closure conformance
-        const { ariaLabel, ariaInvalid } = this;
-        // Note: <input> needs to be rendered before the <svg> for
-        // form.reportValidity() to work in Chrome.
-        return x `
-      <div class="container ${containerClasses}">
-        <input type="checkbox"
-          id="input"
-          aria-checked=${isIndeterminate ? 'mixed' : A}
-          aria-label=${ariaLabel || A}
-          aria-invalid=${ariaInvalid || A}
-          ?disabled=${this.disabled}
-          ?required=${this.required}
-          .indeterminate=${this.indeterminate}
-          .checked=${this.checked}
-          @change=${this.handleChange}
-        >
-
-        <div class="outline"></div>
-        <div class="background"></div>
-        <md-focus-ring part="focus-ring" for="input"></md-focus-ring>
-        <md-ripple for="input" ?disabled=${this.disabled}></md-ripple>
-        <svg class="icon" viewBox="0 0 18 18" aria-hidden="true">
-          <rect class="mark short" />
-          <rect class="mark long" />
-        </svg>
-      </div>
-    `;
-    }
-    updated() {
-        // Sync validity when properties change, since validation properties may
-        // have changed.
-        this.syncValidity();
-    }
-    handleChange(event) {
-        const target = event.target;
-        this.checked = target.checked;
-        this.indeterminate = target.indeterminate;
-        redispatchEvent(this, event);
-    }
-    syncValidity() {
-        // Sync the internal <input>'s validity and the host's ElementInternals
-        // validity. We do this to re-use native `<input>` validation messages.
-        const input = this.getInput();
-        if (this.hasCustomValidityError) {
-            input.setCustomValidity(this.internals.validationMessage);
-        }
-        else {
-            input.setCustomValidity('');
-        }
-        this.internals.setValidity(input.validity, input.validationMessage, this.getInput());
-    }
-    getInput() {
-        if (!this.input) {
-            // If the input is not yet defined, synchronously render.
-            this.connectedCallback();
-            this.performUpdate();
-        }
-        if (this.isUpdatePending) {
-            // If there are pending updates, synchronously perform them. This ensures
-            // that constraint validation properties (like `required`) are synced
-            // before interacting with input APIs that depend on them.
-            this.scheduleUpdate();
-        }
-        return this.input;
-    }
-    /** @private */
-    formResetCallback() {
-        // The checked property does not reflect, so the original attribute set by
-        // the user is used to determine the default value.
-        this.checked = this.hasAttribute('checked');
-    }
-    /** @private */
-    formStateRestoreCallback(state) {
-        this.checked = state === 'true';
+        this.insetEnd = false;
     }
 }
-(() => {
-    requestUpdateOnAriaChange(Checkbox);
-})();
-/** @nocollapse */
-Checkbox.shadowRootOptions = {
-    ...s$1.shadowRootOptions,
-    delegatesFocus: true
-};
-/** @nocollapse */
-Checkbox.formAssociated = true;
-__decorate([
-    n$6({ type: Boolean })
-], Checkbox.prototype, "checked", void 0);
 __decorate([
     n$6({ type: Boolean, reflect: true })
-], Checkbox.prototype, "disabled", void 0);
+], Divider.prototype, "inset", void 0);
 __decorate([
-    n$6({ type: Boolean })
-], Checkbox.prototype, "indeterminate", void 0);
+    n$6({ type: Boolean, reflect: true, attribute: 'inset-start' })
+], Divider.prototype, "insetStart", void 0);
 __decorate([
-    n$6({ type: Boolean })
-], Checkbox.prototype, "required", void 0);
-__decorate([
-    n$6()
-], Checkbox.prototype, "value", void 0);
-__decorate([
-    t$3()
-], Checkbox.prototype, "prevChecked", void 0);
-__decorate([
-    t$3()
-], Checkbox.prototype, "prevDisabled", void 0);
-__decorate([
-    t$3()
-], Checkbox.prototype, "prevIndeterminate", void 0);
-__decorate([
-    i$4('input')
-], Checkbox.prototype, "input", void 0);
+    n$6({ type: Boolean, reflect: true, attribute: 'inset-end' })
+], Divider.prototype, "insetEnd", void 0);
 
 /**
   * @license
   * Copyright 2022 Google LLC
   * SPDX-License-Identifier: Apache-2.0
   */
-const styles = i$3 `:host{--_container-shape: var(--md-checkbox-container-shape, 2px);--_container-size: var(--md-checkbox-container-size, 18px);--_icon-size: var(--md-checkbox-icon-size, 18px);--_selected-container-color: var(--md-checkbox-selected-container-color, var(--md-sys-color-primary, #6750a4));--_selected-disabled-container-color: var(--md-checkbox-selected-disabled-container-color, var(--md-sys-color-on-surface, #1d1b20));--_selected-disabled-container-opacity: var(--md-checkbox-selected-disabled-container-opacity, 0.38);--_selected-disabled-icon-color: var(--md-checkbox-selected-disabled-icon-color, var(--md-sys-color-surface, #fef7ff));--_selected-focus-container-color: var(--md-checkbox-selected-focus-container-color, var(--md-sys-color-primary, #6750a4));--_selected-focus-icon-color: var(--md-checkbox-selected-focus-icon-color, var(--md-sys-color-on-primary, #fff));--_selected-hover-container-color: var(--md-checkbox-selected-hover-container-color, var(--md-sys-color-primary, #6750a4));--_selected-hover-icon-color: var(--md-checkbox-selected-hover-icon-color, var(--md-sys-color-on-primary, #fff));--_selected-hover-state-layer-color: var(--md-checkbox-selected-hover-state-layer-color, var(--md-sys-color-primary, #6750a4));--_selected-hover-state-layer-opacity: var(--md-checkbox-selected-hover-state-layer-opacity, 0.08);--_selected-icon-color: var(--md-checkbox-selected-icon-color, var(--md-sys-color-on-primary, #fff));--_selected-pressed-container-color: var(--md-checkbox-selected-pressed-container-color, var(--md-sys-color-primary, #6750a4));--_selected-pressed-icon-color: var(--md-checkbox-selected-pressed-icon-color, var(--md-sys-color-on-primary, #fff));--_selected-pressed-state-layer-color: var(--md-checkbox-selected-pressed-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_selected-pressed-state-layer-opacity: var(--md-checkbox-selected-pressed-state-layer-opacity, 0.12);--_state-layer-shape: var(--md-checkbox-state-layer-shape, 9999px);--_state-layer-size: var(--md-checkbox-state-layer-size, 40px);--_disabled-container-opacity: var(--md-checkbox-disabled-container-opacity, 0.38);--_disabled-outline-color: var(--md-checkbox-disabled-outline-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-outline-width: var(--md-checkbox-disabled-outline-width, 2px);--_focus-outline-color: var(--md-checkbox-focus-outline-color, var(--md-sys-color-on-surface, #1d1b20));--_focus-outline-width: var(--md-checkbox-focus-outline-width, 2px);--_hover-outline-color: var(--md-checkbox-hover-outline-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-outline-width: var(--md-checkbox-hover-outline-width, 2px);--_hover-state-layer-color: var(--md-checkbox-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-state-layer-opacity: var(--md-checkbox-hover-state-layer-opacity, 0.08);--_outline-color: var(--md-checkbox-outline-color, var(--md-sys-color-on-surface-variant, #49454f));--_outline-width: var(--md-checkbox-outline-width, 2px);--_pressed-outline-color: var(--md-checkbox-pressed-outline-color, var(--md-sys-color-on-surface, #1d1b20));--_pressed-outline-width: var(--md-checkbox-pressed-outline-width, 2px);--_pressed-state-layer-color: var(--md-checkbox-pressed-state-layer-color, var(--md-sys-color-primary, #6750a4));--_pressed-state-layer-opacity: var(--md-checkbox-pressed-state-layer-opacity, 0.12);--_container-shape-start-start: var( --md-checkbox-container-shape-start-start, var(--_container-shape) );--_container-shape-start-end: var( --md-checkbox-container-shape-start-end, var(--_container-shape) );--_container-shape-end-end: var( --md-checkbox-container-shape-end-end, var(--_container-shape) );--_container-shape-end-start: var( --md-checkbox-container-shape-end-start, var(--_container-shape) );border-start-start-radius:var(--_container-shape-start-start);border-start-end-radius:var(--_container-shape-start-end);border-end-end-radius:var(--_container-shape-end-end);border-end-start-radius:var(--_container-shape-end-start);display:inline-flex;height:var(--_container-size);position:relative;vertical-align:top;width:var(--_container-size);-webkit-tap-highlight-color:rgba(0,0,0,0)}:host([touch-target=wrapper]){margin:max(0px,(48px - var(--_container-size))/2)}md-focus-ring{height:44px;inset:unset;width:44px}input{appearance:none;height:48px;margin:0;opacity:0;outline:none;position:absolute;width:48px;z-index:1}:host([touch-target=none]) input{height:100%;width:100%}.container{border-radius:inherit;display:flex;height:100%;place-content:center;place-items:center;position:relative;width:100%}.outline,.background,.icon{inset:0;position:absolute}.outline,.background{border-radius:inherit}.outline{border-color:var(--_outline-color);border-style:solid;border-width:var(--_outline-width);box-sizing:border-box}.background{background-color:var(--_selected-container-color)}.background,.icon{opacity:0;transition-duration:150ms,50ms;transition-property:transform,opacity;transition-timing-function:cubic-bezier(0.3, 0, 0.8, 0.15),linear;transform:scale(0.6)}:where(.selected) :is(.background,.icon){opacity:1;transition-duration:350ms,50ms;transition-timing-function:cubic-bezier(0.05, 0.7, 0.1, 1),linear;transform:scale(1)}md-ripple{border-radius:var(--_state-layer-shape);height:var(--_state-layer-size);inset:unset;width:var(--_state-layer-size);--md-ripple-hover-color: var(--_hover-state-layer-color);--md-ripple-hover-opacity: var(--_hover-state-layer-opacity);--md-ripple-pressed-color: var(--_pressed-state-layer-color);--md-ripple-pressed-opacity: var(--_pressed-state-layer-opacity)}.selected md-ripple{--md-ripple-hover-color: var(--_selected-hover-state-layer-color);--md-ripple-hover-opacity: var(--_selected-hover-state-layer-opacity);--md-ripple-pressed-color: var(--_selected-pressed-state-layer-color);--md-ripple-pressed-opacity: var(--_selected-pressed-state-layer-opacity)}.icon{fill:var(--_selected-icon-color);height:var(--_icon-size);width:var(--_icon-size)}.mark.short{height:2px;transition-property:transform,height;width:2px}.mark.long{height:2px;transition-property:transform,width;width:10px}.mark{animation-duration:150ms;animation-timing-function:cubic-bezier(0.3, 0, 0.8, 0.15);transition-duration:150ms;transition-timing-function:cubic-bezier(0.3, 0, 0.8, 0.15)}.selected .mark{animation-duration:350ms;animation-timing-function:cubic-bezier(0.05, 0.7, 0.1, 1);transition-duration:350ms;transition-timing-function:cubic-bezier(0.05, 0.7, 0.1, 1)}.checked .mark,.prev-checked.unselected .mark{transform:scaleY(-1) translate(7px, -14px) rotate(45deg)}.checked .mark.short,.prev-checked.unselected .mark.short{height:5.6568542495px}.checked .mark.long,.prev-checked.unselected .mark.long{width:11.313708499px}.indeterminate .mark,.prev-indeterminate.unselected .mark{transform:scaleY(-1) translate(4px, -10px) rotate(0deg)}.prev-unselected .mark{transition-property:none}.prev-unselected.checked .mark.long{animation-name:prev-unselected-to-checked}@keyframes prev-unselected-to-checked{from{width:0}}:where(:hover) .outline{border-color:var(--_hover-outline-color);border-width:var(--_hover-outline-width)}:where(:hover) .background{background:var(--_selected-hover-container-color)}:where(:hover) .icon{fill:var(--_selected-hover-icon-color)}:where(:focus-within) .outline{border-color:var(--_focus-outline-color);border-width:var(--_focus-outline-width)}:where(:focus-within) .background{background:var(--_selected-focus-container-color)}:where(:focus-within) .icon{fill:var(--_selected-focus-icon-color)}:where(:active) .outline{border-color:var(--_pressed-outline-color);border-width:var(--_pressed-outline-width)}:where(:active) .background{background:var(--_selected-pressed-container-color)}:where(:active) .icon{fill:var(--_selected-pressed-icon-color)}:where(.disabled,.prev-disabled) :is(.background,.icon,.mark){animation-duration:0s;transition-duration:0s}:where(.disabled) .outline{border-color:var(--_disabled-outline-color);border-width:var(--_disabled-outline-width);opacity:var(--_disabled-container-opacity)}:where(.selected.disabled) .outline{visibility:hidden}:where(.selected.disabled) .background{background:var(--_selected-disabled-container-color);opacity:var(--_selected-disabled-container-opacity)}:where(.disabled) .icon{fill:var(--_selected-disabled-icon-color)}@media(forced-colors: active){.background{background-color:CanvasText}.selected.disabled .background{background-color:GrayText;opacity:1}.outline{border-color:CanvasText}.disabled .outline{border-color:GrayText;opacity:1}.icon{fill:Canvas}}/*# sourceMappingURL=checkbox-styles.css.map */
+const styles$4 = i$3 `:host{--_color: var(--md-divider-color, var(--md-sys-color-outline-variant, #cac4d0));--_thickness: var(--md-divider-thickness, 1px);box-sizing:border-box;color:var(--_color);display:flex;height:var(--_thickness);width:100%}:host([inset]),:host([inset-start]){padding-inline-start:16px}:host([inset]),:host([inset-end]){padding-inline-end:16px}:host::before{background:currentColor;content:"";height:100%;width:100%}@media(forced-colors: active){:host::before{background:CanvasText}}/*# sourceMappingURL=divider-styles.css.map */
 `;
 
 /**
  * @license
- * Copyright 2018 Google LLC
+ * Copyright 2023 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 /**
- * @summary Checkboxes allow users to select one or more items from a set.
- * Checkboxes can turn an option on or off.
+ * @summary A divider is a thin line that groups content in lists and
+ * containers.
  *
- * @description
- * Use checkboxes to:
- * - Select one or more options from a list
- * - Present a list containing sub-selections
- * - Turn an item on or off in a desktop environment
+ * @description Dividers can reinforce tapability, such as when used to separate
+ * list items or define tappable regions in an accordion.
  *
  * @final
  * @suppress {visibility}
  */
-let MdCheckbox = class MdCheckbox extends Checkbox {
+let MdDivider = class MdDivider extends Divider {
 };
-MdCheckbox.styles = [styles];
-MdCheckbox = __decorate([
-    e$7('md-checkbox')
-], MdCheckbox);
+MdDivider.styles = [styles$4];
+MdDivider = __decorate([
+    e$7('md-divider')
+], MdDivider);
+
+/**
+ * @license
+ * Copyright 2023 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+var _a;
+/**
+ * Symbol for tabs to use to animate their indicators based off another tab's
+ * indicator.
+ */
+const INDICATOR = Symbol('indicator');
+/**
+ * Symbol used by the tab bar to request a tab to animate its indicator from a
+ * previously selected tab.
+ */
+const ANIMATE_INDICATOR = Symbol('animateIndicator');
+/**
+ * Tab component.
+ */
+class Tab extends s$1 {
+    /**
+     * TODO(b/293476210): remove after migrating
+     * @deprecated use `active`
+     */
+    get selected() {
+        return this.active;
+    }
+    set selected(active) {
+        this.active = active;
+    }
+    constructor() {
+        super();
+        /**
+         * Whether or not the tab is selected.
+         **/
+        this.active = false;
+        /**
+         * In SSR, set this to true when an icon is present.
+         */
+        this.hasIcon = false;
+        /**
+         * In SSR, set this to true when there is no label and only an icon.
+         */
+        this.iconOnly = false;
+        this.fullWidthIndicator = false;
+        this.internals = polyfillElementInternalsAria(this, this /* needed for closure */.attachInternals());
+        {
+            this.internals.role = 'tab';
+            this.addEventListener('keydown', this.handleKeydown.bind(this));
+        }
+    }
+    render() {
+        const indicator = x `<div class="indicator"></div>`;
+        return x `
+      <div class="button" role="presentation" @click=${this.handleContentClick}>
+        <md-focus-ring part="focus-ring" inward
+            .control=${this}></md-focus-ring>
+        <md-elevation></md-elevation>
+        <md-ripple .control=${this}></md-ripple>
+        <div class="content ${o(this.getContentClasses())}"
+            role="presentation">
+          <slot name="icon" @slotchange=${this.handleIconSlotChange}></slot>
+          <slot @slotchange=${this.handleSlotChange}></slot>
+          ${this.fullWidthIndicator ? A : indicator}
+        </div>
+        ${this.fullWidthIndicator ? indicator : A}
+      </div>`;
+    }
+    getContentClasses() {
+        return {
+            'has-icon': this.hasIcon,
+            'has-label': !this.iconOnly,
+        };
+    }
+    updated() {
+        this.internals.ariaSelected = String(this.active);
+    }
+    async handleKeydown(event) {
+        // Allow event to bubble.
+        await 0;
+        if (event.defaultPrevented) {
+            return;
+        }
+        if (event.key === 'Enter' || event.key === ' ') {
+            // Prevent default behavior such as scrolling when pressing spacebar.
+            event.preventDefault();
+            this.click();
+        }
+    }
+    handleContentClick(event) {
+        // Ensure the "click" target is always the tab, and not content, by stopping
+        // propagation of content clicks and re-clicking the host.
+        event.stopPropagation();
+        this.click();
+    }
+    [(_a = INDICATOR, ANIMATE_INDICATOR)](previousTab) {
+        if (!this[INDICATOR]) {
+            return;
+        }
+        this[INDICATOR].getAnimations().forEach(a => {
+            a.cancel();
+        });
+        const frames = this.getKeyframes(previousTab);
+        if (frames !== null) {
+            this[INDICATOR].animate(frames, { duration: 250, easing: EASING.EMPHASIZED });
+        }
+    }
+    getKeyframes(previousTab) {
+        const reduceMotion = shouldReduceMotion();
+        if (!this.active) {
+            return reduceMotion ? [{ 'opacity': 1 }, { 'transform': 'none' }] : null;
+        }
+        const from = {};
+        const fromRect = previousTab[INDICATOR]?.getBoundingClientRect() ?? {};
+        const fromPos = fromRect.left;
+        const fromExtent = fromRect.width;
+        const toRect = this[INDICATOR].getBoundingClientRect();
+        const toPos = toRect.left;
+        const toExtent = toRect.width;
+        const scale = fromExtent / toExtent;
+        if (!reduceMotion && fromPos !== undefined && toPos !== undefined &&
+            !isNaN(scale)) {
+            from['transform'] = `translateX(${(fromPos - toPos).toFixed(4)}px) scaleX(${scale.toFixed(4)})`;
+        }
+        else {
+            from['opacity'] = 0;
+        }
+        // note, including `transform: none` avoids quirky Safari behavior
+        // that can hide the animation.
+        return [from, { 'transform': 'none' }];
+    }
+    handleSlotChange() {
+        this.iconOnly = false;
+        // Check if there's any label text or elements. If not, then there is only
+        // an icon.
+        for (const node of this.assignedDefaultNodes) {
+            const hasTextContent = node.nodeType === Node.TEXT_NODE &&
+                !!node.wholeText.match(/\S/);
+            if (node.nodeType === Node.ELEMENT_NODE || hasTextContent) {
+                return;
+            }
+        }
+        this.iconOnly = true;
+    }
+    handleIconSlotChange() {
+        this.hasIcon = this.assignedIcons.length > 0;
+    }
+}
+(() => {
+    setupHostAria(Tab);
+})();
+__decorate([
+    n$6({ type: Boolean, reflect: true })
+], Tab.prototype, "active", void 0);
+__decorate([
+    n$6({ type: Boolean })
+], Tab.prototype, "selected", null);
+__decorate([
+    n$6({ type: Boolean, attribute: 'has-icon' })
+], Tab.prototype, "hasIcon", void 0);
+__decorate([
+    n$6({ type: Boolean, attribute: 'icon-only' })
+], Tab.prototype, "iconOnly", void 0);
+__decorate([
+    i$4('.indicator')
+], Tab.prototype, _a, void 0);
+__decorate([
+    t$3()
+], Tab.prototype, "fullWidthIndicator", void 0);
+__decorate([
+    o$5({ flatten: true })
+], Tab.prototype, "assignedDefaultNodes", void 0);
+__decorate([
+    l$4({ slot: 'icon', flatten: true })
+], Tab.prototype, "assignedIcons", void 0);
+function shouldReduceMotion() {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+/**
+ * @license
+ * Copyright 2023 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/**
+ * @fires change Fired when the selected tab changes. The target's selected or
+ * selectedItem and previousSelected or previousSelectedItem provide information
+ * about the selection change. The change event is fired when a user interaction
+ * like a space/enter key or click cause a selection change. The tab selection
+ * based on these actions can be cancelled by calling preventDefault on the
+ * triggering `keydown` or `click` event.
+ *
+ * @example
+ * // perform an action if a tab is clicked
+ * tabs.addEventListener('change', (event: Event) => {
+ *   if (event.target.selected === 2)
+ *      takeAction();
+ *   }
+ * });
+ *
+ * // prevent a click from triggering tab selection under some condition
+ * tabs.addEventListener('click', (event: Event) => {
+ *   if (notReady)
+ *      event.preventDefault();
+ *   }
+ * });
+ *
+ */
+class Tabs extends s$1 {
+    /**
+     * The tabs of this tab bar.
+     */
+    get tabs() {
+        return this.maybeTabs.filter(isTab);
+    }
+    /**
+     * The currently selected tab, `null` only when there are no tab children.
+     */
+    get activeTab() {
+        return this.tabs.find(tab => tab.active) ?? null;
+    }
+    set activeTab(tab) {
+        // Ignore setting activeTab to null. As long as there are children, one tab
+        // must be selected.
+        if (tab) {
+            this.activateTab(tab);
+        }
+    }
+    /**
+     * The index of the currently selected tab.
+     */
+    get activeTabIndex() {
+        return this.tabs.findIndex(tab => tab.active);
+    }
+    set activeTabIndex(index) {
+        const activateTabAtIndex = () => {
+            const tab = this.tabs[index];
+            // Ignore out-of-bound indices.
+            if (tab) {
+                this.activateTab(tab);
+            }
+        };
+        if (!this.slotElement) {
+            // This is needed to support setting the activeTabIndex via a lit property
+            // binding.
+            //
+            // ```ts
+            // html`
+            //   <md-tabs .activeTabIndex=${1}>
+            //     <md-tab>First</md-tab>
+            //     <md-tab>Second</md-tab>
+            //   </md-tabs>
+            // `;
+            // ```
+            //
+            // It's needed since lit's rendering lifecycle is asynchronous, and the
+            // `<slot>` element hasn't rendered, so `tabs` is empty.
+            this.updateComplete.then(activateTabAtIndex);
+            return;
+        }
+        activateTabAtIndex();
+    }
+    get focusedTab() {
+        return this.tabs.find(tab => tab.matches(':focus-within'));
+    }
+    constructor() {
+        super();
+        /**
+         * Whether or not to automatically select a tab when it is focused.
+         */
+        this.autoActivate = false;
+        this.internals = polyfillElementInternalsAria(this, this /* needed for closure */.attachInternals());
+        {
+            this.internals.role = 'tablist';
+            this.addEventListener('keydown', this.handleKeydown.bind(this));
+            this.addEventListener('keyup', this.handleKeyup.bind(this));
+            this.addEventListener('focusout', this.handleFocusout.bind(this));
+        }
+    }
+    /**
+     * Scrolls the toolbar, if overflowing, to the active tab, or the provided
+     * tab.
+     *
+     * @param tabToScrollTo The tab that should be scrolled to. Defaults to the
+     *     active tab.
+     * @return A Promise that resolves after the tab has been scrolled to.
+     */
+    async scrollToTab(tabToScrollTo) {
+        await this.updateComplete;
+        const { tabs } = this;
+        tabToScrollTo ?? (tabToScrollTo = this.activeTab);
+        if (!tabToScrollTo || !tabs.includes(tabToScrollTo)) {
+            return;
+        }
+        // wait for tabs to render.
+        for (const tab of this.tabs) {
+            await tab.updateComplete;
+        }
+        const offset = tabToScrollTo.offsetLeft;
+        const extent = tabToScrollTo.offsetWidth;
+        const scroll = this.scrollLeft;
+        const hostExtent = this.offsetWidth;
+        const scrollMargin = 48;
+        const min = offset - scrollMargin;
+        const max = offset + extent - hostExtent + scrollMargin;
+        const to = Math.min(min, Math.max(max, scroll));
+        // TODO(b/299934312): improve focus smoothness
+        const behavior = !this.focusedTab ? 'smooth' : 'instant';
+        this.scrollTo({ behavior, top: 0, left: to });
+    }
+    render() {
+        return x `
+      <div class="tabs">
+        <slot @slotchange=${this.handleSlotChange}
+            @click=${this.handleTabClick}></slot>
+      </div>
+      <md-divider part="divider"></md-divider>
+    `;
+    }
+    async handleTabClick(event) {
+        const tab = event.target;
+        // Allow event to bubble
+        await 0;
+        if (event.defaultPrevented || !isTab(tab) || tab.active) {
+            return;
+        }
+        this.activateTab(tab);
+    }
+    activateTab(activeTab) {
+        const { tabs } = this;
+        const previousTab = this.activeTab;
+        if (!tabs.includes(activeTab) || previousTab === activeTab) {
+            // Ignore setting activeTab to a tab element that is not a child.
+            return;
+        }
+        for (const tab of tabs) {
+            tab.active = tab === activeTab;
+        }
+        if (previousTab) {
+            // Don't dispatch a change event if activating a tab when no previous tabs
+            // were selected, such as when md-tabs auto-selects the first tab.
+            const defaultPrevented = !this.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
+            if (defaultPrevented) {
+                for (const tab of tabs) {
+                    tab.active = tab === previousTab;
+                }
+                return;
+            }
+            activeTab[ANIMATE_INDICATOR](previousTab);
+        }
+        this.updateFocusableTab(activeTab);
+        this.scrollToTab(activeTab);
+    }
+    updateFocusableTab(focusableTab) {
+        for (const tab of this.tabs) {
+            tab.tabIndex = tab === focusableTab ? 0 : -1;
+        }
+    }
+    // focus item on keydown and optionally select it
+    async handleKeydown(event) {
+        // Allow event to bubble.
+        await 0;
+        const isLeft = event.key === 'ArrowLeft';
+        const isRight = event.key === 'ArrowRight';
+        const isHome = event.key === 'Home';
+        const isEnd = event.key === 'End';
+        // Ignore non-navigation keys
+        if (event.defaultPrevented || !isLeft && !isRight && !isHome && !isEnd) {
+            return;
+        }
+        const { tabs } = this;
+        // Don't try to select another tab if there aren't any.
+        if (tabs.length < 2) {
+            return;
+        }
+        // Prevent default interactions, such as scrolling.
+        event.preventDefault();
+        let indexToFocus;
+        if (isHome || isEnd) {
+            indexToFocus = isHome ? 0 : tabs.length - 1;
+        }
+        else {
+            // Check if moving forwards or backwards
+            const isRtl = getComputedStyle(this).direction === 'rtl';
+            const forwards = isRtl ? isLeft : isRight;
+            const { focusedTab } = this;
+            if (!focusedTab) {
+                // If there is not already a tab focused, select the first or last tab
+                // based on the direction we're traveling.
+                indexToFocus = forwards ? 0 : tabs.length - 1;
+            }
+            else {
+                const focusedIndex = this.tabs.indexOf(focusedTab);
+                indexToFocus = forwards ? focusedIndex + 1 : focusedIndex - 1;
+                if (indexToFocus >= tabs.length) {
+                    // Return to start if moving past the last item.
+                    indexToFocus = 0;
+                }
+                else if (indexToFocus < 0) {
+                    // Go to end if moving before the first item.
+                    indexToFocus = tabs.length - 1;
+                }
+            }
+        }
+        const tabToFocus = tabs[indexToFocus];
+        tabToFocus.focus();
+        if (this.autoActivate) {
+            this.activateTab(tabToFocus);
+        }
+        else {
+            this.updateFocusableTab(tabToFocus);
+        }
+    }
+    // scroll to item on keyup.
+    handleKeyup() {
+        this.scrollToTab(this.focusedTab ?? this.activeTab);
+    }
+    handleFocusout() {
+        // restore focus to selected item when blurring the tab bar.
+        if (this.matches(':focus-within')) {
+            return;
+        }
+        const { activeTab } = this;
+        if (activeTab) {
+            this.updateFocusableTab(activeTab);
+        }
+    }
+    handleSlotChange() {
+        const firstTab = this.tabs[0];
+        if (!this.activeTab && firstTab) {
+            // If the active tab was removed, auto-select the first one. There should
+            // always be a selected tab while the bar has children.
+            this.activateTab(firstTab);
+        }
+        // When children shift, ensure the active tab is visible. For example, if
+        // many children are added before the active tab, it'd be pushed off screen.
+        // This ensures it stays visible.
+        this.scrollToTab(this.activeTab);
+    }
+}
+(() => {
+    setupHostAria(Tabs, { focusable: false });
+})();
+__decorate([
+    n$6({ type: Boolean, attribute: 'auto-activate' })
+], Tabs.prototype, "autoActivate", void 0);
+__decorate([
+    i$4('slot')
+], Tabs.prototype, "slotElement", void 0);
+__decorate([
+    l$4({ flatten: true })
+], Tabs.prototype, "maybeTabs", void 0);
+function isTab(element) {
+    return element instanceof Tab;
+}
+
+/**
+  * @license
+  * Copyright 2022 Google LLC
+  * SPDX-License-Identifier: Apache-2.0
+  */
+const styles$3 = i$3 `:host{box-sizing:border-box;display:flex;flex-direction:column;overflow:auto;scroll-behavior:smooth;scrollbar-width:none;position:relative}:host([hidden]){display:none}:host::-webkit-scrollbar{display:none}.tabs{align-items:end;display:flex;height:100%;overflow:inherit;justify-content:space-between;width:100%}::slotted(*){flex:1}::slotted([active]){z-index:1}/*# sourceMappingURL=tabs-styles.css.map */
+`;
+
+/**
+ * @license
+ * Copyright 2023 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+// TODO(b/267336507): add docs
+/**
+ * @summary Tabs displays a list of selectable tabs.
+ *
+ */
+let MdTabs = class MdTabs extends Tabs {
+};
+MdTabs.styles = [styles$3];
+MdTabs = __decorate([
+    e$7('md-tabs')
+], MdTabs);
+
+/**
+ * @license
+ * Copyright 2023 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/**
+ * A primary tab component.
+ */
+class PrimaryTab extends Tab {
+    constructor() {
+        super(...arguments);
+        /**
+         * Whether or not the icon renders inline with label or stacked vertically.
+         */
+        this.inlineIcon = false;
+    }
+    getContentClasses() {
+        return {
+            ...super.getContentClasses(),
+            'stacked': !this.inlineIcon,
+        };
+    }
+}
+__decorate([
+    n$6({ type: Boolean, attribute: 'inline-icon' })
+], PrimaryTab.prototype, "inlineIcon", void 0);
+
+/**
+  * @license
+  * Copyright 2022 Google LLC
+  * SPDX-License-Identifier: Apache-2.0
+  */
+const styles$2 = i$3 `:host{--_active-indicator-color: var(--md-primary-tab-active-indicator-color, var(--md-sys-color-primary, #6750a4));--_active-indicator-height: var(--md-primary-tab-active-indicator-height, 3px);--_active-indicator-shape: var(--md-primary-tab-active-indicator-shape, 3px 3px 0px 0px);--_active-hover-state-layer-color: var(--md-primary-tab-active-hover-state-layer-color, var(--md-sys-color-primary, #6750a4));--_active-hover-state-layer-opacity: var(--md-primary-tab-active-hover-state-layer-opacity, 0.08);--_active-pressed-state-layer-color: var(--md-primary-tab-active-pressed-state-layer-color, var(--md-sys-color-primary, #6750a4));--_active-pressed-state-layer-opacity: var(--md-primary-tab-active-pressed-state-layer-opacity, 0.12);--_container-color: var(--md-primary-tab-container-color, var(--md-sys-color-surface, #fef7ff));--_container-elevation: var(--md-primary-tab-container-elevation, 0);--_container-height: var(--md-primary-tab-container-height, 48px);--_container-shape: var(--md-primary-tab-container-shape, 0px);--_with-icon-and-label-text-container-height: var(--md-primary-tab-with-icon-and-label-text-container-height, 64px);--_hover-state-layer-color: var(--md-primary-tab-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-state-layer-opacity: var(--md-primary-tab-hover-state-layer-opacity, 0.08);--_pressed-state-layer-color: var(--md-primary-tab-pressed-state-layer-color, var(--md-sys-color-primary, #6750a4));--_pressed-state-layer-opacity: var(--md-primary-tab-pressed-state-layer-opacity, 0.12);--_active-focus-icon-color: var(--md-primary-tab-active-focus-icon-color, var(--md-sys-color-primary, #6750a4));--_active-hover-icon-color: var(--md-primary-tab-active-hover-icon-color, var(--md-sys-color-primary, #6750a4));--_active-icon-color: var(--md-primary-tab-active-icon-color, var(--md-sys-color-primary, #6750a4));--_active-pressed-icon-color: var(--md-primary-tab-active-pressed-icon-color, var(--md-sys-color-primary, #6750a4));--_icon-size: var(--md-primary-tab-icon-size, 24px);--_focus-icon-color: var(--md-primary-tab-focus-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-icon-color: var(--md-primary-tab-hover-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_icon-color: var(--md-primary-tab-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_pressed-icon-color: var(--md-primary-tab-pressed-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_label-text-font: var(--md-primary-tab-label-text-font, var(--md-sys-typescale-title-small-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-primary-tab-label-text-line-height, var(--md-sys-typescale-title-small-line-height, 1.25rem));--_label-text-size: var(--md-primary-tab-label-text-size, var(--md-sys-typescale-title-small-size, 0.875rem));--_label-text-weight: var(--md-primary-tab-label-text-weight, var(--md-sys-typescale-title-small-weight, var(--md-ref-typeface-weight-medium, 500)));--_active-focus-label-text-color: var(--md-primary-tab-active-focus-label-text-color, var(--md-sys-color-primary, #6750a4));--_active-hover-label-text-color: var(--md-primary-tab-active-hover-label-text-color, var(--md-sys-color-primary, #6750a4));--_active-label-text-color: var(--md-primary-tab-active-label-text-color, var(--md-sys-color-primary, #6750a4));--_active-pressed-label-text-color: var(--md-primary-tab-active-pressed-label-text-color, var(--md-sys-color-primary, #6750a4));--_focus-label-text-color: var(--md-primary-tab-focus-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-label-text-color: var(--md-primary-tab-hover-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_label-text-color: var(--md-primary-tab-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_pressed-label-text-color: var(--md-primary-tab-pressed-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_container-shape-start-start: var( --md-primary-tab-container-shape-start-start, var(--_container-shape) );--_container-shape-start-end: var( --md-primary-tab-container-shape-start-end, var(--_container-shape) );--_container-shape-end-end: var( --md-primary-tab-container-shape-end-end, var(--_container-shape) );--_container-shape-end-start: var( --md-primary-tab-container-shape-end-start, var(--_container-shape) )}.content.stacked{flex-direction:column;gap:2px}.content.stacked.has-icon.has-label{height:var(--_with-icon-and-label-text-container-height)}/*# sourceMappingURL=primary-tab-styles.css.map */
+`;
+
+/**
+  * @license
+  * Copyright 2022 Google LLC
+  * SPDX-License-Identifier: Apache-2.0
+  */
+const styles$1 = i$3 `:host{display:inline-flex;outline:none;-webkit-tap-highlight-color:rgba(0,0,0,0);vertical-align:middle;user-select:none;--md-ripple-hover-color: var(--_hover-state-layer-color);--md-ripple-hover-opacity: var(--_hover-state-layer-opacity);--md-ripple-pressed-color: var(--_pressed-state-layer-color);--md-ripple-pressed-opacity: var(--_pressed-state-layer-opacity)}md-focus-ring{--md-focus-ring-shape: 8px}:host([active]) md-focus-ring{margin-bottom:calc(var(--_active-indicator-height) + 1px)}.button{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;width:100%;position:relative;padding:0 16px;margin:0;z-index:0;font-family:var(--_label-text-font);font-size:var(--_label-text-size);line-height:var(--_label-text-line-height);font-weight:var(--_label-text-weight);color:var(--_label-text-color)}.button::before{background:var(--_container-color);content:"";inset:0;position:absolute;z-index:-1}.button::before,md-ripple{border-start-start-radius:var(--_container-shape-start-start);border-start-end-radius:var(--_container-shape-start-end);border-end-end-radius:var(--_container-shape-end-end);border-end-start-radius:var(--_container-shape-end-start)}.content{position:relative;box-sizing:border-box;display:inline-flex;flex-direction:row;align-items:center;justify-content:center;height:var(--_container-height);gap:8px}.indicator{position:absolute;box-sizing:border-box;z-index:-1;transform-origin:bottom left;background:var(--_active-indicator-color);border-radius:var(--_active-indicator-shape);height:var(--_active-indicator-height);inset:auto 0 0 0;opacity:0}.button ::slotted([slot=icon]){display:inline-flex;position:relative;writing-mode:horizontal-tb;fill:currentColor;color:var(--_icon-color);font-size:var(--_icon-size);width:var(--_icon-size);height:var(--_icon-size)}.button:hover{color:var(--_hover-label-text-color);cursor:pointer}.button:hover ::slotted([slot=icon]){color:var(--_hover-icon-color)}.button:focus{color:var(--_focus-label-text-color)}.button:focus ::slotted([slot=icon]){color:var(--_focus-icon-color)}.button:active{color:var(--_pressed-label-text-color);outline:none}.button:active ::slotted([slot=icon]){color:var(--_pressed-icon-color)}:host([active]) .indicator{opacity:1}:host([active]) .button{color:var(--_active-label-text-color);--md-elevation-level: var(--_container-elevation);--md-ripple-hover-color: var(--_active-hover-state-layer-color);--md-ripple-hover-opacity: var(--_active-hover-state-layer-opacity);--md-ripple-pressed-color: var(--_active-pressed-state-layer-color);--md-ripple-pressed-opacity: var(--_active-pressed-state-layer-opacity)}:host([active]) .button ::slotted([slot=icon]){color:var(--_active-icon-color)}:host([active]) .button:hover{color:var(--_active-hover-label-text-color)}:host([active]) .button:hover ::slotted([slot=icon]){color:var(--_active-hover-icon-color)}:host([active]) .button:focus{color:var(--_active-focus-label-text-color)}:host([active]) .button:focus ::slotted([slot=icon]){color:var(--_active-focus-icon-color)}:host([active]) .button:active{color:var(--_active-pressed-label-text-color)}:host([active]) .button:active ::slotted([slot=icon]){color:var(--_active-pressed-icon-color)}:host,::slotted(*){white-space:nowrap}@media(forced-colors: active){.indicator{background:CanvasText}}/*# sourceMappingURL=tab-styles.css.map */
+`;
+
+/**
+ * @license
+ * Copyright 2023 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+// TODO(b/267336507): add docs
+/**
+ * @summary Tab allow users to display a tab within a Tabs.
+ *
+ */
+let MdPrimaryTab = class MdPrimaryTab extends PrimaryTab {
+};
+MdPrimaryTab.styles = [styles$1, styles$2];
+MdPrimaryTab = __decorate([
+    e$7('md-primary-tab')
+], MdPrimaryTab);
+
+/**
+ * @license
+ * Copyright 2023 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/**
+ * A secondary tab component.
+ */
+class SecondaryTab extends Tab {
+    constructor() {
+        super(...arguments);
+        this.fullWidthIndicator = true;
+    }
+}
+
+/**
+  * @license
+  * Copyright 2022 Google LLC
+  * SPDX-License-Identifier: Apache-2.0
+  */
+const styles = i$3 `:host{--_active-indicator-color: var(--md-secondary-tab-active-indicator-color, var(--md-sys-color-primary, #6750a4));--_active-indicator-height: var(--md-secondary-tab-active-indicator-height, 2px);--_active-label-text-color: var(--md-secondary-tab-active-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_container-color: var(--md-secondary-tab-container-color, var(--md-sys-color-surface, #fef7ff));--_container-elevation: var(--md-secondary-tab-container-elevation, 0);--_container-height: var(--md-secondary-tab-container-height, 48px);--_container-shape: var(--md-secondary-tab-container-shape, 0px);--_focus-label-text-color: var(--md-secondary-tab-focus-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-label-text-color: var(--md-secondary-tab-hover-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-state-layer-color: var(--md-secondary-tab-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-state-layer-opacity: var(--md-secondary-tab-hover-state-layer-opacity, 0.08);--_label-text-font: var(--md-secondary-tab-label-text-font, var(--md-sys-typescale-title-small-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-secondary-tab-label-text-line-height, var(--md-sys-typescale-title-small-line-height, 1.25rem));--_label-text-size: var(--md-secondary-tab-label-text-size, var(--md-sys-typescale-title-small-size, 0.875rem));--_label-text-weight: var(--md-secondary-tab-label-text-weight, var(--md-sys-typescale-title-small-weight, var(--md-ref-typeface-weight-medium, 500)));--_pressed-label-text-color: var(--md-secondary-tab-pressed-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_pressed-state-layer-color: var(--md-secondary-tab-pressed-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_pressed-state-layer-opacity: var(--md-secondary-tab-pressed-state-layer-opacity, 0.12);--_active-focus-icon-color: var(--md-secondary-tab-active-focus-icon-color, );--_active-focus-label-text-color: var(--md-secondary-tab-active-focus-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_active-hover-icon-color: var(--md-secondary-tab-active-hover-icon-color, );--_active-hover-label-text-color: var(--md-secondary-tab-active-hover-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_active-hover-state-layer-color: var(--md-secondary-tab-active-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_active-hover-state-layer-opacity: var(--md-secondary-tab-active-hover-state-layer-opacity, 0.08);--_active-icon-color: var(--md-secondary-tab-active-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_active-indicator-shape: var(--md-secondary-tab-active-indicator-shape, 0);--_active-pressed-icon-color: var(--md-secondary-tab-active-pressed-icon-color, );--_active-pressed-label-text-color: var(--md-secondary-tab-active-pressed-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_active-pressed-state-layer-color: var(--md-secondary-tab-active-pressed-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_active-pressed-state-layer-opacity: var(--md-secondary-tab-active-pressed-state-layer-opacity, 0.12);--_label-text-color: var(--md-secondary-tab-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-icon-color: var(--md-secondary-tab-focus-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-icon-color: var(--md-secondary-tab-hover-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_icon-size: var(--md-secondary-tab-icon-size, 24px);--_icon-color: var(--md-secondary-tab-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_pressed-icon-color: var(--md-secondary-tab-pressed-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_container-shape-start-start: var( --md-secondary-tab-container-shape-start-start, var(--_container-shape) );--_container-shape-start-end: var( --md-secondary-tab-container-shape-start-end, var(--_container-shape) );--_container-shape-end-end: var( --md-secondary-tab-container-shape-end-end, var(--_container-shape) );--_container-shape-end-start: var( --md-secondary-tab-container-shape-end-start, var(--_container-shape) )}/*# sourceMappingURL=secondary-tab-styles.css.map */
+`;
+
+/**
+ * @license
+ * Copyright 2023 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+// TODO(b/267336507): add docs
+/**
+ * @summary Tab allow users to display a tab within a Tabs.
+ *
+ */
+let MdSecondaryTab = class MdSecondaryTab extends SecondaryTab {
+};
+MdSecondaryTab.styles = [styles$1, styles];
+MdSecondaryTab = __decorate([
+    e$7('md-secondary-tab')
+], MdSecondaryTab);

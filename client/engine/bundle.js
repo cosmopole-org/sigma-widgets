@@ -48,7 +48,7 @@ var _default = exports.default = {
 };
 window.engine = _default
 
-},{"./Native":1,"./widget/Applet":3,"./widget/Module":12,"./widget/utils":30}],3:[function(require,module,exports){
+},{"./Native":1,"./widget/Applet":3,"./widget/Module":12,"./widget/utils":34}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -130,7 +130,7 @@ class Applet {
 }
 var _default = exports.default = Applet;
 
-},{"./Creature":4,"./INative":10,"./Module":12,"./elements/BaseElement":18,"./utils":30}],4:[function(require,module,exports){
+},{"./Creature":4,"./INative":10,"./Module":12,"./elements/BaseElement":22,"./utils":34}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -203,7 +203,7 @@ class Creature {
 }
 var _default = exports.default = Creature;
 
-},{"./DOM":6,"./Module":12,"./Runtime":13,"./elements/BaseElement":18,"./utils":30}],5:[function(require,module,exports){
+},{"./DOM":6,"./Module":12,"./Runtime":13,"./elements/BaseElement":22,"./utils":34}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -265,7 +265,7 @@ class DOM {
 }
 var _default = exports.default = DOM;
 
-},{"./Creature":4,"./Module":12,"./elements/BaseElement":18}],7:[function(require,module,exports){
+},{"./Creature":4,"./Module":12,"./elements/BaseElement":22}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -331,7 +331,7 @@ class Func {
 }
 var _default = exports.default = Func;
 
-},{"./utils":30}],9:[function(require,module,exports){
+},{"./utils":34}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -484,7 +484,7 @@ class Module {
 }
 var _default = exports.default = Module;
 
-},{"./Applet":3,"./Creature":4,"./CreatureStore":5,"./DOM":6,"./FuncStore":9,"./Runtime":13,"./elements/BaseElement":18,"./utils":30}],13:[function(require,module,exports){
+},{"./Applet":3,"./Creature":4,"./CreatureStore":5,"./DOM":6,"./FuncStore":9,"./Runtime":13,"./elements/BaseElement":22,"./utils":34}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -557,7 +557,7 @@ class Runtime {
 }
 var _default = exports.default = Runtime;
 
-},{"./Creature":4,"./INative":10,"./MemoryLayer":11,"./Module":12,"./utils":30}],14:[function(require,module,exports){
+},{"./Creature":4,"./INative":10,"./MemoryLayer":11,"./Module":12,"./utils":34}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -575,13 +575,37 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _BaseControl = _interopRequireDefault(require("./BaseControl"));
+var _utils = _interopRequireDefault(require("../utils"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+class BoxControl extends _BaseControl.default {
+  static TYPE = 'box';
+  static defaultProps = {};
+  static defaultStyles = {
+    width: 200,
+    height: 200
+  };
+  static instantiate(overridenProps, overridenStyles, children) {
+    return _utils.default.generator.prepareElement(BoxControl.TYPE, this.defaultProps, overridenProps, this.defaultStyles, overridenStyles, children);
+  }
+}
+var _default = exports.default = BoxControl;
+
+},{"../utils":34,"./BaseControl":14}],16:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _BaseControl = _interopRequireDefault(require("./BaseControl"));
 var _StringProp = _interopRequireDefault(require("../props/StringProp"));
 var _utils = _interopRequireDefault(require("../utils"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 class ButtonControl extends _BaseControl.default {
   static TYPE = 'button';
   static defaultProps = {
-    caption: new _StringProp.default('')
+    caption: new _StringProp.default(''),
+    variant: new _StringProp.default('filled')
   };
   static defaultStyles = {
     width: 150,
@@ -593,7 +617,75 @@ class ButtonControl extends _BaseControl.default {
 }
 var _default = exports.default = ButtonControl;
 
-},{"../props/StringProp":23,"../utils":30,"./BaseControl":14}],16:[function(require,module,exports){
+},{"../props/StringProp":27,"../utils":34,"./BaseControl":14}],17:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _BaseControl = _interopRequireDefault(require("./BaseControl"));
+var _utils = _interopRequireDefault(require("../utils"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+class CardControl extends _BaseControl.default {
+  static TYPE = 'card';
+  static defaultProps = {};
+  static defaultStyles = {
+    width: 200,
+    height: 200,
+    boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
+    backgroundColor: '#fff',
+    borderRadius: 4
+  };
+  static instantiate(overridenProps, overridenStyles, children) {
+    return _utils.default.generator.prepareElement(CardControl.TYPE, this.defaultProps, overridenProps, this.defaultStyles, overridenStyles, children);
+  }
+}
+var _default = exports.default = CardControl;
+
+},{"../utils":34,"./BaseControl":14}],18:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _BaseControl = _interopRequireDefault(require("./BaseControl"));
+var _utils = _interopRequireDefault(require("../utils"));
+var _BaseElement = _interopRequireDefault(require("../elements/BaseElement"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+class PrimaryTabControl extends _BaseControl.default {
+  static TYPE = 'primary-tab';
+  static defaultProps = {};
+  static defaultStyles = {};
+  static instantiate(overridenProps, overridenStyles, children) {
+    return _utils.default.generator.prepareElement(PrimaryTabControl.TYPE, this.defaultProps, overridenProps, this.defaultStyles, overridenStyles, children);
+  }
+}
+var _default = exports.default = PrimaryTabControl;
+
+},{"../elements/BaseElement":22,"../utils":34,"./BaseControl":14}],19:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _BaseControl = _interopRequireDefault(require("./BaseControl"));
+var _utils = _interopRequireDefault(require("../utils"));
+var _BaseElement = _interopRequireDefault(require("../elements/BaseElement"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+class TabsControl extends _BaseControl.default {
+  static TYPE = 'tabs';
+  static defaultProps = {};
+  static defaultStyles = {};
+  static instantiate(overridenProps, overridenStyles, children) {
+    return _utils.default.generator.prepareElement(TabsControl.TYPE, this.defaultProps, overridenProps, this.defaultStyles, overridenStyles, children);
+  }
+}
+var _default = exports.default = TabsControl;
+
+},{"../elements/BaseElement":22,"../utils":34,"./BaseControl":14}],20:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -619,7 +711,7 @@ class TextControl extends _BaseControl.default {
 }
 var _default = exports.default = TextControl;
 
-},{"../props/StringProp":23,"../utils":30,"./BaseControl":14}],17:[function(require,module,exports){
+},{"../props/StringProp":27,"../utils":34,"./BaseControl":14}],21:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -628,13 +720,21 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _TextControl = _interopRequireDefault(require("./TextControl"));
 var _ButtonControl = _interopRequireDefault(require("./ButtonControl"));
+var _BoxControl = _interopRequireDefault(require("./BoxControl"));
+var _CardControl = _interopRequireDefault(require("./CardControl"));
+var _TabsControl = _interopRequireDefault(require("./TabsControl"));
+var _PrimaryTabControl = _interopRequireDefault(require("./PrimaryTabControl"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 var _default = exports.default = {
   [_TextControl.default.TYPE]: _TextControl.default,
-  [_ButtonControl.default.TYPE]: _ButtonControl.default
+  [_ButtonControl.default.TYPE]: _ButtonControl.default,
+  [_BoxControl.default.TYPE]: _BoxControl.default,
+  [_CardControl.default.TYPE]: _CardControl.default,
+  [_TabsControl.default.TYPE]: _TabsControl.default,
+  [_PrimaryTabControl.default.TYPE]: _PrimaryTabControl.default
 };
 
-},{"./ButtonControl":15,"./TextControl":16}],18:[function(require,module,exports){
+},{"./BoxControl":15,"./ButtonControl":16,"./CardControl":17,"./PrimaryTabControl":18,"./TabsControl":19,"./TextControl":20}],22:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -675,7 +775,7 @@ class BaseElement {
 }
 var _default = exports.default = BaseElement;
 
-},{"../props/BaseProp":19,"../utils/convertStylesToCss":25}],19:[function(require,module,exports){
+},{"../props/BaseProp":23,"../utils/convertStylesToCss":29}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -694,7 +794,7 @@ class BaseProp {
 }
 var _default = exports.default = BaseProp;
 
-},{}],20:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -723,7 +823,7 @@ class BooleanProp extends _BaseProp.default {
 }
 var _default = exports.default = BooleanProp;
 
-},{"./BaseProp":19}],21:[function(require,module,exports){
+},{"./BaseProp":23}],25:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -752,7 +852,7 @@ class FuncProp extends _BaseProp.default {
 }
 var _default = exports.default = FuncProp;
 
-},{"./BaseProp":19}],22:[function(require,module,exports){
+},{"./BaseProp":23}],26:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -781,7 +881,7 @@ class NumberProp extends _BaseProp.default {
 }
 var _default = exports.default = NumberProp;
 
-},{"./BaseProp":19}],23:[function(require,module,exports){
+},{"./BaseProp":23}],27:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -810,7 +910,7 @@ class StringProp extends _BaseProp.default {
 }
 var _default = exports.default = StringProp;
 
-},{"./BaseProp":19}],24:[function(require,module,exports){
+},{"./BaseProp":23}],28:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -834,7 +934,7 @@ var _default = exports.default = {
   extractModules
 };
 
-},{"../Applet":3,"../Module":12}],25:[function(require,module,exports){
+},{"../Applet":3,"../Module":12}],29:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -879,7 +979,7 @@ function styleToCssString(rules) {
 }
 var _default = exports.default = styleToCssString;
 
-},{"./cssProperty":26,"./hyphenateStyleName":29}],26:[function(require,module,exports){
+},{"./cssProperty":30,"./hyphenateStyleName":33}],30:[function(require,module,exports){
 'use strict';
 
 /**
@@ -995,7 +1095,7 @@ var CSSProperty = {
 module.exports = CSSProperty;
 var _default = exports.default = CSSProperty;
 
-},{}],27:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1483,7 +1583,7 @@ var _default = exports.default = {
   ExecutionMeta: _ExecutionMeta.default
 };
 
-},{".":30,"../Creature":4,"../ExecutionMeta":7,"../controls/index":17,"../elements/BaseElement":18}],28:[function(require,module,exports){
+},{".":34,"../Creature":4,"../ExecutionMeta":7,"../controls/index":21,"../elements/BaseElement":22}],32:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1553,7 +1653,7 @@ var _default = exports.default = {
   nestedContext
 };
 
-},{"../ExecutionMeta":7,"../elements/BaseElement":18,"../props/BooleanProp":20,"../props/FuncProp":21,"../props/NumberProp":22,"../props/StringProp":23}],29:[function(require,module,exports){
+},{"../ExecutionMeta":7,"../elements/BaseElement":22,"../props/BooleanProp":24,"../props/FuncProp":25,"../props/NumberProp":26,"../props/StringProp":27}],33:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1600,7 +1700,7 @@ function hyphenateStyleName(string) {
 }
 var _default = exports.default = hyphenateStyleName;
 
-},{}],30:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1619,7 +1719,7 @@ var _default = exports.default = {
   executor: _executor.default
 };
 
-},{"./compiler":24,"./executor":27,"./generator":28,"./json":31}],31:[function(require,module,exports){
+},{"./compiler":28,"./executor":31,"./generator":32,"./json":35}],35:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

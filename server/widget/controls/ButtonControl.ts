@@ -8,7 +8,8 @@ class ButtonControl extends BaseControl {
 
     public static readonly TYPE = 'button'
     public static defaultProps = {
-        caption: new StringProp('')
+        caption: new StringProp(''),
+        variant: new StringProp('filled')
     }
     public static defaultStyles = {
         width: 150,
