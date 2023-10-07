@@ -1,14 +1,19 @@
 
 class UIDriver {
 
+    styleToCssString;
     bindings = {}
+
+    constructor(styleToCssString) {
+        this.styleToCssString = styleToCssString
+    }
 
     createElement(controlType, tag, props, styles) {
         let element = document.createElement(tag)
         for (let key in props) {
             element[key] = props[key]
         }
-        element.style = styles
+        element.style = this.styleToCssString(styles)
         this.bindings[props.cosmoId] = { rendered: element, controlType }
         return element
     }
@@ -29,7 +34,7 @@ class UIDriver {
                         'span',
                         {
                             cosmoId: element._key,
-                            textContent: element._props.text._value
+                            textContent: element._props.text?._value
                         },
                         element._styles
                     )
@@ -65,7 +70,7 @@ class UIDriver {
                 }
                 case 'button': {
                     let elementTag
-                    if (element._props.variant._value === 'outlined') {
+                    if (element._props.variant?._value === 'outlined') {
                         elementTag = 'md-outlined-button'
                     } else {
                         elementTag = 'md-filled-button'
@@ -75,7 +80,8 @@ class UIDriver {
                         elementTag,
                         {
                             cosmoId: element._key,
-                            textContent: element._props.caption._value
+                            textContent: element._props.caption?._value,
+                            onClick: element._props.onClick?._value
                         },
                         element._styles
                     )
@@ -118,13 +124,53 @@ class UIDriver {
         return result
     }
 
-    update(element, propKey, propValue) {
+    createChild(newChild, parentKey) {
+        this.build(newChild, parentKey)
+    }
+
+    deleteChild(childKey) {
+        let elCont = this.bindings[childKey]
+        if (elCont) {
+            let { rendered } = elCont
+            rendered.remove()
+        }
+    }
+
+    replaceChild(element, newChild) {
+        let key = element._key
+        let elCont = this.bindings[key]
+        if (elCont) {
+            let { rendered } = elCont
+            let newRendered = this.build(newChild)
+            rendered.replaceWith(newRendered)
+        }
+    }
+
+    updateStyle(element, cssKey, cssValue) {
+        let key = element._key
+        let elCont = this.bindings[key]
+        if (elCont) {
+            let { rendered } = elCont
+            rendered.style[cssKey] = cssValue
+        }
+    }
+
+    updateProp(element, propKey, propValue) {
         let key = element._key
         let elCont = this.bindings[key]
         if (elCont) {
             let { rendered, controlType } = elCont
             switch (controlType) {
                 case 'text': {
+                    switch (propKey) {
+                        case 'text': {
+                            rendered.textContent = propValue
+                            break
+                        }
+                    }
+                    break
+                }
+                case 'box': {
                     switch (propKey) {
                         case 'text': {
                             rendered.textContent = propValue

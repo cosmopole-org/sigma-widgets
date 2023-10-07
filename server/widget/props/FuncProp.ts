@@ -3,14 +3,14 @@ import BaseProp from './BaseProp'
 
 class FuncProp extends BaseProp {
 
-    _value?: string
+    _value?: () => void
     public get value() { return this._value }
     public setValue(v: any) { this._value = v}
 
-    _defaultValue: string
+    _defaultValue?: () => void
     public get defaultValue() { return this._defaultValue }
 
-    constructor(defaultValue: string) {
+    constructor(defaultValue?: () => void) {
         super('function')
         this._value = defaultValue
         this._defaultValue = defaultValue

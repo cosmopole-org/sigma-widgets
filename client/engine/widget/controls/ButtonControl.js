@@ -2,13 +2,15 @@
 import BaseControl from './BaseControl';
 import StringProp from '../props/StringProp'
 import Utils from '../utils';
+import FuncProp from '../props/FuncProp';
 
 class ButtonControl extends BaseControl {
 
     static TYPE = 'button'
     static defaultProps = {
         caption: new StringProp(''),
-        variant: new StringProp('filled')
+        variant: new StringProp('filled'),
+        onClick: new FuncProp(undefined)
     }
     static defaultStyles = {
         width: 150,

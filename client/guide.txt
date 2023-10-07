@@ -1,0 +1,5 @@
+
+npm install rollup @rollup/plugin-node-resolve
+npx rollup -p @rollup/plugin-node-resolve index.js -o bundle.js
+
+browserify index.js -p esmify > bundle.js

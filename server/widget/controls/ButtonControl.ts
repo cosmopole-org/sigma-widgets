@@ -3,13 +3,15 @@ import BaseControl from './BaseControl';
 import StringProp from '../props/StringProp'
 import Utils from '../utils';
 import BaseElement from '../elements/BaseElement';
+import FuncProp from '../props/FuncProp';
 
 class ButtonControl extends BaseControl {
 
     public static readonly TYPE = 'button'
     public static defaultProps = {
         caption: new StringProp(''),
-        variant: new StringProp('filled')
+        variant: new StringProp('filled'),
+        onClick: new FuncProp(undefined)
     }
     public static defaultStyles = {
         width: 150,

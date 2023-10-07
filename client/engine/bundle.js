@@ -46,9 +46,10 @@ var _default = exports.default = {
   Runnable: _Applet.Runnable,
   Utils: _utils.default
 };
+
 window.engine = _default
 
-},{"./Native":1,"./widget/Applet":3,"./widget/Module":12,"./widget/utils":34}],3:[function(require,module,exports){
+},{"./Native":1,"./widget/Applet":3,"./widget/Module":12,"./widget/utils":33}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -130,7 +131,7 @@ class Applet {
 }
 var _default = exports.default = Applet;
 
-},{"./Creature":4,"./INative":10,"./Module":12,"./elements/BaseElement":22,"./utils":34}],4:[function(require,module,exports){
+},{"./Creature":4,"./INative":10,"./Module":12,"./elements/BaseElement":22,"./utils":33}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -203,7 +204,7 @@ class Creature {
 }
 var _default = exports.default = Creature;
 
-},{"./DOM":6,"./Module":12,"./Runtime":13,"./elements/BaseElement":22,"./utils":34}],5:[function(require,module,exports){
+},{"./DOM":6,"./Module":12,"./Runtime":13,"./elements/BaseElement":22,"./utils":33}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -331,7 +332,7 @@ class Func {
 }
 var _default = exports.default = Func;
 
-},{"./utils":34}],9:[function(require,module,exports){
+},{"./utils":33}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -484,7 +485,7 @@ class Module {
 }
 var _default = exports.default = Module;
 
-},{"./Applet":3,"./Creature":4,"./CreatureStore":5,"./DOM":6,"./FuncStore":9,"./Runtime":13,"./elements/BaseElement":22,"./utils":34}],13:[function(require,module,exports){
+},{"./Applet":3,"./Creature":4,"./CreatureStore":5,"./DOM":6,"./FuncStore":9,"./Runtime":13,"./elements/BaseElement":22,"./utils":33}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -557,7 +558,7 @@ class Runtime {
 }
 var _default = exports.default = Runtime;
 
-},{"./Creature":4,"./INative":10,"./MemoryLayer":11,"./Module":12,"./utils":34}],14:[function(require,module,exports){
+},{"./Creature":4,"./INative":10,"./MemoryLayer":11,"./Module":12,"./utils":33}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -590,7 +591,7 @@ class BoxControl extends _BaseControl.default {
 }
 var _default = exports.default = BoxControl;
 
-},{"../utils":34,"./BaseControl":14}],16:[function(require,module,exports){
+},{"../utils":33,"./BaseControl":14}],16:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -600,12 +601,14 @@ exports.default = void 0;
 var _BaseControl = _interopRequireDefault(require("./BaseControl"));
 var _StringProp = _interopRequireDefault(require("../props/StringProp"));
 var _utils = _interopRequireDefault(require("../utils"));
+var _FuncProp = _interopRequireDefault(require("../props/FuncProp"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 class ButtonControl extends _BaseControl.default {
   static TYPE = 'button';
   static defaultProps = {
     caption: new _StringProp.default(''),
-    variant: new _StringProp.default('filled')
+    variant: new _StringProp.default('filled'),
+    onClick: new _FuncProp.default(undefined)
   };
   static defaultStyles = {
     width: 150,
@@ -617,7 +620,7 @@ class ButtonControl extends _BaseControl.default {
 }
 var _default = exports.default = ButtonControl;
 
-},{"../props/StringProp":27,"../utils":34,"./BaseControl":14}],17:[function(require,module,exports){
+},{"../props/FuncProp":25,"../props/StringProp":27,"../utils":33,"./BaseControl":14}],17:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -643,7 +646,7 @@ class CardControl extends _BaseControl.default {
 }
 var _default = exports.default = CardControl;
 
-},{"../utils":34,"./BaseControl":14}],18:[function(require,module,exports){
+},{"../utils":33,"./BaseControl":14}],18:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -664,7 +667,7 @@ class PrimaryTabControl extends _BaseControl.default {
 }
 var _default = exports.default = PrimaryTabControl;
 
-},{"../elements/BaseElement":22,"../utils":34,"./BaseControl":14}],19:[function(require,module,exports){
+},{"../elements/BaseElement":22,"../utils":33,"./BaseControl":14}],19:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -685,7 +688,7 @@ class TabsControl extends _BaseControl.default {
 }
 var _default = exports.default = TabsControl;
 
-},{"../elements/BaseElement":22,"../utils":34,"./BaseControl":14}],20:[function(require,module,exports){
+},{"../elements/BaseElement":22,"../utils":33,"./BaseControl":14}],20:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -711,7 +714,7 @@ class TextControl extends _BaseControl.default {
 }
 var _default = exports.default = TextControl;
 
-},{"../props/StringProp":27,"../utils":34,"./BaseControl":14}],21:[function(require,module,exports){
+},{"../props/StringProp":27,"../utils":33,"./BaseControl":14}],21:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -741,9 +744,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _BaseProp = _interopRequireDefault(require("../props/BaseProp"));
-var _convertStylesToCss = _interopRequireDefault(require("../utils/convertStylesToCss"));
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 class BaseElement {
   _key;
   get key() {
@@ -769,13 +769,13 @@ class BaseElement {
     this._key = key;
     this._controlType = controlType;
     this._props = props;
-    this._styles = (0, _convertStylesToCss.default)(styles);
+    this._styles = styles;
     this._children = children ? children : [];
   }
 }
 var _default = exports.default = BaseElement;
 
-},{"../props/BaseProp":23,"../utils/convertStylesToCss":29}],23:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -917,30 +917,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _Applet = _interopRequireDefault(require("../Applet"));
 var _Module = _interopRequireDefault(require("../Module"));
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-// let jsxCompiler = AcornParser.extend(jsx());
-
-// let parse = (jsxCode) => {
-//     return jsxCompiler.parse(jsxCode, { sourceType: 'module', ecmaVersion: 'latest' });
-// }
-let extractModules = (middleCode, applet) => {
-  return middleCode.body.filter(declaration => declaration.type === 'ClassDeclaration').map(declaration => {
-    return new _Module.default(declaration.id.name, applet, declaration);
-  });
-};
-var _default = exports.default = {
-  extractModules
-};
-
-},{"../Applet":3,"../Module":12}],29:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
 var _cssProperty = require("./cssProperty");
 var _hyphenateStyleName = _interopRequireDefault(require("./hyphenateStyleName"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -957,6 +934,14 @@ function buildRule(key, value) {
     value = "'" + value.replace(/'/g, "\\'") + "'";
   }
   return (0, _hyphenateStyleName.default)(key) + ': ' + value + ';  ';
+}
+function buildValue(key, value) {
+  if (!_cssProperty.isUnitlessNumber[key] && typeof value === 'number') {
+    value = '' + value + 'px';
+  } else if (key === 'content' && !unquotedContentValueRegex.test(value)) {
+    value = "'" + value.replace(/'/g, "\\'") + "'";
+  }
+  return value + '';
 }
 function styleToCssString(rules) {
   var result = '';
@@ -977,9 +962,26 @@ function styleToCssString(rules) {
   }
   return result;
 }
-var _default = exports.default = styleToCssString;
 
-},{"./cssProperty":30,"./hyphenateStyleName":33}],30:[function(require,module,exports){
+// let jsxCompiler = AcornParser.extend(jsx());
+
+// let parse = (jsxCode) => {
+//     return jsxCompiler.parse(jsxCode, { sourceType: 'module', ecmaVersion: 'latest' });
+// }
+
+let extractModules = (middleCode, applet) => {
+  return middleCode.body.filter(declaration => declaration.type === 'ClassDeclaration').map(declaration => {
+    return new _Module.default(declaration.id.name, applet, declaration);
+  });
+};
+var _default = exports.default = {
+  extractModules,
+  styleToCssString,
+  buildRule,
+  buildValue
+};
+
+},{"../Module":12,"./cssProperty":29,"./hyphenateStyleName":32}],29:[function(require,module,exports){
 'use strict';
 
 /**
@@ -1095,7 +1097,7 @@ var CSSProperty = {
 module.exports = CSSProperty;
 var _default = exports.default = CSSProperty;
 
-},{}],31:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1583,7 +1585,7 @@ var _default = exports.default = {
   ExecutionMeta: _ExecutionMeta.default
 };
 
-},{".":34,"../Creature":4,"../ExecutionMeta":7,"../controls/index":21,"../elements/BaseElement":22}],32:[function(require,module,exports){
+},{".":33,"../Creature":4,"../ExecutionMeta":7,"../controls/index":21,"../elements/BaseElement":22}],31:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1653,7 +1655,7 @@ var _default = exports.default = {
   nestedContext
 };
 
-},{"../ExecutionMeta":7,"../elements/BaseElement":22,"../props/BooleanProp":24,"../props/FuncProp":25,"../props/NumberProp":26,"../props/StringProp":27}],33:[function(require,module,exports){
+},{"../ExecutionMeta":7,"../elements/BaseElement":22,"../props/BooleanProp":24,"../props/FuncProp":25,"../props/NumberProp":26,"../props/StringProp":27}],32:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1700,7 +1702,7 @@ function hyphenateStyleName(string) {
 }
 var _default = exports.default = hyphenateStyleName;
 
-},{}],34:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1719,7 +1721,7 @@ var _default = exports.default = {
   executor: _executor.default
 };
 
-},{"./compiler":28,"./executor":31,"./generator":32,"./json":35}],35:[function(require,module,exports){
+},{"./compiler":28,"./executor":30,"./generator":31,"./json":34}],34:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
