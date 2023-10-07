@@ -24,7 +24,7 @@ const prepareElement = (
 ) => {
     let finalProps = {}
     Object.keys(defaultProps).forEach(propKey => {
-        if (overridenProps[propKey]) {
+        if (overridenProps[propKey] !== undefined) {
             let bpProp = defaultProps[propKey]
             let copiedProp = clone(bpProp)
             copiedProp.setValue(overridenProps[propKey])

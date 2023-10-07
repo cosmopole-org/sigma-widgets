@@ -1,16 +1,18 @@
 
 import BaseElement from "../elements/BaseElement";
-import BaseProp from "../props/BaseProp";
 import ExecutionMeta from "../ExecutionMeta";
-import Creature from "../Creature";
+import StringProp from "../props/StringProp";
+import NumberProp from "../props/NumberProp";
+import BooleanProp from "../props/BooleanProp";
+import FuncProp from "../props/FuncProp";
 
 let generateKey = () => {
     return Math.random().toString().substring(2)
 }
 
-function clone(instance) {
+function clone(T, instance) {
     const copy = JSON.parse(JSON.stringify(instance));
-    Object.assign(copy, instance);
+    Object.assign(T, copy);
     return copy;
 }
 
@@ -24,10 +26,19 @@ const prepareElement = (
 ) => {
     let finalProps = {}
     Object.keys(defaultProps).forEach(propKey => {
-        if (overridenProps[propKey]) {
+        if (overridenProps[propKey] !== undefined) {
             let bpProp = defaultProps[propKey]
-            let copiedProp = clone(bpProp)
-            copiedProp.setValue(overridenProps[propKey])
+            let copiedProp
+            if (bpProp._type === 'string') {
+                copiedProp = clone(StringProp, bpProp)
+            } else if (bpProp._type === 'number') {
+                copiedProp = clone(NumberProp, bpProp)
+            } else if (bpProp._type === 'boolean') {
+                copiedProp = clone(BooleanProp, bpProp)
+            } else if (bpProp._type === 'function') {
+                copiedProp = clone(FuncProp, bpProp)
+            }
+            copiedProp._value = overridenProps[propKey]
             finalProps[propKey] = copiedProp
         }
     });

@@ -2,31 +2,82 @@
 
 <head>
     <script src="engine/bundle.js"></script>
-    <script>
-        let { Applet, Native, Utils } = window.engine;
-        let applet = new Applet('frame')
-        applet.fill(
-            JSON.parse(
-                `
-                {"type":"Program","start":0,"end":345,"body":[{"type":"ClassDeclaration","start":5,"end":344,"id":{"type":"Identifier","start":11,"end":17,"name":"Button"},"superClass":null,"body":{"type":"ClassBody","start":18,"end":344,"body":[{"type":"MethodDefinition","start":28,"end":121,"static":false,"computed":false,"key":{"type":"Identifier","start":28,"end":39,"name":"constructor"},"kind":"constructor","value":{"type":"FunctionExpression","start":39,"end":121,"id":null,"expression":false,"generator":false,"async":false,"params":[],"body":{"type":"BlockStatement","start":42,"end":121,"body":[{"type":"ExpressionStatement","start":56,"end":111,"expression":{"type":"AssignmentExpression","start":56,"end":111,"operator":"=","left":{"type":"MemberExpression","start":56,"end":66,"object":{"type":"ThisExpression","start":56,"end":60},"property":{"type":"Identifier","start":61,"end":66,"name":"state"},"computed":false,"optional":false},"right":{"type":"ObjectExpression","start":69,"end":111,"properties":[{"type":"Property","start":87,"end":97,"method":false,"shorthand":false,"computed":false,"key":{"type":"Identifier","start":87,"end":94,"name":"counter"},"value":{"type":"Literal","start":96,"end":97,"value":0,"raw":"0"},"kind":"init"}]}}}]}}},{"type":"MethodDefinition","start":130,"end":271,"static":false,"computed":false,"key":{"type":"Identifier","start":130,"end":137,"name":"onMount"},"kind":"method","value":{"type":"FunctionExpression","start":137,"end":271,"id":null,"expression":false,"generator":false,"async":false,"params":[],"body":{"type":"BlockStatement","start":140,"end":271,"body":[{"type":"ExpressionStatement","start":154,"end":261,"expression":{"type":"CallExpression","start":154,"end":261,"callee":{"type":"Identifier","start":154,"end":165,"name":"setInterval"},"arguments":[{"type":"ArrowFunctionExpression","start":166,"end":254,"id":null,"expression":false,"generator":false,"async":false,"params":[],"body":{"type":"BlockStatement","start":172,"end":254,"body":[{"type":"ExpressionStatement","start":190,"end":240,"expression":{"type":"CallExpression","start":190,"end":240,"callee":{"type":"MemberExpression","start":190,"end":203,"object":{"type":"ThisExpression","start":190,"end":194},"property":{"type":"Identifier","start":195,"end":203,"name":"setState"},"computed":false,"optional":false},"arguments":[{"type":"ObjectExpression","start":204,"end":239,"properties":[{"type":"Property","start":206,"end":237,"method":false,"shorthand":false,"computed":false,"key":{"type":"Identifier","start":206,"end":213,"name":"counter"},"value":{"type":"BinaryExpression","start":215,"end":237,"left":{"type":"MemberExpression","start":215,"end":233,"object":{"type":"MemberExpression","start":215,"end":225,"object":{"type":"ThisExpression","start":215,"end":219},"property":{"type":"Identifier","start":220,"end":225,"name":"state"},"computed":false,"optional":false},"property":{"type":"Identifier","start":226,"end":233,"name":"counter"},"computed":false,"optional":false},"operator":"+","right":{"type":"Literal","start":236,"end":237,"value":1,"raw":"1"}},"kind":"init"}]}],"optional":false}}]}},{"type":"Literal","start":256,"end":260,"value":1000,"raw":"1000"}],"optional":false}}]}}},{"type":"MethodDefinition","start":280,"end":338,"static":false,"computed":false,"key":{"type":"Identifier","start":280,"end":286,"name":"render"},"kind":"method","value":{"type":"FunctionExpression","start":286,"end":338,"id":null,"expression":false,"generator":false,"async":false,"params":[],"body":{"type":"BlockStatement","start":289,"end":338,"body":[{"type":"ReturnStatement","start":303,"end":328,"argument":{"type":"MemberExpression","start":310,"end":328,"object":{"type":"MemberExpression","start":310,"end":320,"object":{"type":"ThisExpression","start":310,"end":314},"property":{"type":"Identifier","start":315,"end":320,"name":"state"},"computed":false,"optional":false},"property":{"type":"Identifier","start":321,"end":328,"name":"counter"},"computed":false,"optional":false}}]}}}]}}],"sourceType":"module"}
-                `
-            )
-        )
-
-        const update = (u) => {
-            console.log(Utils.json.prettify(u))
-        }
-
-        applet.run('Button', (mod) => new Native(mod), update).then((runnable) => {
-            console.log(Utils.json.prettify(runnable.root))
-            runnable.mount()
-        })
-
-    </script>
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="./ui-builder/index.js"></script>
+    <script src="./bundle.js"></script>
 </head>
 
 <body>
 
+    <div id="root" style="width: 100%; height: 100vh;">
+        
+    </div>
+
 </body>
+
+<script>
+
+    let root = document.getElementById('root')
+
+    let { Applet, Native, Utils } = window.engine
+
+    let uiDriver = new UIDriver()
+
+    let applet = new Applet('frame')
+    applet.fill(
+        JSON.parse(
+            `
+            {"type":"Program","start":0,"end":366,"body":[{"type":"ClassDeclaration","start":5,"end":365,"id":{"type":"Identifier","start":11,"end":17,"name":"Button"},"superClass":null,"body":{"type":"ClassBody","start":18,"end":365,"body":[{"type":"MethodDefinition","start":28,"end":121,"static":false,"computed":false,"key":{"type":"Identifier","start":28,"end":39,"name":"constructor"},"kind":"constructor","value":{"type":"FunctionExpression","start":39,"end":121,"id":null,"expression":false,"generator":false,"async":false,"params":[],"body":{"type":"BlockStatement","start":42,"end":121,"body":[{"type":"ExpressionStatement","start":56,"end":111,"expression":{"type":"AssignmentExpression","start":56,"end":111,"operator":"=","left":{"type":"MemberExpression","start":56,"end":66,"object":{"type":"ThisExpression","start":56,"end":60},"property":{"type":"Identifier","start":61,"end":66,"name":"state"},"computed":false,"optional":false},"right":{"type":"ObjectExpression","start":69,"end":111,"properties":[{"type":"Property","start":87,"end":97,"method":false,"shorthand":false,"computed":false,"key":{"type":"Identifier","start":87,"end":94,"name":"counter"},"value":{"type":"Literal","start":96,"end":97,"value":0,"raw":"0"},"kind":"init"}]}}}]}}},{"type":"MethodDefinition","start":130,"end":271,"static":false,"computed":false,"key":{"type":"Identifier","start":130,"end":137,"name":"onMount"},"kind":"method","value":{"type":"FunctionExpression","start":137,"end":271,"id":null,"expression":false,"generator":false,"async":false,"params":[],"body":{"type":"BlockStatement","start":140,"end":271,"body":[{"type":"ExpressionStatement","start":154,"end":261,"expression":{"type":"CallExpression","start":154,"end":261,"callee":{"type":"Identifier","start":154,"end":165,"name":"setInterval"},"arguments":[{"type":"ArrowFunctionExpression","start":166,"end":254,"id":null,"expression":false,"generator":false,"async":false,"params":[],"body":{"type":"BlockStatement","start":172,"end":254,"body":[{"type":"ExpressionStatement","start":190,"end":240,"expression":{"type":"CallExpression","start":190,"end":240,"callee":{"type":"MemberExpression","start":190,"end":203,"object":{"type":"ThisExpression","start":190,"end":194},"property":{"type":"Identifier","start":195,"end":203,"name":"setState"},"computed":false,"optional":false},"arguments":[{"type":"ObjectExpression","start":204,"end":239,"properties":[{"type":"Property","start":206,"end":237,"method":false,"shorthand":false,"computed":false,"key":{"type":"Identifier","start":206,"end":213,"name":"counter"},"value":{"type":"BinaryExpression","start":215,"end":237,"left":{"type":"MemberExpression","start":215,"end":233,"object":{"type":"MemberExpression","start":215,"end":225,"object":{"type":"ThisExpression","start":215,"end":219},"property":{"type":"Identifier","start":220,"end":225,"name":"state"},"computed":false,"optional":false},"property":{"type":"Identifier","start":226,"end":233,"name":"counter"},"computed":false,"optional":false},"operator":"+","right":{"type":"Literal","start":236,"end":237,"value":1,"raw":"1"}},"kind":"init"}]}],"optional":false}}]}},{"type":"Literal","start":256,"end":260,"value":1000,"raw":"1000"}],"optional":false}}]}}},{"type":"MethodDefinition","start":280,"end":359,"static":false,"computed":false,"key":{"type":"Identifier","start":280,"end":286,"name":"render"},"kind":"method","value":{"type":"FunctionExpression","start":286,"end":359,"id":null,"expression":false,"generator":false,"async":false,"params":[],"body":{"type":"BlockStatement","start":289,"end":359,"body":[{"type":"ReturnStatement","start":303,"end":349,"argument":{"type":"JSXElement","start":310,"end":349,"openingElement":{"type":"JSXOpeningElement","start":310,"end":349,"attributes":[{"type":"JSXAttribute","start":318,"end":346,"name":{"type":"JSXIdentifier","start":318,"end":325,"name":"caption"},"value":{"type":"JSXExpressionContainer","start":326,"end":346,"expression":{"type":"MemberExpression","start":327,"end":345,"object":{"type":"MemberExpression","start":327,"end":337,"object":{"type":"ThisExpression","start":327,"end":331},"property":{"type":"Identifier","start":332,"end":337,"name":"state"},"computed":false,"optional":false},"property":{"type":"Identifier","start":338,"end":345,"name":"counter"},"computed":false,"optional":false}}}],"name":{"type":"JSXIdentifier","start":311,"end":317,"name":"button"},"selfClosing":true},"closingElement":null,"children":[]}}]}}}]}}],"sourceType":"module"}
+            `
+        )
+    )
+
+    let uiRoot
+
+    const crawl = (newEl, oldEl) => {
+        if (newEl._props) {
+            for (let propKey in newEl._props) {
+                if (newEl._props[propKey]._value?.__state__ === 'updated' || newEl._props[propKey]._value?.__state__ === 'updated') {
+                    let newValue = newEl._props[propKey]._value.__value__
+                    oldEl._props[propKey] = { _value: newValue, _defaultValue: oldEl._props[propKey]._defaultValue, _type: oldEl._props[propKey]._type }
+                    uiDriver.update(oldEl._key, propKey, newValue)
+                } else if (newEl._props[propKey]._value?.__state__ === 'deleted') {
+                    delete oldEl._props[propKey]
+                }
+            }
+        }
+        if (newEl._children) {
+            if (newEl._children.__state__ === 'created') {
+                oldEl._children = newEl._children.__value__
+            } else {
+                for (let arrayIndex in newEl._children) {
+                    let child = newEl[Number(arrayIndex)]
+                    if (child.__state__ === 'created') {
+                        oldEl._children[Number(arrayIndex)] = child
+                    }
+                }
+                for (let child in newEl._children) {
+                    crawl(child,)
+                }
+            }
+        }
+    }
+
+    const update = (u) => {
+        console.log(Utils.json.prettify(u))
+        crawl(u, uiRoot)
+        console.log(uiRoot)
+    }
+
+    applet.run('Button', (mod) => new Native(mod), update).then((runnable) => {
+        console.log(Utils.json.prettify(runnable.root))
+        uiRoot = runnable.root
+        let ui = uiDriver.build(runnable.root)
+        root.appendChild(ui)
+        runnable.mount()
+    })
+
+</script>
 
 </html>

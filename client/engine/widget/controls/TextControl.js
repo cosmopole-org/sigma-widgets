@@ -2,7 +2,6 @@
 import BaseControl from './BaseControl';
 import StringProp from '../props/StringProp'
 import Utils from '../utils';
-import BaseElement from '../elements/BaseElement';
 
 class TextControl extends BaseControl {
 

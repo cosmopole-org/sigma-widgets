@@ -46,10 +46,9 @@ var _default = exports.default = {
   Runnable: _Applet.Runnable,
   Utils: _utils.default
 };
-
 window.engine = _default
 
-},{"./Native":1,"./widget/Applet":3,"./widget/Module":12,"./widget/utils":23}],3:[function(require,module,exports){
+},{"./Native":1,"./widget/Applet":3,"./widget/Module":12,"./widget/utils":30}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -131,7 +130,7 @@ class Applet {
 }
 var _default = exports.default = Applet;
 
-},{"./Creature":4,"./INative":10,"./Module":12,"./elements/BaseElement":17,"./utils":23}],4:[function(require,module,exports){
+},{"./Creature":4,"./INative":10,"./Module":12,"./elements/BaseElement":18,"./utils":30}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -204,7 +203,7 @@ class Creature {
 }
 var _default = exports.default = Creature;
 
-},{"./DOM":6,"./Module":12,"./Runtime":13,"./elements/BaseElement":17,"./utils":23}],5:[function(require,module,exports){
+},{"./DOM":6,"./Module":12,"./Runtime":13,"./elements/BaseElement":18,"./utils":30}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -266,7 +265,7 @@ class DOM {
 }
 var _default = exports.default = DOM;
 
-},{"./Creature":4,"./Module":12,"./elements/BaseElement":17}],7:[function(require,module,exports){
+},{"./Creature":4,"./Module":12,"./elements/BaseElement":18}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -332,7 +331,7 @@ class Func {
 }
 var _default = exports.default = Func;
 
-},{"./utils":23}],9:[function(require,module,exports){
+},{"./utils":30}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -485,7 +484,7 @@ class Module {
 }
 var _default = exports.default = Module;
 
-},{"./Applet":3,"./Creature":4,"./CreatureStore":5,"./DOM":6,"./FuncStore":9,"./Runtime":13,"./elements/BaseElement":17,"./utils":23}],13:[function(require,module,exports){
+},{"./Applet":3,"./Creature":4,"./CreatureStore":5,"./DOM":6,"./FuncStore":9,"./Runtime":13,"./elements/BaseElement":18,"./utils":30}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -558,7 +557,7 @@ class Runtime {
 }
 var _default = exports.default = Runtime;
 
-},{"./Creature":4,"./INative":10,"./MemoryLayer":11,"./Module":12,"./utils":23}],14:[function(require,module,exports){
+},{"./Creature":4,"./INative":10,"./MemoryLayer":11,"./Module":12,"./utils":30}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -578,7 +577,32 @@ exports.default = void 0;
 var _BaseControl = _interopRequireDefault(require("./BaseControl"));
 var _StringProp = _interopRequireDefault(require("../props/StringProp"));
 var _utils = _interopRequireDefault(require("../utils"));
-var _BaseElement = _interopRequireDefault(require("../elements/BaseElement"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+class ButtonControl extends _BaseControl.default {
+  static TYPE = 'button';
+  static defaultProps = {
+    caption: new _StringProp.default('')
+  };
+  static defaultStyles = {
+    width: 150,
+    height: 56
+  };
+  static instantiate(overridenProps, overridenStyles, children) {
+    return _utils.default.generator.prepareElement(ButtonControl.TYPE, this.defaultProps, overridenProps, this.defaultStyles, overridenStyles, children);
+  }
+}
+var _default = exports.default = ButtonControl;
+
+},{"../props/StringProp":23,"../utils":30,"./BaseControl":14}],16:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _BaseControl = _interopRequireDefault(require("./BaseControl"));
+var _StringProp = _interopRequireDefault(require("../props/StringProp"));
+var _utils = _interopRequireDefault(require("../utils"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 class TextControl extends _BaseControl.default {
   static TYPE = 'text';
@@ -595,7 +619,7 @@ class TextControl extends _BaseControl.default {
 }
 var _default = exports.default = TextControl;
 
-},{"../elements/BaseElement":17,"../props/StringProp":19,"../utils":23,"./BaseControl":14}],16:[function(require,module,exports){
+},{"../props/StringProp":23,"../utils":30,"./BaseControl":14}],17:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -603,12 +627,14 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _TextControl = _interopRequireDefault(require("./TextControl"));
+var _ButtonControl = _interopRequireDefault(require("./ButtonControl"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 var _default = exports.default = {
-  [_TextControl.default.TYPE]: _TextControl.default
+  [_TextControl.default.TYPE]: _TextControl.default,
+  [_ButtonControl.default.TYPE]: _ButtonControl.default
 };
 
-},{"./TextControl":15}],17:[function(require,module,exports){
+},{"./ButtonControl":15,"./TextControl":16}],18:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -616,6 +642,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _BaseProp = _interopRequireDefault(require("../props/BaseProp"));
+var _convertStylesToCss = _interopRequireDefault(require("../utils/convertStylesToCss"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 class BaseElement {
   _key;
@@ -642,13 +669,13 @@ class BaseElement {
     this._key = key;
     this._controlType = controlType;
     this._props = props;
-    this._styles = styles;
+    this._styles = (0, _convertStylesToCss.default)(styles);
     this._children = children ? children : [];
   }
 }
 var _default = exports.default = BaseElement;
 
-},{"../props/BaseProp":18}],18:[function(require,module,exports){
+},{"../props/BaseProp":19,"../utils/convertStylesToCss":25}],19:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -667,7 +694,94 @@ class BaseProp {
 }
 var _default = exports.default = BaseProp;
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _BaseProp = _interopRequireDefault(require("./BaseProp"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+class BooleanProp extends _BaseProp.default {
+  _value;
+  get value() {
+    return this._value;
+  }
+  setValue(v) {
+    this._value = v;
+  }
+  _defaultValue;
+  get defaultValue() {
+    return this._defaultValue;
+  }
+  constructor(defaultValue) {
+    super('boolean');
+    this._value = defaultValue;
+    this._defaultValue = defaultValue;
+  }
+}
+var _default = exports.default = BooleanProp;
+
+},{"./BaseProp":19}],21:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _BaseProp = _interopRequireDefault(require("./BaseProp"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+class FuncProp extends _BaseProp.default {
+  _value;
+  get value() {
+    return this._value;
+  }
+  setValue(v) {
+    this._value = v;
+  }
+  _defaultValue;
+  get defaultValue() {
+    return this._defaultValue;
+  }
+  constructor(defaultValue) {
+    super('function');
+    this._value = defaultValue;
+    this._defaultValue = defaultValue;
+  }
+}
+var _default = exports.default = FuncProp;
+
+},{"./BaseProp":19}],22:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _BaseProp = _interopRequireDefault(require("./BaseProp"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+class NumberProp extends _BaseProp.default {
+  _value;
+  get value() {
+    return this._value;
+  }
+  setValue(v) {
+    this._value = v;
+  }
+  _defaultValue;
+  get defaultValue() {
+    return this._defaultValue;
+  }
+  constructor(defaultValue) {
+    super('number');
+    this._value = defaultValue;
+    this._defaultValue = defaultValue;
+  }
+}
+var _default = exports.default = NumberProp;
+
+},{"./BaseProp":19}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -696,7 +810,7 @@ class StringProp extends _BaseProp.default {
 }
 var _default = exports.default = StringProp;
 
-},{"./BaseProp":18}],20:[function(require,module,exports){
+},{"./BaseProp":19}],24:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -720,7 +834,168 @@ var _default = exports.default = {
   extractModules
 };
 
-},{"../Applet":3,"../Module":12}],21:[function(require,module,exports){
+},{"../Applet":3,"../Module":12}],25:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _cssProperty = require("./cssProperty");
+var _hyphenateStyleName = _interopRequireDefault(require("./hyphenateStyleName"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var isArray = Array.isArray;
+var keys = Object.keys;
+var counter = 1;
+// Follows syntax at https://developer.mozilla.org/en-US/docs/Web/CSS/content,
+// including multiple space separated values.
+var unquotedContentValueRegex = /^(normal|none|(\b(url\([^)]*\)|chapter_counter|attr\([^)]*\)|(no-)?(open|close)-quote|inherit)((\b\s*)|$|\s+))+)$/;
+function buildRule(key, value) {
+  if (!_cssProperty.isUnitlessNumber[key] && typeof value === 'number') {
+    value = '' + value + 'px';
+  } else if (key === 'content' && !unquotedContentValueRegex.test(value)) {
+    value = "'" + value.replace(/'/g, "\\'") + "'";
+  }
+  return (0, _hyphenateStyleName.default)(key) + ': ' + value + ';  ';
+}
+function styleToCssString(rules) {
+  var result = '';
+  if (!rules || keys(rules).length === 0) {
+    return result;
+  }
+  var styleKeys = keys(rules);
+  for (var j = 0, l = styleKeys.length; j < l; j++) {
+    var styleKey = styleKeys[j];
+    var value = rules[styleKey];
+    if (isArray(value)) {
+      for (var i = 0, len = value.length; i < len; i++) {
+        result += buildRule(styleKey, value[i]);
+      }
+    } else {
+      result += buildRule(styleKey, value);
+    }
+  }
+  return result;
+}
+var _default = exports.default = styleToCssString;
+
+},{"./cssProperty":26,"./hyphenateStyleName":29}],26:[function(require,module,exports){
+'use strict';
+
+/**
+ * CSS properties which accept numbers but are not in units of "px".
+ */
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var isUnitlessNumber = {
+  boxFlex: true,
+  boxFlexGroup: true,
+  columnCount: true,
+  flex: true,
+  flexGrow: true,
+  flexPositive: true,
+  flexShrink: true,
+  flexNegative: true,
+  fontWeight: true,
+  lineClamp: true,
+  lineHeight: true,
+  opacity: true,
+  order: true,
+  orphans: true,
+  widows: true,
+  zIndex: true,
+  zoom: true,
+  // SVG-related properties
+  fillOpacity: true,
+  strokeDashoffset: true,
+  strokeOpacity: true,
+  strokeWidth: true
+};
+
+/**
+ * @param {string} prefix vendor-specific prefix, eg: Webkit
+ * @param {string} key style name, eg: transitionDuration
+ * @return {string} style name prefixed with `prefix`, properly camelCased, eg:
+ * WebkitTransitionDuration
+ */
+function prefixKey(prefix, key) {
+  return prefix + key.charAt(0).toUpperCase() + key.substring(1);
+}
+
+/**
+ * Support style names that may come passed in prefixed by adding permutations
+ * of vendor prefixes.
+ */
+var prefixes = ['Webkit', 'ms', 'Moz', 'O'];
+
+// Using Object.keys here, or else the vanilla for-in loop makes IE8 go into an
+// infinite loop, because it iterates over the newly added props too.
+Object.keys(isUnitlessNumber).forEach(function (prop) {
+  prefixes.forEach(function (prefix) {
+    isUnitlessNumber[prefixKey(prefix, prop)] = isUnitlessNumber[prop];
+  });
+});
+
+/**
+ * Most style properties can be unset by doing .style[prop] = '' but IE8
+ * doesn't like doing that with shorthand properties so for the properties that
+ * IE8 breaks on, which are listed here, we instead unset each of the
+ * individual properties. See http://bugs.jquery.com/ticket/12385.
+ * The 4-value 'clock' properties like margin, padding, border-width seem to
+ * behave without any problems. Curiously, list-style works too without any
+ * special prodding.
+ */
+var shorthandPropertyExpansions = {
+  background: {
+    backgroundImage: true,
+    backgroundPosition: true,
+    backgroundRepeat: true,
+    backgroundColor: true
+  },
+  border: {
+    borderWidth: true,
+    borderStyle: true,
+    borderColor: true
+  },
+  borderBottom: {
+    borderBottomWidth: true,
+    borderBottomStyle: true,
+    borderBottomColor: true
+  },
+  borderLeft: {
+    borderLeftWidth: true,
+    borderLeftStyle: true,
+    borderLeftColor: true
+  },
+  borderRight: {
+    borderRightWidth: true,
+    borderRightStyle: true,
+    borderRightColor: true
+  },
+  borderTop: {
+    borderTopWidth: true,
+    borderTopStyle: true,
+    borderTopColor: true
+  },
+  font: {
+    fontStyle: true,
+    fontVariant: true,
+    fontWeight: true,
+    fontSize: true,
+    lineHeight: true,
+    fontFamily: true
+  }
+};
+var CSSProperty = {
+  isUnitlessNumber: isUnitlessNumber,
+  shorthandPropertyExpansions: shorthandPropertyExpansions
+};
+module.exports = CSSProperty;
+var _default = exports.default = CSSProperty;
+
+},{}],27:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1208,7 +1483,7 @@ var _default = exports.default = {
   ExecutionMeta: _ExecutionMeta.default
 };
 
-},{".":23,"../Creature":4,"../ExecutionMeta":7,"../controls/index":16,"../elements/BaseElement":17}],22:[function(require,module,exports){
+},{".":30,"../Creature":4,"../ExecutionMeta":7,"../controls/index":17,"../elements/BaseElement":18}],28:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1216,25 +1491,36 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _BaseElement = _interopRequireDefault(require("../elements/BaseElement"));
-var _BaseProp = _interopRequireDefault(require("../props/BaseProp"));
 var _ExecutionMeta = _interopRequireDefault(require("../ExecutionMeta"));
-var _Creature = _interopRequireDefault(require("../Creature"));
+var _StringProp = _interopRequireDefault(require("../props/StringProp"));
+var _NumberProp = _interopRequireDefault(require("../props/NumberProp"));
+var _BooleanProp = _interopRequireDefault(require("../props/BooleanProp"));
+var _FuncProp = _interopRequireDefault(require("../props/FuncProp"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 let generateKey = () => {
   return Math.random().toString().substring(2);
 };
-function clone(instance) {
+function clone(T, instance) {
   const copy = JSON.parse(JSON.stringify(instance));
-  Object.assign(copy, instance);
+  Object.assign(T, copy);
   return copy;
 }
 const prepareElement = (typeName, defaultProps, overridenProps, defaultStyles, overridenStyles, children) => {
   let finalProps = {};
   Object.keys(defaultProps).forEach(propKey => {
-    if (overridenProps[propKey]) {
+    if (overridenProps[propKey] !== undefined) {
       let bpProp = defaultProps[propKey];
-      let copiedProp = clone(bpProp);
-      copiedProp.setValue(overridenProps[propKey]);
+      let copiedProp;
+      if (bpProp._type === 'string') {
+        copiedProp = clone(_StringProp.default, bpProp);
+      } else if (bpProp._type === 'number') {
+        copiedProp = clone(_NumberProp.default, bpProp);
+      } else if (bpProp._type === 'boolean') {
+        copiedProp = clone(_BooleanProp.default, bpProp);
+      } else if (bpProp._type === 'function') {
+        copiedProp = clone(_FuncProp.default, bpProp);
+      }
+      copiedProp._value = overridenProps[propKey];
       finalProps[propKey] = copiedProp;
     }
   });
@@ -1267,7 +1553,54 @@ var _default = exports.default = {
   nestedContext
 };
 
-},{"../Creature":4,"../ExecutionMeta":7,"../elements/BaseElement":17,"../props/BaseProp":18}],23:[function(require,module,exports){
+},{"../ExecutionMeta":7,"../elements/BaseElement":18,"../props/BooleanProp":20,"../props/FuncProp":21,"../props/NumberProp":22,"../props/StringProp":23}],29:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var msPattern = /^ms-/;
+var _uppercasePattern = /([A-Z])/g;
+
+/**
+ * Hyphenates a camelcased string, for example:
+ *
+ *   > hyphenate('backgroundColor')
+ *   < "background-color"
+ *
+ * For CSS style names, use `hyphenateStyleName` instead which works properly
+ * with all vendor prefixes, including `ms`.
+ *
+ * @param {string} string
+ * @return {string}
+ */
+function hyphenate(string) {
+  return string.replace(_uppercasePattern, '-$1').toLowerCase();
+}
+
+/**
+ * Hyphenates a camelcased CSS property name, for example:
+ *
+ *   > hyphenateStyleName('backgroundColor')
+ *   < "background-color"
+ *   > hyphenateStyleName('MozTransition')
+ *   < "-moz-transition"
+ *   > hyphenateStyleName('msTransition')
+ *   < "-ms-transition"
+ *
+ * As Modernizr suggests (http://modernizr.com/docs/#prefixed), an `ms` prefix
+ * is converted to `-ms-`.
+ *
+ * @param {string} string
+ * @return {string}
+ */
+function hyphenateStyleName(string) {
+  return hyphenate(string).replace(msPattern, '-ms-');
+}
+var _default = exports.default = hyphenateStyleName;
+
+},{}],30:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1286,7 +1619,7 @@ var _default = exports.default = {
   executor: _executor.default
 };
 
-},{"./compiler":20,"./executor":21,"./generator":22,"./json":24}],24:[function(require,module,exports){
+},{"./compiler":24,"./executor":27,"./generator":28,"./json":31}],31:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

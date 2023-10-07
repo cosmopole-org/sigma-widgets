@@ -10,8 +10,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@material/web": "^1.0.0",
+    "@rollup/plugin-node-resolve": "^15.2.2",
     "browser-resolve": "^2.0.0",
     "esmify": "^2.1.1",
+    "react-style-object-to-css": "^1.1.2",
+    "rollup": "^4.0.2",
     "vmengine": "^0.1.0"
   }
 }

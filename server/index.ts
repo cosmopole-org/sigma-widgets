@@ -20,7 +20,7 @@ applet.fill(
             }, 1000)
         }
         render() {
-            return this.state.counter
+            return <button caption={this.state.counter} />
         }
     }
 `

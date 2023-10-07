@@ -1,4 +1,5 @@
 import BaseProp from "../props/BaseProp";
+import styleToCssString from '../utils/convertStylesToCss'
 
 class BaseElement {
 
@@ -27,7 +28,7 @@ class BaseElement {
         this._key = key
         this._controlType = controlType
         this._props = props;
-        this._styles = styles
+        this._styles = styleToCssString(styles)
         this._children = children ? children : []
     }
 }
