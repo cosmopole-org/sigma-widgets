@@ -52,12 +52,13 @@ class Applet {
     onCreatureStateChange(creature: Creature, newVersion: BaseElement) {
         let oldVersion = this.oldVersions[creature._key]
         this.oldVersions[creature._key] = newVersion
-        this.update(Utils.json.diff(oldVersion, newVersion))
+        newVersion._key = oldVersion._key
+        this.update(oldVersion._key, Utils.json.diff(oldVersion, newVersion))
     }
 
-    update: (u: any) => void
+    update: (key: string, u: any) => void
 
-    public run(genesis: string, nativeBuilder: (mod: Module) => INative, update: (u) => void) {
+    public run(genesis: string, nativeBuilder: (mod: Module) => INative, update: (key: string, u: any) => void) {
         return new Promise(resolve => {
             this._nativeBuilder = nativeBuilder
             this.update = update

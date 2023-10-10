@@ -11,6 +11,17 @@ class Native extends _INative.default {
   globalMemory = {};
   intervals = {};
   timeouts = {};
+  Object = {
+    keys: obj => {
+      return Object.keys(obj);
+    },
+    values: obj => {
+      return Object.values(obj);
+    }
+  };
+  alert = str => {
+    window.alert(str);
+  };
   console = {
     log: (...strs) => {
       console.log(...strs);
@@ -103,7 +114,10 @@ class Applet {
   onCreatureStateChange(creature, newVersion) {
     let oldVersion = this.oldVersions[creature._key];
     this.oldVersions[creature._key] = newVersion;
-    this.update(_utils.default.json.diff(oldVersion, newVersion));
+    // newVersion._key = oldVersion._key
+    this.cache.elements[newVersion._key] = newVersion._key;
+    delete this.cache.elements[oldVersion._key];
+    this.update(oldVersion._key, newVersion._key, _utils.default.json.diff(oldVersion, newVersion));
   }
   update;
   run(genesis, nativeBuilder, update) {
@@ -196,7 +210,9 @@ class Creature {
         ...this.thisObj['state'],
         ...stateUpdate
       };
-      let newMetaBranch = _utils.default.generator.nestedContext(this);
+      let newMetaBranch = _utils.default.generator.nestedContext(this, {
+        parentJsxKey: '100'
+      });
       let newRender = this.getBaseMethod('render')(newMetaBranch);
       this._module.applet.onCreatureStateChange(this, newRender);
     };
@@ -677,10 +693,13 @@ exports.default = void 0;
 var _BaseControl = _interopRequireDefault(require("./BaseControl"));
 var _utils = _interopRequireDefault(require("../utils"));
 var _BaseElement = _interopRequireDefault(require("../elements/BaseElement"));
+var _FuncProp = _interopRequireDefault(require("../props/FuncProp"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 class TabsControl extends _BaseControl.default {
   static TYPE = 'tabs';
-  static defaultProps = {};
+  static defaultProps = {
+    onChange: new _FuncProp.default(undefined)
+  };
   static defaultStyles = {};
   static instantiate(overridenProps, overridenStyles, children) {
     return _utils.default.generator.prepareElement(TabsControl.TYPE, this.defaultProps, overridenProps, this.defaultStyles, overridenStyles, children);
@@ -688,7 +707,7 @@ class TabsControl extends _BaseControl.default {
 }
 var _default = exports.default = TabsControl;
 
-},{"../elements/BaseElement":22,"../utils":33,"./BaseControl":14}],20:[function(require,module,exports){
+},{"../elements/BaseElement":22,"../props/FuncProp":25,"../utils":33,"./BaseControl":14}],20:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1196,10 +1215,10 @@ let codeCallbacks = {
     let isNew = c === undefined;
     let children = code.children.map(child => executeSingle(child, meta)).flat(Infinity).filter(child => child !== '');
     if (!c) {
-      c = Control.instantiate(attrs, attrs['style'], children);
+      c = Control.instantiate(attrs, attrs['style'], children, undefined, meta.parentJsxKey);
     } else {
       let cThisObj = c.thisObj;
-      c = Control.instantiate(attrs, attrs['style'], children, cThisObj);
+      c = Control.instantiate(attrs, attrs['style'], children, cThisObj, meta.parentJsxKey);
     }
     meta.creature.module.applet.cache.elements[key] = c;
     if (c instanceof _BaseElement.default) return c;else {
@@ -1732,6 +1751,14 @@ let prettify = obj => {
   return JSON.stringify(obj, undefined, 4);
 };
 let diff = (obj1, obj2) => {
+  if (obj2._key || obj1._key) {
+    if (obj2._key !== obj1._key) {
+      return {
+        __state__: 'updated',
+        __value__: obj2
+      };
+    }
+  }
   if (obj2 === undefined) {
     if (obj1 === undefined) {
       return undefined;

@@ -7,6 +7,17 @@ class Native extends INative {
     intervals = {}
     timeouts = {}
 
+    Object = {
+        keys: (obj) => {
+            return Object.keys(obj)
+        },
+        values: (obj) => {
+            return Object.values(obj)
+        }
+    }
+    alert = (str) => {
+        window.alert(str)
+    }
     console = {
         log: (...strs) => {
             console.log(...strs)

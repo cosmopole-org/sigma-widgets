@@ -26,7 +26,7 @@ let executeBlock = (codes: Array<any>, meta: ExecutionMeta) => {
 let findLayer = (meta: ExecutionMeta, id: string) => {
     for (let i = meta.creature.runtime.stack.length - 1; i >= 0; i--) {
         let r = meta.creature.runtime.stack[i].findUnit(id)
-        if (r) {
+        if (r !== undefined) {
             return meta.creature.runtime.stack[i]
         }
     }
@@ -81,7 +81,6 @@ let codeCallbacks = {
         if (!Control) {
             Control = meta.creature.module.applet.findModule(code.openingElement.name.name)
         }
-        console.log(code.openingElement.name.name)
         let attrs = {}
         code.openingElement.attributes.forEach((attr: any) => {
             attrs[attr.name.name] = executeSingle(attr.value, meta)
@@ -98,8 +97,7 @@ let codeCallbacks = {
         if (!c) {
             c = Control.instantiate(attrs, attrs['style'], children)
         } else {
-            let cThisObj = c.thisObj
-            c = Control.instantiate(attrs, attrs['style'], children, cThisObj)
+            c.update(attrs, attrs['style'], children)
         }
         meta.creature.module.applet.cache.elements[key] = c
         if (c instanceof BaseElement) return c
@@ -144,19 +142,28 @@ let codeCallbacks = {
     },
     VariableDeclarator: (code: any, meta: ExecutionMeta) => {
         if (meta?.declaration) {
-            meta.creature.runtime.stackTop.putUnit(code.id.name, executeSingle(code.init, meta))
+            let val = executeSingle(code.init, meta)
+            if (code.id.type === 'ObjectPattern') {
+                code.id.properties.forEach((property: any) => {
+                    meta.creature.runtime.stackTop.putUnit(property.key.name, val[property.key.name])
+                });
+            } else {
+                meta.creature.runtime.stackTop.putUnit(code.id.name, val)
+            }
         }
     },
     Identifier: (code: any, meta: ExecutionMeta) => {
-        for (let i = meta.creature.runtime.stack.length - 1; i >= 0; i--) {
-            if (meta.returnIdParent) {
+        if (meta.returnIdParent) {
+            for (let i = meta.creature.runtime.stack.length - 1; i >= 0; i--) {
                 let wrapper = findLayer(meta, code.name)
                 if (wrapper) {
                     return { parent: wrapper.units, id: code.name }
                 }
-            } else {
+            }
+        } else {
+            for (let i = meta.creature.runtime.stack.length - 1; i >= 0; i--) {
                 let r = meta.creature.runtime.stack[i].findUnit(code.name)
-                if (r) {
+                if (r !== undefined) {
                     return r
                 }
             }
@@ -340,13 +347,13 @@ let codeCallbacks = {
                     return (...args: Array<any>) => {
                         switch (prop) {
                             case 'push': {
-                                return r.push(...args);
+                                return r.push(...args)
                             }
                             case 'map': {
                                 return r.map(...args)
                             }
                             case 'forEach': {
-                                return r.forEach(...args);
+                                return r.forEach(...args)
                             }
                             default: {
 

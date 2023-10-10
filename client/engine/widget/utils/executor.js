@@ -95,10 +95,10 @@ let codeCallbacks = {
         let isNew = (c === undefined)
         let children = code.children.map((child) => executeSingle(child, meta)).flat(Infinity).filter((child) => (child !== ''))
         if (!c) {
-            c = Control.instantiate(attrs, attrs['style'], children)
+            c = Control.instantiate(attrs, attrs['style'], children, undefined, meta.parentJsxKey)
         } else {
             let cThisObj = c.thisObj
-            c = Control.instantiate(attrs, attrs['style'], children, cThisObj)
+            c = Control.instantiate(attrs, attrs['style'], children, cThisObj, meta.parentJsxKey)
         }
         meta.creature.module.applet.cache.elements[key] = c
         if (c instanceof BaseElement) return c

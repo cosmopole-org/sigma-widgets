@@ -8,8 +8,19 @@ class Native extends INative {
     private intervals = {}
     private timeouts = {}
 
+    public readonly Object = {
+        keys: (obj: any) => {
+            return Object.keys(obj)
+        },
+        values: (obj: any) => {
+            return Object.values(obj)
+        }
+    }
+    alert = (str: any) => {
+        // window.alert(str)
+    }
     public readonly console = {
-        log: (...strs: Array<any>) => {
+        log: (...strs: any) => {
             console.log(...strs)
         }
     }

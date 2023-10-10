@@ -4,6 +4,14 @@ let prettify = (obj) => {
 }
 
 let diff = (obj1, obj2) => {
+    if (obj2._key || obj1._key) {
+        if (obj2._key !== obj1._key) {
+            return {
+                __state__: 'updated',
+                __value__: obj2
+            }
+        }
+    }
     if (obj2 === undefined) {
         if (obj1 === undefined) {
             return undefined

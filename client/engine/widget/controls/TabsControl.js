@@ -2,12 +2,13 @@
 import BaseControl from './BaseControl';
 import Utils from '../utils';
 import BaseElement from '../elements/BaseElement';
+import FuncProp from '../props/FuncProp';
 
 class TabsControl extends BaseControl {
 
     static TYPE = 'tabs'
     static defaultProps = {
-        
+        onChange: new FuncProp(undefined)
     }
     static defaultStyles = {
         

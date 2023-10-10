@@ -81,7 +81,7 @@ class UIDriver {
                         {
                             cosmoId: element._key,
                             textContent: element._props.caption?._value,
-                            onClick: element._props.onClick?._value
+                            onclick: element._props.onClick?._value
                         },
                         element._styles
                     )
@@ -93,6 +93,7 @@ class UIDriver {
                         'md-tabs',
                         {
                             cosmoId: element._key,
+                            onchange: element._props.onChange?._value
                         },
                         element._styles
                     )
@@ -125,7 +126,7 @@ class UIDriver {
     }
 
     createChild(newChild, parentKey) {
-        this.build(newChild, parentKey)
+        return this.build(newChild, parentKey)
     }
 
     deleteChild(childKey) {
@@ -143,6 +144,7 @@ class UIDriver {
             let { rendered } = elCont
             let newRendered = this.build(newChild)
             rendered.replaceWith(newRendered)
+            return newRendered
         }
     }
 

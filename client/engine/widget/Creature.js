@@ -50,7 +50,7 @@ class Creature {
         }
         this.thisObj['setState'] = (stateUpdate) => {
             this.thisObj['state'] = { ...this.thisObj['state'], ...stateUpdate }
-            let newMetaBranch = Utils.generator.nestedContext(this)
+            let newMetaBranch = Utils.generator.nestedContext(this, { })
             let newRender = this.getBaseMethod('render')(newMetaBranch)
             this._module.applet.onCreatureStateChange(this, newRender)
         }

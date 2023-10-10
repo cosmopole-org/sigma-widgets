@@ -51,7 +51,10 @@ class Applet {
     onCreatureStateChange(creature, newVersion) {
         let oldVersion = this.oldVersions[creature._key]
         this.oldVersions[creature._key] = newVersion
-        this.update(Utils.json.diff(oldVersion, newVersion))
+        // newVersion._key = oldVersion._key
+        this.cache.elements[newVersion._key] = newVersion._key
+        delete this.cache.elements[oldVersion._key]
+        this.update(oldVersion._key, newVersion._key, Utils.json.diff(oldVersion, newVersion))
     }
 
     update

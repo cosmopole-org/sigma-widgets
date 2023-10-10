@@ -29,6 +29,15 @@ class Creature {
         return this._runtime.stack[0].findUnit(methodId)
     }
 
+    public update(props?: { [id: string]: any }, styles?: { [id: string]: any }, children?: Array<BaseElement>) {
+        this.thisObj = {
+            ...this.thisObj,
+            props,
+            styles,
+            children
+        }
+    }
+
     constructor(module: Module, defaultValues?: any) {
         this._key = defaultValues?._key ? defaultValues._key : Utils.generator.generateKey()
         this._cosmoId = defaultValues?.cosmoId
