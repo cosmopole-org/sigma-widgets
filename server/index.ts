@@ -10,31 +10,59 @@ applet.fill(
     `
     class Button {
         constructor() {
+            let { data } = this.props
             this.state = {
-                counter: 0
+                counter: data
             }
         }
         onMount() {
+            let { counter } = this.state
             setTimeout(() => {
-                this.setState({ counter: this.state.counter + 5 })
+                this.setState({ counter: counter + ' another test !' })
             }, 1000)
         }
         render() {
-            return <text text={this.state.counter} />
+            return <text text={'hello ' + this.state.counter} />
         }
     }
     class Test {
         constructor() {
             this.state = {
+                items: [ 1 ],
                 counter: 0
             }
         }
         onMount() {
-
+            let { counter } = this.state
+            setTimeout(() => {
+                this.setState({ counter: counter + 1, items: [ 1, 2 ] })
+            }, 2000)
+            setTimeout(() => {
+                this.setState({ items: [ 1, 2, 3 ] })
+            }, 5000)
+            setTimeout(() => {
+                this.setState({ items: [ 1, 2, 3, 4 ] })
+            }, 6000)
         }
         render() {
-            let { counter, test } = this.state
-            console.log(counter, test)
+            let { counter, items } = this.state
+            return counter === 0 ? (
+                <box>
+                    {
+                        items.map(item => {
+                            return <Button key={item} data={'test 1 ' + item} />
+                        })
+                    }
+                </box>
+            ) : (
+                <box>
+                    {
+                        items.map(item => {
+                            return <Button key={item} data={'test 2 ' + item} />
+                        })
+                    }
+                </box>
+            )
         }
     }
     `

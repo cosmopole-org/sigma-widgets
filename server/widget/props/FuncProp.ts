@@ -6,6 +6,7 @@ class FuncProp extends BaseProp {
     _value?: () => void
     public get value() { return this._value }
     public setValue(v: any) { this._value = v}
+    public getValue() { return this._value}
 
     _defaultValue?: () => void
     public get defaultValue() { return this._defaultValue }

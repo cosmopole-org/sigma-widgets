@@ -97,7 +97,7 @@ let codeCallbacks = {
         if (!c) {
             c = Control.instantiate(attrs, attrs['style'], children)
         } else {
-            c.update(attrs, attrs['style'], children)
+            c = Control.instantiate(attrs, attrs['style'], children, c.thisObj)
         }
         meta.creature.module.applet.cache.elements[key] = c
         if (c instanceof BaseElement) return c

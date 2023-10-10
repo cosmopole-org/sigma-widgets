@@ -17,6 +17,12 @@ class BaseElement {
     public _children: Array<BaseElement>
     get children() { return this._children }
 
+    public update(props?: { [id: string]: any }, styles?: { [id: string]: any }, children?: Array<BaseElement>) {
+        if (props) this._props = props
+        if (styles) this._styles = styles
+        if (children) this._children = children
+    }
+
     constructor(
         key: string,
         controlType: string,

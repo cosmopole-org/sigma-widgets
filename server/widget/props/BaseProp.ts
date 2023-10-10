@@ -5,6 +5,7 @@ abstract class BaseProp {
     public get type() { return this._type }
 
     public abstract setValue(value: any): void
+    public abstract getValue(): any
 
     constructor(type: string) {
         this._type = type
