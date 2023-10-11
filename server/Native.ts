@@ -1,6 +1,9 @@
 
 import Creature from "widget/Creature"
 import INative from "./widget/INative"
+import BaseElement from "widget/elements/BaseElement"
+import generator from "widget/utils/generator"
+import Controls from './widget/controls'
 
 class Native extends INative {
 
@@ -8,6 +11,11 @@ class Native extends INative {
     private intervals = {}
     private timeouts = {}
 
+    public readonly nativeElement = (compType: string, props: any, styles: any, children: any) => {
+        let control = Controls[compType]
+        let c = control.instantiate(props, styles, children)
+        return c
+    }
     public readonly Object = {
         keys: (obj: any) => {
             return Object.keys(obj)
@@ -16,7 +24,7 @@ class Native extends INative {
             return Object.values(obj)
         }
     }
-    alert = (str: any) => {
+    public readonly alert = (str: any) => {
         // window.alert(str)
     }
     public readonly console = {

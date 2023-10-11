@@ -52,16 +52,23 @@ class Applet {
     onCreatureStateChange(creature: Creature, newVersion: BaseElement) {
         let oldVersion = this.oldVersions[creature._key]
         this.oldVersions[creature._key] = newVersion
-        newVersion._key = oldVersion._key
-        this.update(oldVersion._key, Utils.json.diff(oldVersion, newVersion))
+        let updates = Utils.json.diff(oldVersion, newVersion)
+        updates.forEach((u: any) => {
+            if (u.__action__ === 'element_deleted') {
+                delete this.cache.elements[u.__key__]
+            }
+        })
+        this.update(oldVersion._key, updates)
     }
 
     update: (key: string, u: any) => void
+    firstMount: boolean = false;
 
     public run(genesis: string, nativeBuilder: (mod: Module) => INative, update: (key: string, u: any) => void) {
         return new Promise(resolve => {
             this._nativeBuilder = nativeBuilder
             this.update = update
+            this.firstMount = false
             this.cache.elements = {}
             this.cache.mounts = []
             let genesisMod = this._modules[genesis]
@@ -75,6 +82,7 @@ class Applet {
                 new Runnable(
                     view,
                     () => {
+                        this.firstMount = true
                         this.cache.mounts.reverse().forEach((onMount: any) => onMount())
                     }
                 )

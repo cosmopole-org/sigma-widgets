@@ -8,60 +8,67 @@ let applet = new Applet('frame')
 
 applet.fill(
     `
-    class Button {
+    class Box {
         constructor() {
-            let { data } = this.props
+        
+        }
+        onMount() {
+
+        }
+        render() {
+            return nativeElement('box', this.props, this.styles, this.children)
+        }
+    }
+    class Text {
+        constructor() {
+        
+        }
+        onMount() {
+
+        }
+        render() {
+            return nativeElement('text', this.props, this.styles, [])
+        }
+    }
+    class Child {
+        constructor() {
             this.state = {
-                counter: data
+                name: 'mamad'
             }
         }
         onMount() {
-            let { counter } = this.state
             setTimeout(() => {
-                this.setState({ counter: counter + ' another test !' })
+                this.setState({ name: 'keyhan' })
             }, 1000)
         }
         render() {
-            return <text text={'hello ' + this.state.counter} />
+            return (
+                <Box>
+                    {
+                        this.state.name === 'mamad' ? [0, 1].map(item => {
+                            return (
+                                <Text key={item} text={this.state.name + ' ' + item} />
+                            )
+                        }) : [0, 1, 2].map(item => {
+                            return (
+                                <Text key={item} text={this.state.name} />
+                            )
+                        })
+                    }
+                </Box>
+            )
         }
     }
     class Test {
         constructor() {
-            this.state = {
-                items: [ 1 ],
-                counter: 0
-            }
+
         }
         onMount() {
-            let { counter } = this.state
-            setTimeout(() => {
-                this.setState({ counter: counter + 1, items: [ 1, 2 ] })
-            }, 2000)
-            setTimeout(() => {
-                this.setState({ items: [ 1, 2, 3 ] })
-            }, 5000)
-            setTimeout(() => {
-                this.setState({ items: [ 1, 2, 3, 4 ] })
-            }, 6000)
+
         }
         render() {
-            let { counter, items } = this.state
-            return counter === 0 ? (
-                <box>
-                    {
-                        items.map(item => {
-                            return <Button key={item} data={'test 1 ' + item} />
-                        })
-                    }
-                </box>
-            ) : (
-                <box>
-                    {
-                        items.map(item => {
-                            return <Button key={item} data={'test 2 ' + item} />
-                        })
-                    }
-                </box>
+            return (
+                <Child />
             )
         }
     }

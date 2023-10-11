@@ -1,5 +1,6 @@
 
 import DOM from "./DOM"
+import ExecutionMeta from "./ExecutionMeta"
 import Module from "./Module"
 import Runtime from "./Runtime"
 import BaseElement from "./elements/BaseElement"
@@ -38,6 +39,10 @@ class Creature {
         }
     }
 
+    public fillChildren(children: Array<BaseElement>) {
+        this.thisObj.children = children
+    }
+
     constructor(module: Module, defaultValues?: any) {
         this._key = defaultValues?._key ? defaultValues._key : Utils.generator.generateKey()
         this._cosmoId = defaultValues?.cosmoId
@@ -59,7 +64,7 @@ class Creature {
         }
         this.thisObj['setState'] = (stateUpdate: { [id: string]: any }) => {
             this.thisObj['state'] = { ...this.thisObj['state'], ...stateUpdate }
-            let newMetaBranch = Utils.generator.nestedContext(this)
+            let newMetaBranch = new ExecutionMeta({ creature: this, parentJsxKey: this.thisObj['parentJsxKey'] })
             let newRender = this.getBaseMethod('render')(newMetaBranch)
             this._module.applet.onCreatureStateChange(this, newRender)
         }

@@ -25,7 +25,7 @@ let executeBlock = (codes: Array<any>, meta: ExecutionMeta) => {
 
 let findLayer = (meta: ExecutionMeta, id: string) => {
     for (let i = meta.creature.runtime.stack.length - 1; i >= 0; i--) {
-        let r = meta.creature.runtime.stack[i].findUnit(id)
+        let r = meta.creature._runtime.stack[i].findUnit(id)
         if (r !== undefined) {
             return meta.creature.runtime.stack[i]
         }
@@ -77,40 +77,43 @@ let codeCallbacks = {
     },
     JSXElement: (code: any, meta: ExecutionMeta) => {
         if (!code.cosmoId) code.cosmoId = Utils.generator.generateKey()
-        let Control = Controls[code.openingElement.name.name]
-        if (!Control) {
-            Control = meta.creature.module.applet.findModule(code.openingElement.name.name)
-        }
+        let Control = meta.creature.module.applet.findModule(code.openingElement.name.name)
         let attrs = {}
         code.openingElement.attributes.forEach((attr: any) => {
             attrs[attr.name.name] = executeSingle(attr.value, meta)
         })
+   
         let key = attrs['key']
-        if (!key) {
+        if (key === undefined) {
             key = code.cosmoId
-            if (meta.parentJsxKey) key = meta.parentJsxKey + '-' + key
-            attrs['key'] = key
         }
-        let c = meta.creature.module.applet.cache.elements[key];
+        if (meta.parentJsxKey) key = meta.parentJsxKey + '-' + key
+        attrs['key'] = key
+
+        let c: Creature = meta.creature.module.applet.cache.elements[key];
         let isNew = (c === undefined)
-        let children = code.children.map((child: any) => executeSingle(child, meta)).flat(Infinity).filter((child: any) => (child !== ''))
-        if (!c) {
-            c = Control.instantiate(attrs, attrs['style'], children)
-        } else {
-            c = Control.instantiate(attrs, attrs['style'], children, c.thisObj)
-        }
+
+        c = Control.instantiate(attrs, attrs['style'], [], c?.thisObj)
+
+        let childMeta = new ExecutionMeta({ ...meta, parentJsxKey: key })
+        let children = code.children.map((child: any) => executeSingle(child, childMeta))
+            .flat(Infinity).filter((child: any) => (child !== ''))
+        c.fillChildren(children)
+        if (meta.parentJsxKey) c.thisObj.parentJsxKey = meta.parentJsxKey
+
+        let newMetaBranch = Utils.generator.nestedContext(c, { ...meta, parentJsxKey: key })
         meta.creature.module.applet.cache.elements[key] = c
-        if (c instanceof BaseElement) return c
-        else {
-            let newMetaBranch = Utils.generator.nestedContext(c, { ...meta, parentJsxKey: key })
+        if (isNew) c.getBaseMethod('constructor')(newMetaBranch)
+        if (meta.creature.module.applet.firstMount) {
+            c.getBaseMethod('onMount')(newMetaBranch)
+        } else {
             meta.creature.module.applet.cache.mounts.push(() => c.getBaseMethod('onMount')(newMetaBranch))
-            if (isNew) c.getBaseMethod('constructor')(newMetaBranch)
-            let r = c.getBaseMethod('render')(newMetaBranch)
-            if (!meta.creature.module.applet.oldVersions[c._key]) {
-                meta.creature.module.applet.oldVersions[c._key] = r
-            }
-            return r
         }
+        let r = c.getBaseMethod('render')(newMetaBranch)
+        if (!meta.creature.module.applet.oldVersions[c._key]) {
+            meta.creature.module.applet.oldVersions[c._key] = r
+        }
+        return r
     },
     Program: (code: any, meta: ExecutionMeta) => {
         code.body.forEach((child: any) => {
