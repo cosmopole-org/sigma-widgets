@@ -18,6 +18,11 @@ declare class BaseElement {
     };
     _children: Array<BaseElement>;
     get children(): BaseElement[];
+    update(props?: {
+        [id: string]: any;
+    }, styles?: {
+        [id: string]: any;
+    }, children?: Array<BaseElement>): void;
     constructor(key: string, controlType: string, props: {
         [key: string]: BaseProp;
     }, styles: {

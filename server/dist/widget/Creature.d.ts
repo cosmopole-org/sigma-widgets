@@ -1,6 +1,7 @@
 import DOM from "./DOM";
 import Module from "./Module";
 import Runtime from "./Runtime";
+import BaseElement from "./elements/BaseElement";
 declare class Creature {
     _key: string;
     get key(): string;
@@ -17,6 +18,12 @@ declare class Creature {
         [id: string]: any;
     };
     getBaseMethod(methodId: string): any;
+    update(props?: {
+        [id: string]: any;
+    }, styles?: {
+        [id: string]: any;
+    }, children?: Array<BaseElement>): void;
+    fillChildren(children: Array<BaseElement>): void;
     constructor(module: Module, defaultValues?: any);
 }
 export default Creature;

@@ -157,9 +157,8 @@ class UIDriver {
         }
     }
 
-    updateProp(element, propKey, propValue) {
-        let key = element._key
-        let elCont = this.bindings[key]
+    updateProp(elementKey, propKey, propValue) {
+        let elCont = this.bindings[elementKey]
         if (elCont) {
             let { rendered, controlType } = elCont
             switch (controlType) {

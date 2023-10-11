@@ -13,11 +13,15 @@ declare const _default: {
         nestedContext: (creature: import("../Creature").default, otherMetas?: import("../ExecutionMeta").default) => import("../ExecutionMeta").default;
     };
     compiler: {
+        parse: (jsxCode: string) => import("acorn").Node;
         extractModules: (middleCode: any, applet: import("../Applet").default) => any;
+        styleToCssString: (rules: any) => string;
+        buildRule: (key: any, value: any) => string;
+        buildValue: (key: any, value: any) => string;
     };
     json: {
         prettify: (obj: any) => string;
-        diff: (obj1: any, obj2: any) => {};
+        diff: (el1: import("../elements/BaseElement").default, el2: import("../elements/BaseElement").default) => any[];
     };
     executor: {
         executeSingle: (code: any, meta: import("../ExecutionMeta").default) => any;
