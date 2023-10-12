@@ -87,10 +87,11 @@ let codeCallbacks = {
         if (key === undefined) {
             key = code.cosmoId
         }
+        console.log(meta.parentJsxKey, key, code.cosmoId)
         if (meta.parentJsxKey) key = meta.parentJsxKey + '-' + key
         attrs['key'] = key
 
-        let c: Creature = meta.creature.module.applet.cache.elements[key];
+        let c = meta.creature.module.applet.cache.elements[key];
         let isNew = (c === undefined)
 
         c = Control.instantiate(attrs, attrs['style'], [], c?.thisObj)

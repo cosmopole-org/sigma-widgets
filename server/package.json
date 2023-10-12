@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "npx webpack -w",
-    "start": "ts-node-esm index.ts",
+    "start": "ts-node-esm src/index.ts",
     "dev": "nodemon index.ts"
   },
   "eslintConfig": {

@@ -18,7 +18,7 @@ let findChanges = (parentKey: string, el1: BaseElement, el2: BaseElement) => {
             {
                 __action__: 'element_created',
                 __key__: el2._key,
-                __element__: JSON.parse(JSON.stringify(el2)),
+                __element__: el2,
                 __parentKey__: parentKey
             }
         )
@@ -27,18 +27,18 @@ let findChanges = (parentKey: string, el1: BaseElement, el2: BaseElement) => {
     let propsChanges = { __action__: 'props_updated', __key__: el2._key, __created__: {}, __deleted__: {}, __updated__: {} }
     for (let pKey in el2._props) {
         if (el1._props[pKey] === undefined) {
-            propsChanges.__created__[pKey] = el2._props[pKey].getValue()
+            propsChanges.__created__[pKey] = el2._props[pKey]
         }
     }
     for (let pKey in el1._props) {
         if (el2._props[pKey] === undefined) {
-            propsChanges.__deleted__[pKey] = el2._props[pKey].getValue()
+            propsChanges.__deleted__[pKey] = el2._props[pKey]
         }
     }
     for (let pKey in el2._props) {
         if (el1._props[pKey] !== undefined && el2._props[pKey] !== undefined) {
             if (el1._props[pKey].getValue() !== el2._props[pKey].getValue()) {
-                propsChanges.__updated__[pKey] = el2._props[pKey].getValue()
+                propsChanges.__updated__[pKey] = el2._props[pKey]
             }
         }
     }
@@ -97,7 +97,7 @@ let findChanges = (parentKey: string, el1: BaseElement, el2: BaseElement) => {
                 {
                     __action__: 'element_created',
                     __key__: child._key,
-                    __element__: JSON.parse(JSON.stringify(child)),
+                    __element__: child,
                     __parentKey__: el2._key
                 }
             )

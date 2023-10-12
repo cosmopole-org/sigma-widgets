@@ -55,7 +55,23 @@ class Applet {
         let updates = Utils.json.diff(oldVersion, newVersion)
         updates.forEach((u: any) => {
             if (u.__action__ === 'element_deleted') {
-                delete this.cache.elements[u.__key__]
+                let keys = Object.keys(this.cache.elements).filter(k => {
+                    if (k.startsWith(u.__key__)) {
+                        delete this.cache.elements[k]
+                        return true
+                    } else {
+                        return false
+                    }
+                })
+                if (keys.length > 0) {
+                    let temp = keys[keys.length - 1].split('-')
+                    if (temp.length > 1) {
+                        let temp2 = temp.slice(0, temp.length - 1).join('-')
+                        console.log('temp 2', temp2)
+                        delete this.cache.elements[temp2]
+                    }
+                }
+                console.log('after', this.cache.elements)
             }
         })
         this.update(oldVersion._key, updates)

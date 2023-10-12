@@ -63,6 +63,7 @@ class Creature {
             this.thisObj = {}
         }
         this.thisObj['setState'] = (stateUpdate: { [id: string]: any }) => {
+            console.log(stateUpdate)
             this.thisObj['state'] = { ...this.thisObj['state'], ...stateUpdate }
             let newMetaBranch = new ExecutionMeta({ creature: this, parentJsxKey: this.thisObj['parentJsxKey'] })
             let newRender = this.getBaseMethod('render')(newMetaBranch)
