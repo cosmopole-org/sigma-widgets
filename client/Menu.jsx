@@ -71,29 +71,31 @@ class Food {
                 <Box style={{ width: '100%', paddingTop: 8, height: 'calc(100% - 28px)', position: 'relative' }}>
                     <Box style={{ marginTop: 8, paddingLeft: 16, height: 'auto', width: 'auto', display: 'flex' }}>
                         <Text text={this.props.food.id} style={{ fontSize: 18, fontWeight: 'bold', width: 'auto', display: 'flex', verticalAlign: 'middle', textAlign: 'left', alignItems: 'left', justifyContent: 'left' }} />
-                        <Text text={this.props.food.tag} style={{ width: 'auto', paddingLeft: 8, paddingRight: 8, paddingTop: 2, paddingBottom: 2, backgroundColor: '#9cf', borderRadius: 12, marginLeft: 16, fontSize: 17, textAlign: 'left' }} />
+                        <Text text={this.props.food.tag} style={{ width: 'auto', color: '#fff', fontWeight: 'bold', paddingLeft: 8, paddingRight: 8, paddingTop: 4, paddingBottom: 4, backgroundColor: 'rgb(206, 147, 216)', borderRadius: 12, marginLeft: 16, fontSize: 17, textAlign: 'left' }} />
                         <Box style={{ flex: 1, height: 16 }} />
                         <Box style={{ height: 'auto', width: 'auto' }}>
-                            <Text text={this.state.count} style={{ width: 'auto', height: 'auto', display: this.state.count === 0 ? 'none' : 'block', backgroundColor: 'pink', paddingLeft: 8, paddingRight: 8, paddingTop: 4, paddingBottom: 4, borderRadius: '50%' }} />
+                            <Text text={this.state.count} style={{ width: 'auto', height: 'auto', display: this.state.count === 0 ? 'none' : 'block', color: '#fff', fontWeight: 'bold', backgroundColor: 'rgb(77, 182, 172)', paddingLeft: 8, paddingRight: 8, paddingTop: 4, paddingBottom: 4, borderRadius: '50%' }} />
                         </Box>
                         <Box style={{ height: 16, width: 16 }} />
                     </Box>
                     <Box style={{ marginTop: 16, height: 'auto', width: 'auto', paddingLeft: 16 }}>
                         <Text text={this.props.food.description} style={{ width: '100%', textAlign: 'left' }} />
                     </Box>
-                    <Box style={{ borderRadius: '12px 0px 0px 12px', width: 'auto', height: 'auto', position: 'absolute', right: 0, top: 56, backgroundColor: '#9fc', paddingLeft: 8, paddingRight: 8, paddingTop: 4, paddingBottom: 4 }}>
+                    <Box style={{ color: '#fff', borderRadius: '12px 0px 0px 12px', width: 'auto', fontWeight: 'bold', height: 'auto', position: 'absolute', right: 0, top: 56, backgroundColor: 'rgb(100, 181, 246)', paddingLeft: 8, paddingRight: 8, paddingTop: 4, paddingBottom: 4 }}>
                         <Text text={this.props.food.price + ' $'} style={{ width: 'auto' }} />
                     </Box>
                 </Box>
                 <Box style={{ width: 'calc(100% - 32px)', height: 32, alignItems: 'right', justifyContent: 'right', textAlign: 'right', display: 'flex' }}>
-                    <Button style={{ height: 32, maxWidth: 56, fontSize: 25 }} caption='-' onClick={() => {
+                    <Button style={{
+                        height: 32, maxWidth: 56, fontSize: 25
+                    }} caption='-' onClick={() => {
                         if (this.state.count > 0) {
                             this.props.onCountChange(this.state.count - 1)
                             this.setState({ count: this.state.count - 1 })
                         }
                     }} />
                     <Box style={{ width: 16, height: 16 }} />
-                    <Button style={{ height: 32, maxWidth: 56, fontSize: 18 }} caption='+' onClick={() => {
+                    <Button style={{ height: 32, maxWidth: 56, fontSize: 18, borderRadius: 16 }} caption='+' onClick={() => {
                         this.props.onCountChange(this.state.count + 1)
                         this.setState({ count: this.state.count + 1 })
                     }} />
@@ -213,7 +215,7 @@ class Test {
                     <Box style={{ width: '100%', height: 100 }} />
                 </Box>
                 <Text text={this.state.total + ' $'} style={{ boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px', fontSize: 17, position: 'absolute', left: 0, bottom: 0, paddingLeft: 24, paddingTop: 24, backgroundColor: '#fff', width: 'calc(100%)', height: 56 }} />
-                <Button style={{ width: 100, height: 48, position: 'absolute', right: 16, bottom: 24, borderRadius: 0 }} caption='Submit' onClick={() => {
+                <Button variant='outlined' style={{ width: 100, height: 48, position: 'absolute', right: 16, bottom: 24, borderRadius: 0 }} caption='Submit' onClick={() => {
                     console.log({ order: this.state.menu, total: this.state.total })
                 }} />
             </Box>

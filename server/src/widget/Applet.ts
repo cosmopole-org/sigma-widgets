@@ -67,11 +67,9 @@ class Applet {
                     let temp = keys[keys.length - 1].split('-')
                     if (temp.length > 1) {
                         let temp2 = temp.slice(0, temp.length - 1).join('-')
-                        console.log('temp 2', temp2)
                         delete this.cache.elements[temp2]
                     }
                 }
-                console.log('after', this.cache.elements)
             }
         })
         this.update(oldVersion._key, updates)

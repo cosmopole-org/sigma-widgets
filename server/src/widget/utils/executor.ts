@@ -87,7 +87,6 @@ let codeCallbacks = {
         if (key === undefined) {
             key = code.cosmoId
         }
-        console.log(meta.parentJsxKey, key, code.cosmoId)
         if (meta.parentJsxKey) key = meta.parentJsxKey + '-' + key
         attrs['key'] = key
 

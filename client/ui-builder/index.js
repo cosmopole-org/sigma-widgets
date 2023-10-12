@@ -73,7 +73,7 @@ class UIDriver {
                     if (element._props.variant?._value === 'outlined') {
                         elementTag = 'md-outlined-button'
                     } else {
-                        elementTag = 'md-elevated-button'
+                        elementTag = 'md-filled-button'
                     }
                     result = this.createElement(
                         'button',
@@ -190,7 +190,7 @@ class UIDriver {
                             if (propValue === 'outlined') {
                                 elementTag = 'md-outlined-button'
                             } else {
-                                elementTag = 'md-elevated-button'
+                                elementTag = 'md-filled-button'
                             }
                             rendered.replaceWith(
                                 this.createElement(

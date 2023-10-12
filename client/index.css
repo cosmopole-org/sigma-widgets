@@ -1,0 +1,6 @@
+:root {
+    --md-sys-color-primary: rgb(206, 147, 216);
+    --md-sys-color-secondary: rgb(100, 181, 246);
+    --md-ref-typeface-brand: 'Open Sans';
+    --md-ref-typeface-plain: system-ui;
+}
