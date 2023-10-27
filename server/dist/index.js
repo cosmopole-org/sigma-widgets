@@ -48,6 +48,7 @@ var server_exports = {};
 __export(server_exports, {
   Applet: () => Applet_default,
   Controls: () => controls_default,
+  INative: () => INative_default,
   Module: () => Module_default,
   Runnable: () => Runnable,
   Utils: () => utils_default
@@ -1342,10 +1343,22 @@ var controls_default = {
   [TabsControl_default.TYPE]: TabsControl_default,
   [PrimaryTabControl_default.TYPE]: PrimaryTabControl_default
 };
+
+// widget/INative.ts
+var INative = class {
+  get key() {
+    return this._module.key;
+  }
+  constructor(module2) {
+    this._module = module2;
+  }
+};
+var INative_default = INative;
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   Applet,
   Controls,
+  INative,
   Module,
   Runnable,
   Utils

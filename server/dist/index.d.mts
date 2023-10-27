@@ -362,4 +362,4 @@ declare const _default: {
     "primary-tab": typeof PrimaryTabControl;
 };
 
-export { Applet, _default as Controls, Module, Runnable, _default$1 as Utils };
+export { Applet, _default as Controls, INative, Module, Runnable, _default$1 as Utils };

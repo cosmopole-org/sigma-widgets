@@ -1306,9 +1306,21 @@ var controls_default = {
   [TabsControl_default.TYPE]: TabsControl_default,
   [PrimaryTabControl_default.TYPE]: PrimaryTabControl_default
 };
+
+// widget/INative.ts
+var INative = class {
+  get key() {
+    return this._module.key;
+  }
+  constructor(module) {
+    this._module = module;
+  }
+};
+var INative_default = INative;
 export {
   Applet_default as Applet,
   controls_default as Controls,
+  INative_default as INative,
   Module_default as Module,
   Runnable,
   utils_default as Utils
