@@ -1,0 +1,11 @@
+
+if module not found in index.mjs built file then just convert defineProperty of module.exports to export default of tokTypes obj like below:
+
+let tokTypes = {
+  get: function get_tokTypes() {
+    return getJsxTokens(acornObj).tokTypes;
+  },
+  configurable: true,
+  enumerable: true
+};
+export default tokTypes

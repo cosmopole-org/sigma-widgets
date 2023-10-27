@@ -1,6 +1,6 @@
 
-import { Parser as AcornParser } from 'acorn';
-import * as jsx from 'acorn-jsx';
+import { Parser } from 'acorn';
+import jsx from './jsx';
 import Applet from '../Applet';
 import Module from '../Module';
 import cssProperty from './cssProperty';
@@ -8,7 +8,7 @@ import hyphenateStyleName from './hyphenateStyleName';
 
 let { isUnitlessNumber } = cssProperty
 
-let jsxCompiler = AcornParser.extend(jsx());
+let jsxCompiler = Parser.extend(jsx() as any);
 
 var isArray = Array.isArray;
 var keys = Object.keys;
