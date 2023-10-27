@@ -1,6 +1,5 @@
 import INative from "./widget/INative"
 
-
 class Native extends INative {
 
     globalMemory = {}
