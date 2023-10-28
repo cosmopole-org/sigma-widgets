@@ -1,7 +1,12 @@
 {
   "name": "vmengine",
-  "version": "0.1.10",
-  "type": "module",
+  "version": "0.1.13",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "@rollup/plugin-node-resolve": "^15.2.3",
     "acorn": "^8.10.0",

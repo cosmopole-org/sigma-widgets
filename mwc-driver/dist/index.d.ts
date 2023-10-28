@@ -8,4 +8,5 @@ declare class MwcDriver {
     }): void;
     constructor(applet: any, container: HTMLElement);
 }
-export default MwcDriver;
+
+export { MwcDriver as default };

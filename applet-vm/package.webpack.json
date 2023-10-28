@@ -1,22 +1,16 @@
 {
-  "name": "applet-mwc",
-  "version": "0.0.3",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "name": "vmengine",
+  "version": "0.1.13",
+  "type": "module",
   "dependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "acorn": "^8.10.0",
+    "rollup": "^4.0.2",
     "tslib": "^2.6.2",
     "tsup": "^7.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.2",
-    "@babel/plugin-transform-nullish-coalescing-operator": "^7.22.11",
-    "babelify": "^10.0.0",
-    "browser-resolve": "^2.0.0",
-    "esmify": "^2.1.1",
+    "@rollup/plugin-typescript": "^11.1.5",
     "ts-loader": "^9.5.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.2.2",
@@ -25,7 +19,15 @@
   },
   "scripts": {
     "build": "tsup",
-    "buildForBrowser": "npx webpack -w"
+    "buildForBrowser": "npx webpack -w",
+    "start": "ts-node-esm src/index.ts",
+    "dev": "nodemon index.ts"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": {
     "production": [

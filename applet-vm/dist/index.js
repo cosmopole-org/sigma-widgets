@@ -44,8 +44,8 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // index.ts
-var server_exports = {};
-__export(server_exports, {
+var applet_vm_exports = {};
+__export(applet_vm_exports, {
   Applet: () => Applet_default,
   Controls: () => controls_default,
   INative: () => INative_default,
@@ -53,7 +53,7 @@ __export(server_exports, {
   Runnable: () => Runnable,
   Utils: () => utils_default
 });
-module.exports = __toCommonJS(server_exports);
+module.exports = __toCommonJS(applet_vm_exports);
 
 // widget/DOM.ts
 var DOM = class {
@@ -511,6 +511,7 @@ Object.defineProperty(module.exports, "tokTypes", {
   configurable: true,
   enumerable: true
 });
+
 function plugin(options, Parser2) {
   const acorn = Parser2.acorn || acornObj;
   const acornJsx = getJsxTokens(acorn);
