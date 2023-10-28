@@ -1,0 +1,37 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="index.css">
+    <script src="applet-bundle.js"></script>
+    <script src="applet-mwc-bundle.js"></script>
+    <script src="mwc-bundle.js"></script>
+</head>
+
+<body style="margin: 0px auto; padding: 0px">
+
+    <div id="root" style="width: 100%; height: 100%; overflow: hidden;">
+
+    </div>
+
+    <script>
+
+        fetch('/Menu.jsx').then(res => res.text()).then(code => {
+
+            let { Applet, Controls } = window.AppletVM
+            let MwcDriver = window.MwcDriver
+
+            let applet = new Applet('frame')
+            applet.fill(code)
+
+            let driver = new MwcDriver(applet, document.getElementById('root'))
+            driver.start('Test', Controls)
+        })
+
+    </script>
+
+</body>
+
+</html>
