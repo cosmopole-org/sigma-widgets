@@ -1,6 +1,6 @@
 {
   "name": "vmengine",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "type": "module",
   "dependencies": {
     "@rollup/plugin-node-resolve": "^15.2.3",
