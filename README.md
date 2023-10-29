@@ -51,6 +51,6 @@ The 'Test' in this example is name of class component which is root of UI. ( the
 
 ![sample1](https://raw.githubusercontent.com/cosmopole-org/sigma-widgets/master/Screenshot_2023-10-12-20-00-43-763_com.android.chrome~2.jpg)
 
-The sample code can be found in this link :
+The sample code can be found in this link:
 
 https://github.com/cosmopole-org/sigma-widgets/blob/master/test/browser/Menu.js
