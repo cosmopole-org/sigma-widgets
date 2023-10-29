@@ -53,4 +53,4 @@ The 'Test' in this example is name of class component which is root of UI. ( the
 
 The sample code can be found in this link:
 
-https://github.com/cosmopole-org/sigma-widgets/blob/master/test/browser/Menu.js
+https://raw.githubusercontent.com/cosmopole-org/sigma-widgets/master/test/browser/Menu.jsx
