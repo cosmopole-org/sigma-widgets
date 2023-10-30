@@ -511,7 +511,6 @@ Object.defineProperty(module.exports, "tokTypes", {
   configurable: true,
   enumerable: true
 });
-
 function plugin(options, Parser2) {
   const acorn = Parser2.acorn || acornObj;
   const acornJsx = getJsxTokens(acorn);
