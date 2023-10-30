@@ -467,13 +467,15 @@ function jsx_default(options) {
     }, Parser2);
   };
 }
-Object.defineProperty(module.exports, "tokTypes", {
+let tokTypes = {
   get: function get_tokTypes() {
     return getJsxTokens(acornObj).tokTypes;
   },
   configurable: true,
   enumerable: true
-});
+};
+export default tokTypes
+
 function plugin(options, Parser2) {
   const acorn = Parser2.acorn || acornObj;
   const acornJsx = getJsxTokens(acorn);
