@@ -50,7 +50,30 @@ const generateCallbackFunction = (code: any, meta: ExecutionMeta) => {
     }
 }
 
+const resolveResource = (path: string): any => {
+    return { default: 'hello world !' }
+}
+
 let codeCallbacks = {
+    ImportDeclaration: (code: any, meta: ExecutionMeta) => {
+        let scriptPath = code.source.value
+        code.specifiers.forEach((c: any) => {
+            let value = undefined
+            let memUnitId = undefined
+            let res = resolveResource(scriptPath)
+            if (c.type === 'ImportDefaultSpecifier') {
+                memUnitId = c.local.name
+                value = res['default']
+            } else if (c.type === 'ImportSpecifier') {
+                memUnitId = c.local.name
+                value = res[c.imported.name]
+            } else if (c.type === 'ImportNamespaceSpecifier') {
+                memUnitId = c.local.name
+                value = res
+            }
+            meta.creature.runtime.stackTop.putUnit(memUnitId, value)
+        });
+    },
     UnaryExpression: (code: any, meta: ExecutionMeta) => {
         if (code.operator === '!') {
             return !executeSingle(code.argument, meta)
@@ -73,7 +96,12 @@ let codeCallbacks = {
         return executeSingle(code.expression, meta)
     },
     JSXText: (code: any, meta: ExecutionMeta) => {
-        return code.value.trim();
+        let data = code.value.trim()
+        if (meta.isParentScript) {
+            let codes = Utils.compiler.parse(data)
+            executeBlock((codes as any).body, new ExecutionMeta({ ...meta, isParentScript: false }))
+        }
+        return data
     },
     JSXElement: (code: any, meta: ExecutionMeta) => {
         if (!code.cosmoId) code.cosmoId = Utils.generator.generateKey()
@@ -82,7 +110,7 @@ let codeCallbacks = {
         code.openingElement.attributes.forEach((attr: any) => {
             attrs[attr.name.name] = executeSingle(attr.value, meta)
         })
-   
+
         let key = attrs['key']
         if (key === undefined) {
             key = code.cosmoId
@@ -95,7 +123,7 @@ let codeCallbacks = {
 
         c = Control.instantiate(attrs, attrs['style'], [], c?.thisObj)
 
-        let childMeta = new ExecutionMeta({ ...meta, parentJsxKey: key })
+        let childMeta = new ExecutionMeta({ ...meta, parentJsxKey: key, isParentScript: (code.openingElement.name.name === 'script') })
         let children = code.children.map((child: any) => executeSingle(child, childMeta))
             .flat(Infinity).filter((child: any) => (child !== ''))
         c.fillChildren(children)

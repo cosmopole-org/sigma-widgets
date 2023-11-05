@@ -30,16 +30,26 @@ class body {
         return nativeElement('body', this.props, this.styles, this.children)
     }
 }
+class script {
+    constructor() {
+
+    }
+    onMount() {
+
+    }
+    render() {
+        return nativeElement('script', this.props, this.styles, this.children)
+    }
+}
 `)
 applet.fill(`
-<html>
-    <body>
-
-    </body>
-</html>
+    <script>
+        import hello from 'test'
+        console.log(hello)
+    </script>
 `)
 applet.runRaw((mod: Module) => new Native(mod, Controls), (key: string, u: any) => { }).then((runnable: Runnable) => {
-    console.log(runnable.root)
+    console.log(Utils.json.prettify(runnable.root))
     runnable.mount()
 })
 

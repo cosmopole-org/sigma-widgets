@@ -7,6 +7,7 @@ import PrimaryTabControl from "./PrimaryTabControl"
 import TextControl from "./TextControl"
 import HtmlControl from "./HtmlControl"
 import BodyControl from "./BodyControl"
+import ScriptControl from "./ScriptControl"
 
 export default {
     [TextControl.TYPE]: TextControl,
@@ -16,5 +17,6 @@ export default {
     [TabsControl.TYPE]: TabsControl,
     [PrimaryTabControl.TYPE]: PrimaryTabControl,
     [HtmlControl.TYPE]: HtmlControl,
-    [BodyControl.TYPE]: BodyControl
+    [BodyControl.TYPE]: BodyControl,
+    [ScriptControl.TYPE]: ScriptControl
 }

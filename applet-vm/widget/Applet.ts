@@ -91,7 +91,7 @@ class Applet {
             this.putModule(genesisMod)
             this._genesisCreature = genesisMod.instantiate()
             let genesisMetaContext = Utils.generator.nestedContext(this._genesisCreature)
-            let view = Utils.executor.executeSingle(this.middleCode.body[0], genesisMetaContext)
+            let view = Utils.executor.executeBlock(this.middleCode.body, genesisMetaContext)
             resolve(
                 new Runnable(
                     view,
