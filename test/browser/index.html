@@ -8,6 +8,7 @@
     <script src="applet-bundle.js"></script>
     <script src="applet-mwc-bundle.js"></script>
     <script src="mwc-bundle.js"></script>
+    <script src="native.js"></script>
 </head>
 
 <body style="margin: 0px auto; padding: 0px">
@@ -22,12 +23,13 @@
 
             let { Applet, Controls } = window.AppletVM
             let MwcDriver = window.MwcDriver
+            let Native = window.Native
 
             let applet = new Applet('frame')
             applet.fill(code)
 
             let driver = new MwcDriver(applet, document.getElementById('root'))
-            driver.start('Test', Controls)
+            driver.start('Test', Controls, (mod) => new Native(mod, Controls, window))
         })
 
     </script>

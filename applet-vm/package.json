@@ -25,7 +25,7 @@
   "scripts": {
     "build": "tsup",
     "buildForBrowser": "npx webpack -w",
-    "start": "ts-node-esm src/index.ts",
+    "start": "ts-node-esm index.ts",
     "dev": "nodemon index.ts"
   },
   "eslintConfig": {

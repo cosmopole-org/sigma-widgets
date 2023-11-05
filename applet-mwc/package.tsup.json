@@ -1,7 +1,12 @@
 {
   "name": "applet-mwc",
-  "version": "0.0.5",
-  "type": "module",
+  "version": "0.0.6",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "tslib": "^2.6.2",
     "tsup": "^7.2.0"

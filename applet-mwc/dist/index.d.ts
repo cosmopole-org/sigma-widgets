@@ -5,8 +5,7 @@ declare class MwcDriver {
     update(key: string, updates: Array<any>): void;
     start(genesisComponent: string, Controls: {
         [id: string]: any;
-    }): void;
+    }, scope: (mod: any) => any): void;
     constructor(applet: any, container: HTMLElement);
 }
-
-export { MwcDriver as default };
+export default MwcDriver;

@@ -106,6 +106,7 @@ class Food {
 }
 class Test {
     constructor() {
+        console.log(window)
         this.state = {
             total: 0,
             selectedCategoryId: 'pizza',
