@@ -37,8 +37,8 @@ class Applet {
 
     public fill(jsxCode: any) {
         this.middleCode = Utils.compiler.parse(jsxCode)
-        console.log(JSON.stringify(this.middleCode))
-        let r = Utils.compiler.extractModules(this.middleCode, this);
+        console.log(Utils.json.prettify(this.middleCode))
+        let r = Utils.compiler.extractModules(this.middleCode, this)
         r.forEach((module: Module) => this.putModule(module))
     }
 
@@ -77,6 +77,32 @@ class Applet {
 
     update: (key: string, u: any) => void
     firstMount: boolean = false;
+
+    public runRaw(nativeBuilder: (mod: Module) => INative, update: (key: string, u: any) => void) {
+        return new Promise(resolve => {
+            this._nativeBuilder = nativeBuilder
+            this.update = update
+            this.firstMount = false
+            this.cache.elements = {}
+            this.cache.mounts = []
+            let dummyClassMiddleCode = Utils.compiler.parse('class Main {}')
+            let r = Utils.compiler.extractModules(dummyClassMiddleCode, this)
+            let genesisMod = r[0]
+            this.putModule(genesisMod)
+            this._genesisCreature = genesisMod.instantiate()
+            let genesisMetaContext = Utils.generator.nestedContext(this._genesisCreature)
+            let view = Utils.executor.executeSingle(this.middleCode.body[0], genesisMetaContext)
+            resolve(
+                new Runnable(
+                    view,
+                    () => {
+                        this.firstMount = true
+                        this.cache.mounts.reverse().forEach((onMount: any) => onMount())
+                    }
+                )
+            )
+        })
+    }
 
     public run(genesis: string, nativeBuilder: (mod: Module) => INative, update: (key: string, u: any) => void) {
         return new Promise(resolve => {

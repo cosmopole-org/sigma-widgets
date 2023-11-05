@@ -5,6 +5,8 @@ import CardControl from "./CardControl"
 import TabsControl from "./TabsControl"
 import PrimaryTabControl from "./PrimaryTabControl"
 import TextControl from "./TextControl"
+import HtmlControl from "./HtmlControl"
+import BodyControl from "./BodyControl"
 
 export default {
     [TextControl.TYPE]: TextControl,
@@ -12,5 +14,7 @@ export default {
     [BoxControl.TYPE]: BoxControl,
     [CardControl.TYPE]: CardControl,
     [TabsControl.TYPE]: TabsControl,
-    [PrimaryTabControl.TYPE]: PrimaryTabControl
+    [PrimaryTabControl.TYPE]: PrimaryTabControl,
+    [HtmlControl.TYPE]: HtmlControl,
+    [BodyControl.TYPE]: BodyControl
 }
