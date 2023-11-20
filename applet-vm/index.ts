@@ -17,20 +17,48 @@ applet.fill(`
             return '[ ' + this.name + ' , ' + this.age + ' ]'
         }
     }
-    class Group {
+    class Box {
         constructor() {
-            this.person = new Person('keyhan', 25)
+       
+        }
+        onMount() {
 
         }
-        print() {
-            console.log(this.person.getInfo())
+        render() {
+            return nativeElement('box', this.props, this.styles, this.children)
         }
     }
-    let group = new Group()
-    group.print()
+    class Hello {
+        constructor() {
+            this.person = new Person('keyhan', 25)
+        }
+        onMount() {
+
+        }
+        render() {
+            return (
+                <Box style={{width: 300, height: 300}}>
+                  {this.person.getInfo()}  
+                </Box>
+            )
+        }
+    }
+    class Test {
+        constructor() {
+
+        }
+        onMount() {
+
+        }
+        render() {
+            return (
+                <Hello />
+            )
+        }
+    }
 `)
 applet.setContextBuilder((mod: Module) => new Native(mod, Controls))
-applet.runRaw((key: string, u: any) => { }).then((runnable: Runnable) => {
+applet.run('Test', (key: string, u: any) => { }).then((runnable: Runnable) => {
     console.log(Utils.json.prettify(runnable.root))
     runnable.mount()
 })

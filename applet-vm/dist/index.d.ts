@@ -130,6 +130,7 @@ declare class Applet {
     putModule(module: Module): void;
     removeModule(key: string): void;
     middleCode: any;
+    filledClasses: Array<any>;
     fill(jsxCode: any): void;
     cache: {
         elements: {};
@@ -139,7 +140,13 @@ declare class Applet {
     onCreatureStateChange(creature: Creature, newVersion: BaseElement): void;
     update: (key: string, u: any) => void;
     firstMount: boolean;
+    klasses: {
+        [id: string]: any;
+    };
     runRaw(update: (key: string, u: any) => void): Promise<unknown>;
+    buildContext(mod: Module): {
+        _module: Module;
+    };
     setContextBuilder(ctxBuilder: (mod: Module) => INative): void;
     run(genesis: string, update: (key: string, u: any) => void): Promise<unknown>;
     constructor(key: string, modules?: {

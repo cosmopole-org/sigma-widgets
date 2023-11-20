@@ -973,7 +973,7 @@ var parse = (jsxCode) => {
 };
 var extractModules = (middleCode, applet2) => {
   return middleCode.body.filter((declaration) => declaration.type === "ClassDeclaration").map((declaration) => {
-    return new Module_default(declaration.id.name, applet2, declaration);
+    return { module: new Module_default(declaration.id.name, applet2, declaration), code: declaration };
   });
 };
 var compiler_default = { parse, extractModules, styleToCssString, buildRule, buildValue };
@@ -1135,16 +1135,20 @@ var codeCallbacks = {
     let klassMethods = {};
     code.body.body.forEach((item) => {
       if (item.type === "MethodDefinition") {
-        klassMethods[item.key.name] = executeSingle(item, meta);
+        klassMethods[item.key.name] = item;
       }
     });
     meta.creature.runtime.stackTop.putUnit(klassId, klassMethods);
+    return klassMethods;
   },
   PropertyDefinition: (code, meta) => {
     return { key: code.key.name, value: executeSingle(code.value, meta) };
   },
   NewExpression: (code, meta) => {
-    let type = executeSingle(code.callee, meta);
+    let type = meta.creature.module.applet.klasses[code.callee.name];
+    if (type === void 0) {
+      type = executeSingle(code.callee, meta);
+    }
     let args = [];
     if (code.arguments) {
       args = code.arguments.map((arg) => executeSingle(arg, meta));
@@ -1157,10 +1161,20 @@ var codeCallbacks = {
     }
     for (let key in instance) {
       let prop = instance[key];
-      if (typeof prop === "function") {
+      if (prop.type === "MethodDefinition") {
+        let funcAst = instance[key];
         instance[key] = (...args2) => {
+          meta.creature.runtime.pushOnStack();
           meta.creature.runtime.stackTop.putUnit("this", instance);
-          return prop.call(instance, ...args2);
+          let func = executeSingle(funcAst, meta);
+          let result = void 0;
+          if (key === "constructor") {
+            result = func(...args2);
+          } else {
+            result = func(...args2);
+          }
+          meta.creature.runtime.popFromStack();
+          return result;
         };
       }
     }
@@ -1624,7 +1638,7 @@ var Runtime = class _Runtime {
     this.stack = [];
     this._module = module2;
     this._creature = creature;
-    this._native = (reusableTools == null ? void 0 : reusableTools.native) ? reusableTools.native : this._module.applet._nativeBuilder(this._module);
+    this._native = (reusableTools == null ? void 0 : reusableTools.native) ? reusableTools.native : this._module.applet.buildContext(this._module);
     if (reusableTools == null ? void 0 : reusableTools.stack) {
       this.stack = reusableTools.stack;
     } else {
@@ -1840,6 +1854,7 @@ var Applet = class {
     };
     this.oldVersions = {};
     this.firstMount = false;
+    this.klasses = {};
     this._key = key;
     this._modules = modules ? modules : {};
   }
@@ -1859,8 +1874,9 @@ var Applet = class {
   fill(jsxCode) {
     this.middleCode = utils_default.compiler.parse(jsxCode);
     console.log(utils_default.json.prettify(this.middleCode));
-    let r = utils_default.compiler.extractModules(this.middleCode, this);
-    r.forEach((module2) => this.putModule(module2));
+    let extracted = utils_default.compiler.extractModules(this.middleCode, this);
+    extracted.map((ex) => ex.module).forEach((module2) => this.putModule(module2));
+    this.filledClasses = extracted.map((ex) => ex.code);
   }
   onCreatureStateChange(creature, newVersion) {
     let oldVersion = this.oldVersions[creature._key];
@@ -1894,11 +1910,18 @@ var Applet = class {
       this.cache.elements = {};
       this.cache.mounts = [];
       let dummyClassMiddleCode = utils_default.compiler.parse("class Main {}");
-      let r = utils_default.compiler.extractModules(dummyClassMiddleCode, this);
+      let extracted = utils_default.compiler.extractModules(dummyClassMiddleCode, this);
+      let r = extracted.map((ex) => ex.module);
       let genesisMod = r[0];
       this.putModule(genesisMod);
       this._genesisCreature = genesisMod.instantiate();
       let genesisMetaContext = utils_default.generator.nestedContext(this._genesisCreature);
+      this.filledClasses.map((code) => ({
+        klass: utils_default.executor.executeSingle(code, genesisMetaContext),
+        id: code.id.name
+      })).forEach((klassWrapper) => {
+        this.klasses[klassWrapper.id] = klassWrapper.klass;
+      });
       let view = utils_default.executor.executeBlock(this.middleCode.body, genesisMetaContext);
       resolve(
         new Runnable(
@@ -1910,6 +1933,9 @@ var Applet = class {
         )
       );
     });
+  }
+  buildContext(mod) {
+    return __spreadValues(__spreadValues({}, this._nativeBuilder(mod)), this.klasses);
   }
   setContextBuilder(ctxBuilder) {
     this._nativeBuilder = ctxBuilder;
@@ -1925,6 +1951,12 @@ var Applet = class {
       this._genesisCreature = genesisMod.instantiate();
       let genesisMetaContext = utils_default.generator.nestedContext(this._genesisCreature);
       this._genesisCreature._runtime.stack[0].putUnit("this", (_a = this._genesisCreature) == null ? void 0 : _a.thisObj);
+      this.filledClasses.map((code) => ({
+        klass: utils_default.executor.executeSingle(code, genesisMetaContext),
+        id: code.id.name
+      })).forEach((klassWrapper) => {
+        this.klasses[klassWrapper.id] = klassWrapper.klass;
+      });
       this.cache.mounts.push(() => this._genesisCreature.getBaseMethod("onMount")(genesisMetaContext));
       this._genesisCreature.getBaseMethod("constructor")(genesisMetaContext);
       let view = this._genesisCreature.getBaseMethod("render")(genesisMetaContext);
@@ -2213,11 +2245,48 @@ applet.fill(`
             return '[ ' + this.name + ' , ' + this.age + ' ]'
         }
     }
-    let person = new Person('keyhan', 25)
-    console.log(person.getInfo())
+    class Box {
+        constructor() {
+       
+        }
+        onMount() {
+
+        }
+        render() {
+            return nativeElement('box', this.props, this.styles, this.children)
+        }
+    }
+    class Hello {
+        constructor() {
+            this.person = new Person('keyhan', 25)
+        }
+        onMount() {
+
+        }
+        render() {
+            return (
+                <Box style={{width: 300, height: 300}}>
+                  {this.person.getInfo()}  
+                </Box>
+            )
+        }
+    }
+    class Test {
+        constructor() {
+
+        }
+        onMount() {
+
+        }
+        render() {
+            return (
+                <Hello />
+            )
+        }
+    }
 `);
 applet.setContextBuilder((mod) => new native_default(mod, controls_default));
-applet.runRaw((key, u) => {
+applet.run("Test", (key, u) => {
 }).then((runnable) => {
   console.log(utils_default.json.prettify(runnable.root));
   runnable.mount();

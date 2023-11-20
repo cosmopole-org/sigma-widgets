@@ -71,6 +71,9 @@ let codeCallbacks = {
     },
     NewExpression: (code: any, meta: ExecutionMeta) => {
         let type = meta.creature.module.applet.klasses[code.callee.name]
+        if (type === undefined) {
+            type = executeSingle(code.callee, meta)
+        }
         let args = []
         if (code.arguments) {
             args = code.arguments.map(arg => executeSingle(arg, meta))
