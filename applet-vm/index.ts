@@ -48,7 +48,8 @@ applet.fill(`
         console.log(hello)
     </script>
 `)
-applet.runRaw((mod: Module) => new Native(mod, Controls), (key: string, u: any) => { }).then((runnable: Runnable) => {
+applet.setContextBuilder((mod: Module) => new Native(mod, Controls))
+applet.runRaw((key: string, u: any) => { }).then((runnable: Runnable) => {
     console.log(Utils.json.prettify(runnable.root))
     runnable.mount()
 })

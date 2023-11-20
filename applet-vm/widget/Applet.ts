@@ -78,9 +78,8 @@ class Applet {
     update: (key: string, u: any) => void
     firstMount: boolean = false;
 
-    public runRaw(nativeBuilder: (mod: Module) => INative, update: (key: string, u: any) => void) {
+    public runRaw(update: (key: string, u: any) => void) {
         return new Promise(resolve => {
-            this._nativeBuilder = nativeBuilder
             this.update = update
             this.firstMount = false
             this.cache.elements = {}
@@ -104,9 +103,12 @@ class Applet {
         })
     }
 
-    public run(genesis: string, nativeBuilder: (mod: Module) => INative, update: (key: string, u: any) => void) {
+    public setContextBuilder(ctxBuilder: (mod: Module) => INative) {
+        this._nativeBuilder = ctxBuilder
+    }
+
+    public run(genesis: string, update: (key: string, u: any) => void) {
         return new Promise(resolve => {
-            this._nativeBuilder = nativeBuilder
             this.update = update
             this.firstMount = false
             this.cache.elements = {}

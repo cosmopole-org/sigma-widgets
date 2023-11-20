@@ -3,9 +3,8 @@ declare class MwcDriver {
     root: any;
     uiBuilder: any;
     update(key: string, updates: Array<any>): void;
-    start(genesisComponent: string, Controls: {
-        [id: string]: any;
-    }, scope: (mod: any) => any): void;
+    start(genesisComponent: string): void;
     constructor(applet: any, container: HTMLElement);
 }
-export default MwcDriver;
+
+export { MwcDriver as default };

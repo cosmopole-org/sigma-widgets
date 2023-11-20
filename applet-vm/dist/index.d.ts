@@ -139,7 +139,9 @@ declare class Applet {
     onCreatureStateChange(creature: Creature, newVersion: BaseElement): void;
     update: (key: string, u: any) => void;
     firstMount: boolean;
-    run(genesis: string, nativeBuilder: (mod: Module) => INative, update: (key: string, u: any) => void): Promise<unknown>;
+    runRaw(update: (key: string, u: any) => void): Promise<unknown>;
+    setContextBuilder(ctxBuilder: (mod: Module) => INative): void;
+    run(genesis: string, update: (key: string, u: any) => void): Promise<unknown>;
     constructor(key: string, modules?: {
         [id: string]: Module;
     });
@@ -205,6 +207,7 @@ declare class ExecutionMeta {
     declarationType?: string;
     returnIdParent?: boolean;
     isAnotherCreature?: boolean;
+    isParentScript?: boolean;
     parentJsxKey: string;
     constructor(metaDict: any);
 }
@@ -353,6 +356,39 @@ declare class TextControl extends BaseControl {
     }, children: Array<BaseElement>): BaseElement;
 }
 
+declare class HtmlControl extends BaseControl {
+    static readonly TYPE = "html";
+    static defaultProps: {};
+    static defaultStyles: {};
+    static instantiate(overridenProps: {
+        [id: string]: any;
+    }, overridenStyles: {
+        [id: string]: any;
+    }, children: Array<BaseElement>): BaseElement;
+}
+
+declare class BodyControl extends BaseControl {
+    static readonly TYPE = "body";
+    static defaultProps: {};
+    static defaultStyles: {};
+    static instantiate(overridenProps: {
+        [id: string]: any;
+    }, overridenStyles: {
+        [id: string]: any;
+    }, children: Array<BaseElement>): BaseElement;
+}
+
+declare class ScriptControl extends BaseControl {
+    static readonly TYPE = "script";
+    static defaultProps: {};
+    static defaultStyles: {};
+    static instantiate(overridenProps: {
+        [id: string]: any;
+    }, overridenStyles: {
+        [id: string]: any;
+    }, children: Array<BaseElement>): BaseElement;
+}
+
 declare const _default: {
     text: typeof TextControl;
     button: typeof ButtonControl;
@@ -360,6 +396,9 @@ declare const _default: {
     card: typeof CardControl;
     tabs: typeof TabsControl;
     "primary-tab": typeof PrimaryTabControl;
+    html: typeof HtmlControl;
+    body: typeof BodyControl;
+    script: typeof ScriptControl;
 };
 
 export { Applet, _default as Controls, INative, Module, Runnable, _default$1 as Utils };

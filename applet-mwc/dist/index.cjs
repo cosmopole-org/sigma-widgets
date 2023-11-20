@@ -1,3 +1,28 @@
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+// index.ts
+var applet_mwc_exports = {};
+__export(applet_mwc_exports, {
+  default: () => applet_mwc_default
+});
+module.exports = __toCommonJS(applet_mwc_exports);
+
 // cssProperty.ts
 var isUnitlessNumber = {
   boxFlex: true,
@@ -348,47 +373,6 @@ var UiBuilder = class {
 };
 var uiBuilder_default = UiBuilder;
 
-// native.ts
-var Native = class {
-  constructor(module, controls) {
-    this.globalMemory = {};
-    this.intervals = {};
-    this.timeouts = {};
-    this.controls = {};
-    this.module = void 0;
-    this.nativeElement = (compType, props, styles, children) => {
-      let control = this.controls[compType];
-      let c = control.instantiate(props, styles, children);
-      return c;
-    };
-    this.Object = {
-      keys: (obj) => {
-        return Object.keys(obj);
-      },
-      values: (obj) => {
-        return Object.values(obj);
-      }
-    };
-    this.alert = (str) => {
-      window.alert(str);
-    };
-    this.console = {
-      log: (...strs) => {
-        console.log(...strs);
-      }
-    };
-    this.setInterval = (callback, period) => {
-      this.intervals[setInterval(callback, period) + ""] = true;
-    };
-    this.setTimeout = (callback, timeout) => {
-      this.timeouts[setTimeout(callback, timeout) + ""] = true;
-    };
-    this.module = module;
-    this.controls = controls;
-  }
-};
-var native_default = Native;
-
 // index.ts
 var MwcDriver = class {
   update(key, updates) {
@@ -411,9 +395,8 @@ var MwcDriver = class {
       }
     });
   }
-  start(genesisComponent, Controls) {
-    this.applet.run(genesisComponent, (mod) => new native_default(mod, Controls), this.update).then((runnable) => {
-      console.log(runnable.root);
+  start(genesisComponent) {
+    this.applet.run(genesisComponent, this.update).then((runnable) => {
       let ui = this.uiBuilder.build(runnable.root);
       ui && this.root.appendChild(ui);
       runnable.mount();
@@ -427,8 +410,5 @@ var MwcDriver = class {
     this.start = this.start.bind(this);
   }
 };
-var mwc_driver_default = MwcDriver;
-export {
-  mwc_driver_default as default
-};
-//# sourceMappingURL=index.mjs.map
+var applet_mwc_default = MwcDriver;
+//# sourceMappingURL=index.cjs.map

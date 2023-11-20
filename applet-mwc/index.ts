@@ -29,8 +29,8 @@ class MwcDriver {
         });
     }
 
-    start(genesisComponent: string, Controls: { [id: string]: any }, scope: (mod: any) => any) {
-        this.applet.run(genesisComponent, scope, this.update).then((runnable: any) => {
+    start(genesisComponent: string) {
+        this.applet.run(genesisComponent, this.update).then((runnable: any) => {
             let ui = this.uiBuilder.build(runnable.root)
             ui && (this.root.appendChild(ui))
             runnable.mount()

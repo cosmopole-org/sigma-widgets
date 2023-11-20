@@ -85,6 +85,7 @@ var ExecutionMeta = class {
     this.declarationType = metaDict.declarationType;
     this.returnIdParent = metaDict.returnIdParent;
     this.isAnotherCreature = metaDict.isAnotherCreature;
+    this.isParentScript = metaDict.isParentScript;
     this.parentJsxKey = metaDict.parentJsxKey;
     if (this.declaration && !this.declarationType) {
     }
@@ -1003,9 +1004,9 @@ function styleToCssString(rules) {
 var parse = (jsxCode) => {
   return jsxCompiler.parse(jsxCode, { sourceType: "module", ecmaVersion: "latest" });
 };
-var extractModules = (middleCode, applet) => {
+var extractModules = (middleCode, applet2) => {
   return middleCode.body.filter((declaration) => declaration.type === "ClassDeclaration").map((declaration) => {
-    return new Module_default(declaration.id.name, applet, declaration);
+    return new Module_default(declaration.id.name, applet2, declaration);
   });
 };
 var compiler_default = { parse, extractModules, styleToCssString, buildRule, buildValue };
@@ -1158,7 +1159,29 @@ var generateCallbackFunction = (code, meta) => {
     return result == null ? void 0 : result.value;
   };
 };
+var resolveResource = (path) => {
+  return { default: "hello world !" };
+};
 var codeCallbacks = {
+  ImportDeclaration: (code, meta) => {
+    let scriptPath = code.source.value;
+    code.specifiers.forEach((c) => {
+      let value = void 0;
+      let memUnitId = void 0;
+      let res = resolveResource(scriptPath);
+      if (c.type === "ImportDefaultSpecifier") {
+        memUnitId = c.local.name;
+        value = res["default"];
+      } else if (c.type === "ImportSpecifier") {
+        memUnitId = c.local.name;
+        value = res[c.imported.name];
+      } else if (c.type === "ImportNamespaceSpecifier") {
+        memUnitId = c.local.name;
+        value = res;
+      }
+      meta.creature.runtime.stackTop.putUnit(memUnitId, value);
+    });
+  },
   UnaryExpression: (code, meta) => {
     if (code.operator === "!") {
       return !executeSingle(code.argument, meta);
@@ -1181,7 +1204,12 @@ var codeCallbacks = {
     return executeSingle(code.expression, meta);
   },
   JSXText: (code, meta) => {
-    return code.value.trim();
+    let data = code.value.trim();
+    if (meta.isParentScript) {
+      let codes = utils_default.compiler.parse(data);
+      executeBlock(codes.body, new ExecutionMeta_default(__spreadProps(__spreadValues({}, meta), { isParentScript: false })));
+    }
+    return data;
   },
   JSXElement: (code, meta) => {
     if (!code.cosmoId)
@@ -1201,7 +1229,7 @@ var codeCallbacks = {
     let c = meta.creature.module.applet.cache.elements[key];
     let isNew = c === void 0;
     c = Control.instantiate(attrs, attrs["style"], [], c == null ? void 0 : c.thisObj);
-    let childMeta = new ExecutionMeta_default(__spreadProps(__spreadValues({}, meta), { parentJsxKey: key }));
+    let childMeta = new ExecutionMeta_default(__spreadProps(__spreadValues({}, meta), { parentJsxKey: key, isParentScript: code.openingElement.name.name === "script" }));
     let children = code.children.map((child) => executeSingle(child, childMeta)).flat(Infinity).filter((child) => child !== "");
     c.fillChildren(children);
     if (meta.parentJsxKey)
@@ -1721,8 +1749,8 @@ var Module = class {
   get applet() {
     return this._applet;
   }
-  setApplet(applet) {
-    this._applet = applet;
+  setApplet(applet2) {
+    this._applet = applet2;
   }
   get creatures() {
     return this._creatures;
@@ -1761,9 +1789,9 @@ var Module = class {
     this._creatures.putCreature(creature);
     return creature;
   }
-  constructor(key, applet, ast) {
+  constructor(key, applet2, ast) {
     this._key = key;
-    this._applet = applet;
+    this._applet = applet2;
     this._ast = ast;
     this._creatures = new CreatureStore_default();
     this._funcs = new FuncStore_default();
@@ -1805,7 +1833,7 @@ var Applet = class {
   }
   fill(jsxCode) {
     this.middleCode = utils_default.compiler.parse(jsxCode);
-    console.log(JSON.stringify(this.middleCode));
+    console.log(utils_default.json.prettify(this.middleCode));
     let r = utils_default.compiler.extractModules(this.middleCode, this);
     r.forEach((module2) => this.putModule(module2));
   }
@@ -1834,9 +1862,35 @@ var Applet = class {
     });
     this.update(oldVersion._key, updates2);
   }
-  run(genesis, nativeBuilder, update) {
+  runRaw(update) {
     return new Promise((resolve) => {
-      this._nativeBuilder = nativeBuilder;
+      this.update = update;
+      this.firstMount = false;
+      this.cache.elements = {};
+      this.cache.mounts = [];
+      let dummyClassMiddleCode = utils_default.compiler.parse("class Main {}");
+      let r = utils_default.compiler.extractModules(dummyClassMiddleCode, this);
+      let genesisMod = r[0];
+      this.putModule(genesisMod);
+      this._genesisCreature = genesisMod.instantiate();
+      let genesisMetaContext = utils_default.generator.nestedContext(this._genesisCreature);
+      let view = utils_default.executor.executeBlock(this.middleCode.body, genesisMetaContext);
+      resolve(
+        new Runnable(
+          view,
+          () => {
+            this.firstMount = true;
+            this.cache.mounts.reverse().forEach((onMount) => onMount());
+          }
+        )
+      );
+    });
+  }
+  setContextBuilder(ctxBuilder) {
+    this._nativeBuilder = ctxBuilder;
+  }
+  run(genesis, update) {
+    return new Promise((resolve) => {
       this.update = update;
       this.firstMount = false;
       this.cache.elements = {};
@@ -2017,6 +2071,42 @@ _TextControl.defaultStyles = {
 var TextControl = _TextControl;
 var TextControl_default = TextControl;
 
+// widget/controls/HtmlControl.ts
+var _HtmlControl = class _HtmlControl extends BaseControl_default {
+  static instantiate(overridenProps, overridenStyles, children) {
+    return utils_default.generator.prepareElement(_HtmlControl.TYPE, this.defaultProps, overridenProps, this.defaultStyles, overridenStyles, children);
+  }
+};
+_HtmlControl.TYPE = "html";
+_HtmlControl.defaultProps = {};
+_HtmlControl.defaultStyles = {};
+var HtmlControl = _HtmlControl;
+var HtmlControl_default = HtmlControl;
+
+// widget/controls/BodyControl.ts
+var _BodyControl = class _BodyControl extends BaseControl_default {
+  static instantiate(overridenProps, overridenStyles, children) {
+    return utils_default.generator.prepareElement(_BodyControl.TYPE, this.defaultProps, overridenProps, this.defaultStyles, overridenStyles, children);
+  }
+};
+_BodyControl.TYPE = "body";
+_BodyControl.defaultProps = {};
+_BodyControl.defaultStyles = {};
+var BodyControl = _BodyControl;
+var BodyControl_default = BodyControl;
+
+// widget/controls/ScriptControl.ts
+var _ScriptControl = class _ScriptControl extends BaseControl_default {
+  static instantiate(overridenProps, overridenStyles, children) {
+    return utils_default.generator.prepareElement(_ScriptControl.TYPE, this.defaultProps, overridenProps, this.defaultStyles, overridenStyles, children);
+  }
+};
+_ScriptControl.TYPE = "script";
+_ScriptControl.defaultProps = {};
+_ScriptControl.defaultStyles = {};
+var ScriptControl = _ScriptControl;
+var ScriptControl_default = ScriptControl;
+
 // widget/controls/index.ts
 var controls_default = {
   [TextControl_default.TYPE]: TextControl_default,
@@ -2024,7 +2114,10 @@ var controls_default = {
   [BoxControl_default.TYPE]: BoxControl_default,
   [CardControl_default.TYPE]: CardControl_default,
   [TabsControl_default.TYPE]: TabsControl_default,
-  [PrimaryTabControl_default.TYPE]: PrimaryTabControl_default
+  [PrimaryTabControl_default.TYPE]: PrimaryTabControl_default,
+  [HtmlControl_default.TYPE]: HtmlControl_default,
+  [BodyControl_default.TYPE]: BodyControl_default,
+  [ScriptControl_default.TYPE]: ScriptControl_default
 };
 
 // widget/INative.ts
@@ -2037,4 +2130,96 @@ var INative = class {
   }
 };
 var INative_default = INative;
+
+// native.ts
+var Native = class extends INative_default {
+  constructor(module2, controls) {
+    super(module2);
+    this.globalMemory = {};
+    this.intervals = {};
+    this.timeouts = {};
+    this.controls = {};
+    this.module = void 0;
+    this.nativeElement = (compType, props, styles, children) => {
+      let control = this.controls[compType];
+      let c = control.instantiate(props, styles, children);
+      return c;
+    };
+    this.Object = {
+      keys: (obj) => {
+        return Object.keys(obj);
+      },
+      values: (obj) => {
+        return Object.values(obj);
+      }
+    };
+    this.alert = (str) => {
+      window.alert(str);
+    };
+    this.console = {
+      log: (...strs) => {
+        console.log(...strs);
+      }
+    };
+    this.setInterval = (callback, period) => {
+      this.intervals[setInterval(callback, period) + ""] = true;
+    };
+    this.setTimeout = (callback, timeout) => {
+      this.timeouts[setTimeout(callback, timeout) + ""] = true;
+    };
+    this.module = module2;
+    this.controls = controls;
+  }
+};
+var native_default = Native;
+
+// index.ts
+var applet = new Applet_default("frame");
+applet.fill(`
+class html {
+    constructor() {
+
+    }
+    onMount() {
+
+    }
+    render() {
+        return nativeElement('html', this.props, this.styles, this.children)
+    }
+}
+class body {
+    constructor() {
+
+    }
+    onMount() {
+
+    }
+    render() {
+        return nativeElement('body', this.props, this.styles, this.children)
+    }
+}
+class script {
+    constructor() {
+
+    }
+    onMount() {
+
+    }
+    render() {
+        return nativeElement('script', this.props, this.styles, this.children)
+    }
+}
+`);
+applet.fill(`
+    <script>
+        import hello from 'test'
+        console.log(hello)
+    <\/script>
+`);
+applet.setContextBuilder((mod) => new native_default(mod, controls_default));
+applet.runRaw((key, u) => {
+}).then((runnable) => {
+  console.log(utils_default.json.prettify(runnable.root));
+  runnable.mount();
+});
 //# sourceMappingURL=index.js.map
