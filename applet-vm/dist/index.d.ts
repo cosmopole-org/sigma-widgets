@@ -209,6 +209,7 @@ declare class ExecutionMeta {
     isAnotherCreature?: boolean;
     isParentScript?: boolean;
     parentJsxKey: string;
+    nonCreatureClassThisObj: boolean;
     constructor(metaDict: any);
 }
 

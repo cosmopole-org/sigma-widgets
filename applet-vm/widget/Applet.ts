@@ -116,6 +116,7 @@ class Applet {
             let genesisMod = this._modules[genesis]
             this._genesisCreature = genesisMod.instantiate()
             let genesisMetaContext = Utils.generator.nestedContext(this._genesisCreature)
+            this._genesisCreature._runtime.stack[0].putUnit('this', this._genesisCreature?.thisObj)
             this.cache.mounts.push(() => this._genesisCreature.getBaseMethod('onMount')(genesisMetaContext))
             this._genesisCreature.getBaseMethod('constructor')(genesisMetaContext)
             let view = this._genesisCreature.getBaseMethod('render')(genesisMetaContext)

@@ -36,6 +36,8 @@ class Native extends INative {
         this.timeouts[setTimeout(callback, timeout) + ''] = true
     }
 
+    date = Date
+
     constructor(module, controls) {
         super(module)
         this.module = module

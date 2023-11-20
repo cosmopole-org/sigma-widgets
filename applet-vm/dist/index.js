@@ -87,6 +87,7 @@ var ExecutionMeta = class {
     this.isAnotherCreature = metaDict.isAnotherCreature;
     this.isParentScript = metaDict.isParentScript;
     this.parentJsxKey = metaDict.parentJsxKey;
+    this.nonCreatureClassThisObj = metaDict.nonCreatureClassThisObj;
     if (this.declaration && !this.declarationType) {
     }
   }
@@ -1163,6 +1164,45 @@ var resolveResource = (path) => {
   return { default: "hello world !" };
 };
 var codeCallbacks = {
+  ClassDeclaration: (code, meta) => {
+    let klassId = code.id.name;
+    let klassMethods = {};
+    code.body.body.forEach((item) => {
+      if (item.type === "MethodDefinition") {
+        klassMethods[item.key.name] = executeSingle(item, meta);
+      }
+    });
+    meta.creature.runtime.stackTop.putUnit(klassId, klassMethods);
+  },
+  PropertyDefinition: (code, meta) => {
+    return { key: code.key.name, value: executeSingle(code.value, meta) };
+  },
+  NewExpression: (code, meta) => {
+    let type = executeSingle(code.callee, meta);
+    let args = [];
+    if (code.arguments) {
+      args = code.arguments.map((arg) => executeSingle(arg, meta));
+    }
+    let instance;
+    if (typeof type === "function") {
+      instance = new type(...args);
+    } else {
+      instance = __spreadValues({}, type);
+    }
+    for (let key in instance) {
+      let prop = instance[key];
+      if (typeof prop === "function") {
+        instance[key] = (...args2) => {
+          meta.creature.runtime.stackTop.putUnit("this", instance);
+          return prop.call(instance, ...args2);
+        };
+      }
+    }
+    if (typeof type !== "function") {
+      instance.constructor(...args);
+    }
+    return instance;
+  },
   ImportDeclaration: (code, meta) => {
     let scriptPath = code.source.value;
     code.specifiers.forEach((c) => {
@@ -1198,7 +1238,8 @@ var codeCallbacks = {
     return executeSingle(code.test, meta) ? executeSingle(code.consequent, meta) : executeSingle(code.alternate, meta);
   },
   ThisExpression: (code, meta) => {
-    return meta.creature.thisObj;
+    var _a;
+    return (_a = findLayer(meta, "this")) == null ? void 0 : _a.findUnit("this");
   },
   JSXExpressionContainer: (code, meta) => {
     return executeSingle(code.expression, meta);
@@ -1236,6 +1277,7 @@ var codeCallbacks = {
       c.thisObj.parentJsxKey = meta.parentJsxKey;
     let newMetaBranch = utils_default.generator.nestedContext(c, __spreadProps(__spreadValues({}, meta), { parentJsxKey: key }));
     meta.creature.module.applet.cache.elements[key] = c;
+    newMetaBranch.creature.runtime.stackTop.putUnit("this", c == null ? void 0 : c.thisObj);
     if (isNew)
       c.getBaseMethod("constructor")(newMetaBranch);
     if (meta.creature.module.applet.firstMount) {
@@ -1268,7 +1310,9 @@ var codeCallbacks = {
     meta.creature.runtime.stackTop.putUnit(code.id.name, generateCallbackFunction(code, newMetaBranch));
   },
   MethodDefinition: (code, meta) => {
-    meta.creature.runtime.stackTop.putUnit(code.key.name, executeSingle(code.value, meta));
+    let method = executeSingle(code.value, meta);
+    meta.creature.runtime.stackTop.putUnit(code.key.name, method);
+    return method;
   },
   VariableDeclaration: (code, meta) => {
     if (code.kind === "let") {
@@ -1462,13 +1506,17 @@ var codeCallbacks = {
     let prop = void 0;
     if (code.property === void 0) {
       let r = executeSingle(code.callee, meta);
-      return r(...code.arguments.map((c) => executeSingle(c, meta)));
+      if (r.object) {
+        return r.object[r.prop].call(r.object, ...code.arguments.map((c) => executeSingle(c, meta)));
+      } else {
+        return r(...code.arguments.map((c) => executeSingle(c, meta)));
+      }
     } else {
       if (code.callee.property.type === "Identifier") {
         prop = code.callee.property.name;
       }
       let r = executeSingle(code.callee.object, meta);
-      return r[prop](...code.arguments.map((c) => executeSingle(c, meta)));
+      return r[prop](r, ...code.arguments.map((c) => executeSingle(c, meta)));
     }
   },
   MemberExpression: (code, meta) => {
@@ -1511,6 +1559,17 @@ var codeCallbacks = {
               }
             }
           };
+        } else {
+          if (meta.returnIdParent) {
+            return { parent: r, id: prop };
+          } else {
+            return r[prop];
+          }
+        }
+      } else if (typeof r === "object" || typeof r === "string") {
+        let p = r[prop];
+        if (typeof p === "function") {
+          return { object: r, prop };
         } else {
           if (meta.returnIdParent) {
             return { parent: r, id: prop };
@@ -1891,6 +1950,7 @@ var Applet = class {
   }
   run(genesis, update) {
     return new Promise((resolve) => {
+      var _a;
       this.update = update;
       this.firstMount = false;
       this.cache.elements = {};
@@ -1898,6 +1958,7 @@ var Applet = class {
       let genesisMod = this._modules[genesis];
       this._genesisCreature = genesisMod.instantiate();
       let genesisMetaContext = utils_default.generator.nestedContext(this._genesisCreature);
+      this._genesisCreature._runtime.stack[0].putUnit("this", (_a = this._genesisCreature) == null ? void 0 : _a.thisObj);
       this.cache.mounts.push(() => this._genesisCreature.getBaseMethod("onMount")(genesisMetaContext));
       this._genesisCreature.getBaseMethod("constructor")(genesisMetaContext);
       let view = this._genesisCreature.getBaseMethod("render")(genesisMetaContext);
@@ -2167,6 +2228,7 @@ var Native = class extends INative_default {
     this.setTimeout = (callback, timeout) => {
       this.timeouts[setTimeout(callback, timeout) + ""] = true;
     };
+    this.date = Date;
     this.module = module2;
     this.controls = controls;
   }
@@ -2176,45 +2238,17 @@ var native_default = Native;
 // index.ts
 var applet = new Applet_default("frame");
 applet.fill(`
-class html {
-    constructor() {
-
+    class Person {
+        constructor(name, age) {
+            this.name = name
+            this.age = age
+        }
+        getInfo() {
+            return '[ ' + this.name + ' , ' + this.age + ' ]'
+        }
     }
-    onMount() {
-
-    }
-    render() {
-        return nativeElement('html', this.props, this.styles, this.children)
-    }
-}
-class body {
-    constructor() {
-
-    }
-    onMount() {
-
-    }
-    render() {
-        return nativeElement('body', this.props, this.styles, this.children)
-    }
-}
-class script {
-    constructor() {
-
-    }
-    onMount() {
-
-    }
-    render() {
-        return nativeElement('script', this.props, this.styles, this.children)
-    }
-}
-`);
-applet.fill(`
-    <script>
-        import hello from 'test'
-        console.log(hello)
-    <\/script>
+    let person = new Person('keyhan', 25)
+    console.log(person.getInfo())
 `);
 applet.setContextBuilder((mod) => new native_default(mod, controls_default));
 applet.runRaw((key, u) => {

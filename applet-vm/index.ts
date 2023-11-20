@@ -8,45 +8,17 @@ import Native from './native'
 
 let applet = new Applet('frame')
 applet.fill(`
-class html {
-    constructor() {
-
+    class Person {
+        constructor(name, age) {
+            this.name = name
+            this.age = age
+        }
+        getInfo() {
+            return '[ ' + this.name + ' , ' + this.age + ' ]'
+        }
     }
-    onMount() {
-
-    }
-    render() {
-        return nativeElement('html', this.props, this.styles, this.children)
-    }
-}
-class body {
-    constructor() {
-
-    }
-    onMount() {
-
-    }
-    render() {
-        return nativeElement('body', this.props, this.styles, this.children)
-    }
-}
-class script {
-    constructor() {
-
-    }
-    onMount() {
-
-    }
-    render() {
-        return nativeElement('script', this.props, this.styles, this.children)
-    }
-}
-`)
-applet.fill(`
-    <script>
-        import hello from 'test'
-        console.log(hello)
-    </script>
+    let person = new Person('keyhan', 25)
+    console.log(person.getInfo())
 `)
 applet.setContextBuilder((mod: Module) => new Native(mod, Controls))
 applet.runRaw((key: string, u: any) => { }).then((runnable: Runnable) => {

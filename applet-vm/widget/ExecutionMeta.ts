@@ -9,6 +9,7 @@ class ExecutionMeta {
     isAnotherCreature?: boolean
     isParentScript?: boolean
     parentJsxKey: string
+    nonCreatureClassThisObj: boolean
 
     constructor(metaDict: any) {
         this.creature = metaDict.creature
@@ -18,6 +19,7 @@ class ExecutionMeta {
         this.isAnotherCreature = metaDict.isAnotherCreature
         this.isParentScript = metaDict.isParentScript
         this.parentJsxKey = metaDict.parentJsxKey
+        this.nonCreatureClassThisObj = metaDict.nonCreatureClassThisObj
         if (this.declaration && !this.declarationType) {
             // TODO: throw invalid execution metadata exception
         }

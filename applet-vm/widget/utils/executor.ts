@@ -1,7 +1,5 @@
 
-import BaseElement from "../elements/BaseElement"
 import Creature from "../Creature"
-import Controls from '../controls/index'
 import ExecutionMeta from "../ExecutionMeta"
 import Utils from '.'
 
@@ -55,6 +53,47 @@ const resolveResource = (path: string): any => {
 }
 
 let codeCallbacks = {
+    ClassDeclaration: (code: any, meta: ExecutionMeta) => {
+        let klassId = code.id.name
+        let klassMethods = {}
+        code.body.body.forEach(item => {
+            if (item.type === 'MethodDefinition') {
+                klassMethods[item.key.name] = executeSingle(item, meta)
+            }
+        });
+        meta.creature.runtime.stackTop.putUnit(klassId, klassMethods)
+    },
+    PropertyDefinition: (code: any, meta: ExecutionMeta) => {
+        return { key: code.key.name, value: executeSingle(code.value, meta) }
+    },
+    NewExpression: (code: any, meta: ExecutionMeta) => {
+        let type = executeSingle(code.callee, meta)
+        let args = []
+        if (code.arguments) {
+            args = code.arguments.map(arg => executeSingle(arg, meta))
+        }
+        let instance: any;
+        if (typeof type === 'function') {
+            instance = new type(...args)
+        } else {
+            instance = { ...type }
+        }
+
+        for (let key in instance) {
+            let prop = instance[key]
+            if (typeof prop === 'function') {
+                instance[key] = (...args) => {
+                    meta.creature.runtime.stackTop.putUnit('this', instance)
+                    return prop.call(instance, ...args)
+                }
+            }
+        }
+
+        if (typeof type !== 'function') {
+            instance.constructor(...args)
+        }
+        return instance
+    },
     ImportDeclaration: (code: any, meta: ExecutionMeta) => {
         let scriptPath = code.source.value
         code.specifiers.forEach((c: any) => {
@@ -90,7 +129,7 @@ let codeCallbacks = {
         return executeSingle(code.test, meta) ? executeSingle(code.consequent, meta) : executeSingle(code.alternate, meta)
     },
     ThisExpression: (code: any, meta: ExecutionMeta) => {
-        return meta.creature.thisObj
+        return findLayer(meta, 'this')?.findUnit('this')
     },
     JSXExpressionContainer: (code: any, meta: ExecutionMeta) => {
         return executeSingle(code.expression, meta)
@@ -131,6 +170,7 @@ let codeCallbacks = {
 
         let newMetaBranch = Utils.generator.nestedContext(c, { ...meta, parentJsxKey: key })
         meta.creature.module.applet.cache.elements[key] = c
+        newMetaBranch.creature.runtime.stackTop.putUnit('this', c?.thisObj)
         if (isNew) c.getBaseMethod('constructor')(newMetaBranch)
         if (meta.creature.module.applet.firstMount) {
             c.getBaseMethod('onMount')(newMetaBranch)
@@ -162,7 +202,9 @@ let codeCallbacks = {
         meta.creature.runtime.stackTop.putUnit(code.id.name, generateCallbackFunction(code, newMetaBranch))
     },
     MethodDefinition: (code: any, meta: ExecutionMeta) => {
-        meta.creature.runtime.stackTop.putUnit(code.key.name, executeSingle(code.value, meta))
+        let method = executeSingle(code.value, meta)
+        meta.creature.runtime.stackTop.putUnit(code.key.name, method)
+        return method
     },
     VariableDeclaration: (code: any, meta: ExecutionMeta) => {
         if (code.kind === 'let') {
@@ -341,13 +383,17 @@ let codeCallbacks = {
         let prop = undefined
         if (code.property === undefined) {
             let r = executeSingle(code.callee, meta);
-            return r(...code.arguments.map((c: any) => executeSingle(c, meta)));
+            if (r.object) {
+                return r.object[r.prop].call(r.object, ...code.arguments.map((c: any) => executeSingle(c, meta)))
+            } else {
+                return r(...code.arguments.map((c: any) => executeSingle(c, meta)));
+            }
         } else {
             if (code.callee.property.type === 'Identifier') {
                 prop = code.callee.property.name
             }
             let r = executeSingle(code.callee.object, meta);
-            return r[prop](...code.arguments.map((c: any) => executeSingle(c, meta)))
+            return r[prop](r, ...code.arguments.map((c: any) => executeSingle(c, meta)))
         }
     },
     MemberExpression: (code: any, meta: ExecutionMeta) => {
@@ -391,6 +437,17 @@ let codeCallbacks = {
                             }
                         }
                     }
+                } else {
+                    if (meta.returnIdParent) {
+                        return { parent: r, id: prop }
+                    } else {
+                        return r[prop];
+                    }
+                }
+            } else if (typeof r === 'object' || typeof r === 'string') {
+                let p = r[prop];
+                if (typeof p === 'function') {
+                    return { object: r, prop }
                 } else {
                     if (meta.returnIdParent) {
                         return { parent: r, id: prop }
