@@ -70,7 +70,7 @@ let extractModules = (middleCode: any, applet: Applet) => {
     return middleCode.body
         .filter((declaration: any) => declaration.type === 'ClassDeclaration')
         .map((declaration: any) => {
-            return new Module(declaration.id.name, applet, declaration)
+            return { module: new Module(declaration.id.name, applet, declaration), code: declaration }
         })
 }
 

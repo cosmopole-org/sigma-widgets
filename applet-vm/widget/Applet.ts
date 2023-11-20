@@ -34,12 +34,14 @@ class Applet {
     public removeModule(key: string) { delete this._modules[key] }
 
     middleCode: any
+    filledClasses: Array<any>
 
     public fill(jsxCode: any) {
         this.middleCode = Utils.compiler.parse(jsxCode)
         console.log(Utils.json.prettify(this.middleCode))
-        let r = Utils.compiler.extractModules(this.middleCode, this)
-        r.forEach((module: Module) => this.putModule(module))
+        let extracted = Utils.compiler.extractModules(this.middleCode, this)
+        extracted.map((ex: any) => ex.module).forEach((module: Module) => this.putModule(module))
+        this.filledClasses = extracted.map((ex: any) => ex.code)
     }
 
     cache = {
@@ -77,6 +79,7 @@ class Applet {
 
     update: (key: string, u: any) => void
     firstMount: boolean = false;
+    klasses: { [id: string]: any } = {}
 
     public runRaw(update: (key: string, u: any) => void) {
         return new Promise(resolve => {
@@ -85,11 +88,20 @@ class Applet {
             this.cache.elements = {}
             this.cache.mounts = []
             let dummyClassMiddleCode = Utils.compiler.parse('class Main {}')
-            let r = Utils.compiler.extractModules(dummyClassMiddleCode, this)
+            let extracted = Utils.compiler.extractModules(dummyClassMiddleCode, this)
+            let r = extracted.map((ex: { module: Module, code: any }) => ex.module)
             let genesisMod = r[0]
             this.putModule(genesisMod)
             this._genesisCreature = genesisMod.instantiate()
             let genesisMetaContext = Utils.generator.nestedContext(this._genesisCreature)
+            this.filledClasses.map((code: any) => (
+                {
+                    klass: Utils.executor.executeSingle(code, genesisMetaContext),
+                    id: code.id.name
+                }
+            )).forEach((klassWrapper: { klass: any, id: string }) => {
+                this.klasses[klassWrapper.id] = klassWrapper.klass
+            });
             let view = Utils.executor.executeBlock(this.middleCode.body, genesisMetaContext)
             resolve(
                 new Runnable(
@@ -101,6 +113,10 @@ class Applet {
                 )
             )
         })
+    }
+
+    public buildContext(mod: Module) {
+        return { ...this._nativeBuilder(mod), ...this.klasses }
     }
 
     public setContextBuilder(ctxBuilder: (mod: Module) => INative) {
@@ -117,6 +133,14 @@ class Applet {
             this._genesisCreature = genesisMod.instantiate()
             let genesisMetaContext = Utils.generator.nestedContext(this._genesisCreature)
             this._genesisCreature._runtime.stack[0].putUnit('this', this._genesisCreature?.thisObj)
+            this.filledClasses.map((code: any) => (
+                {
+                    klass: Utils.executor.executeSingle(code, genesisMetaContext),
+                    id: code.id.name
+                }
+            )).forEach((klassWrapper: { klass: any, id: string }) => {
+                this.klasses[klassWrapper.id] = klassWrapper.klass
+            });
             this.cache.mounts.push(() => this._genesisCreature.getBaseMethod('onMount')(genesisMetaContext))
             this._genesisCreature.getBaseMethod('constructor')(genesisMetaContext)
             let view = this._genesisCreature.getBaseMethod('render')(genesisMetaContext)

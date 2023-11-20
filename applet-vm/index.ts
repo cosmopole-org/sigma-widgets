@@ -17,8 +17,17 @@ applet.fill(`
             return '[ ' + this.name + ' , ' + this.age + ' ]'
         }
     }
-    let person = new Person('keyhan', 25)
-    console.log(person.getInfo())
+    class Group {
+        constructor() {
+            this.person = new Person('keyhan', 25)
+
+        }
+        print() {
+            console.log(this.person.getInfo())
+        }
+    }
+    let group = new Group()
+    group.print()
 `)
 applet.setContextBuilder((mod: Module) => new Native(mod, Controls))
 applet.runRaw((key: string, u: any) => { }).then((runnable: Runnable) => {

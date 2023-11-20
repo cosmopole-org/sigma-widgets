@@ -52,22 +52,25 @@ const resolveResource = (path: string): any => {
     return { default: 'hello world !' }
 }
 
+let instanceStore: { [id: string]: any } = {}
+
 let codeCallbacks = {
     ClassDeclaration: (code: any, meta: ExecutionMeta) => {
         let klassId = code.id.name
         let klassMethods = {}
         code.body.body.forEach(item => {
             if (item.type === 'MethodDefinition') {
-                klassMethods[item.key.name] = executeSingle(item, meta)
+                klassMethods[item.key.name] = item
             }
         });
         meta.creature.runtime.stackTop.putUnit(klassId, klassMethods)
+        return klassMethods
     },
     PropertyDefinition: (code: any, meta: ExecutionMeta) => {
         return { key: code.key.name, value: executeSingle(code.value, meta) }
     },
     NewExpression: (code: any, meta: ExecutionMeta) => {
-        let type = executeSingle(code.callee, meta)
+        let type = meta.creature.module.applet.klasses[code.callee.name]
         let args = []
         if (code.arguments) {
             args = code.arguments.map(arg => executeSingle(arg, meta))
@@ -81,10 +84,20 @@ let codeCallbacks = {
 
         for (let key in instance) {
             let prop = instance[key]
-            if (typeof prop === 'function') {
+            if (prop.type === 'MethodDefinition') {
+                let funcAst = instance[key]
                 instance[key] = (...args) => {
+                    meta.creature.runtime.pushOnStack()
                     meta.creature.runtime.stackTop.putUnit('this', instance)
-                    return prop.call(instance, ...args)
+                    let func = executeSingle(funcAst, meta)
+                    let result = undefined
+                    if (key === 'constructor') {
+                        result = func(...args)
+                    } else {
+                        result = func(...args)
+                    }
+                    meta.creature.runtime.popFromStack()
+                    return result
                 }
             }
         }

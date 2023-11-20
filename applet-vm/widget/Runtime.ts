@@ -46,7 +46,7 @@ class Runtime {
     constructor(module: Module, creature?: Creature, reusableTools?: any) {
         this._module = module
         this._creature = creature
-        this._native = reusableTools?.native ? reusableTools.native : this._module.applet._nativeBuilder(this._module)
+        this._native = reusableTools?.native ? reusableTools.native : this._module.applet.buildContext(this._module)
         if (reusableTools?.stack) {
             this.stack = reusableTools.stack
         } else {
