@@ -161,7 +161,7 @@ var UiBuilder = class {
     return element;
   }
   build(element, parentKey) {
-    var _a, _b, _c, _d, _e, _f;
+    var _a, _b, _c, _d, _e, _f, _g;
     if (element === void 0)
       return void 0;
     let result = void 0;
@@ -202,6 +202,25 @@ var UiBuilder = class {
           });
           break;
         }
+        case "image": {
+          result = this.createElement(
+            "image",
+            "img",
+            {
+              cosmoId: element._key,
+              src: (_b = element._props.src) == null ? void 0 : _b._value
+            },
+            element._styles,
+            element
+          );
+          element._children.forEach((c) => {
+            let childEl = this.build(c);
+            if (childEl !== void 0) {
+              result == null ? void 0 : result.appendChild(childEl);
+            }
+          });
+          break;
+        }
         case "card": {
           result = this.createElement(
             "card",
@@ -222,7 +241,7 @@ var UiBuilder = class {
         }
         case "button": {
           let elementTag;
-          if (((_b = element._props.variant) == null ? void 0 : _b._value) === "outlined") {
+          if (((_c = element._props.variant) == null ? void 0 : _c._value) === "outlined") {
             elementTag = "md-outlined-button";
           } else {
             elementTag = "md-filled-button";
@@ -232,8 +251,8 @@ var UiBuilder = class {
             elementTag,
             {
               cosmoId: element._key,
-              textContent: (_c = element._props.caption) == null ? void 0 : _c._value,
-              onclick: (_d = element._props.onClick) == null ? void 0 : _d._value
+              textContent: (_d = element._props.caption) == null ? void 0 : _d._value,
+              onclick: (_e = element._props.onClick) == null ? void 0 : _e._value
             },
             element._styles,
             element
@@ -246,7 +265,7 @@ var UiBuilder = class {
             "md-tabs",
             {
               cosmoId: element._key,
-              onchange: (_e = element._props.onChange) == null ? void 0 : _e._value
+              onchange: (_f = element._props.onChange) == null ? void 0 : _f._value
             },
             element._styles,
             element
@@ -280,7 +299,7 @@ var UiBuilder = class {
       }
     }
     if (parentKey !== void 0) {
-      let parent = (_f = this.bindings[parentKey]) == null ? void 0 : _f.rendered;
+      let parent = (_g = this.bindings[parentKey]) == null ? void 0 : _g.rendered;
       if (parent !== void 0 && result !== void 0) {
         parent.appendChild(result);
       }
@@ -332,6 +351,15 @@ var UiBuilder = class {
           switch (propKey) {
             case "text": {
               rendered.textContent = propValue;
+              break;
+            }
+          }
+          break;
+        }
+        case "image": {
+          switch (propKey) {
+            case "src": {
+              rendered.src = propValue;
               break;
             }
           }

@@ -46,6 +46,7 @@ class Applet {
 
     cache = {
         elements: {},
+        contexts: {},
         mounts: []
     }
 
@@ -55,10 +56,12 @@ class Applet {
         let oldVersion = this.oldVersions[creature._key]
         this.oldVersions[creature._key] = newVersion
         let updates = Utils.json.diff(oldVersion, newVersion)
+        let allDeletedKeys = {}
         updates.forEach((u: any) => {
             if (u.__action__ === 'element_deleted') {
                 let keys = Object.keys(this.cache.elements).filter(k => {
                     if (k.startsWith(u.__key__)) {
+                        allDeletedKeys[k] = this.cache.elements[k]
                         delete this.cache.elements[k]
                         return true
                     } else {
@@ -69,9 +72,17 @@ class Applet {
                     let temp = keys[keys.length - 1].split('-')
                     if (temp.length > 1) {
                         let temp2 = temp.slice(0, temp.length - 1).join('-')
+                        allDeletedKeys[temp2] = this.cache.elements[temp2]
                         delete this.cache.elements[temp2]
                     }
                 }
+            }
+        })
+        Object.keys(allDeletedKeys).forEach((k: string) => {
+            let c = this.cache.elements[k]
+            if (c?.module) {
+                c.getBaseMethod('onUnmount')(this.cache.contexts[k])
+                delete this.cache.contexts[k]
             }
         })
         this.update(oldVersion._key, updates)

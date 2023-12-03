@@ -1257,6 +1257,7 @@ var codeCallbacks = {
       c.thisObj.parentJsxKey = meta.parentJsxKey;
     let newMetaBranch = utils_default.generator.nestedContext(c, __spreadProps(__spreadValues({}, meta), { parentJsxKey: key }));
     meta.creature.module.applet.cache.elements[key] = c;
+    meta.creature.module.applet.cache.contexts[key] = newMetaBranch;
     newMetaBranch.creature.runtime.stackTop.putUnit("this", c == null ? void 0 : c.thisObj);
     if (isNew)
       c.getBaseMethod("constructor")(newMetaBranch);
@@ -1850,6 +1851,7 @@ var Applet = class {
   constructor(key, modules) {
     this.cache = {
       elements: {},
+      contexts: {},
       mounts: []
     };
     this.oldVersions = {};
@@ -1882,10 +1884,12 @@ var Applet = class {
     let oldVersion = this.oldVersions[creature._key];
     this.oldVersions[creature._key] = newVersion;
     let updates2 = utils_default.json.diff(oldVersion, newVersion);
+    let allDeletedKeys = {};
     updates2.forEach((u) => {
       if (u.__action__ === "element_deleted") {
         let keys2 = Object.keys(this.cache.elements).filter((k) => {
           if (k.startsWith(u.__key__)) {
+            allDeletedKeys[k] = this.cache.elements[k];
             delete this.cache.elements[k];
             return true;
           } else {
@@ -1896,9 +1900,17 @@ var Applet = class {
           let temp = keys2[keys2.length - 1].split("-");
           if (temp.length > 1) {
             let temp2 = temp.slice(0, temp.length - 1).join("-");
+            allDeletedKeys[temp2] = this.cache.elements[temp2];
             delete this.cache.elements[temp2];
           }
         }
+      }
+    });
+    Object.keys(allDeletedKeys).forEach((k) => {
+      let c = this.cache.elements[k];
+      if (c == null ? void 0 : c.module) {
+        c.getBaseMethod("onUnmount")(this.cache.contexts[k]);
+        delete this.cache.contexts[k];
       }
     });
     this.update(oldVersion._key, updates2);
@@ -2166,6 +2178,20 @@ _ScriptControl.defaultStyles = {};
 var ScriptControl = _ScriptControl;
 var ScriptControl_default = ScriptControl;
 
+// widget/controls/ImageControl.ts
+var _ImageControl = class _ImageControl extends BaseControl_default {
+  static instantiate(overridenProps, overridenStyles, children) {
+    return utils_default.generator.prepareElement(_ImageControl.TYPE, this.defaultProps, overridenProps, this.defaultStyles, overridenStyles, children);
+  }
+};
+_ImageControl.TYPE = "image";
+_ImageControl.defaultProps = {
+  src: new StringProp_default("")
+};
+_ImageControl.defaultStyles = {};
+var ImageControl = _ImageControl;
+var ImageControl_default = ImageControl;
+
 // widget/controls/index.ts
 var controls_default = {
   [TextControl_default.TYPE]: TextControl_default,
@@ -2176,7 +2202,8 @@ var controls_default = {
   [PrimaryTabControl_default.TYPE]: PrimaryTabControl_default,
   [HtmlControl_default.TYPE]: HtmlControl_default,
   [BodyControl_default.TYPE]: BodyControl_default,
-  [ScriptControl_default.TYPE]: ScriptControl_default
+  [ScriptControl_default.TYPE]: ScriptControl_default,
+  [ImageControl_default.TYPE]: ImageControl_default
 };
 
 // widget/INative.ts

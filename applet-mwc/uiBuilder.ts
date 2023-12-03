@@ -112,6 +112,25 @@ class UiBuilder {
                     });
                     break
                 }
+                case 'image': {
+                    result = this.createElement(
+                        'image',
+                        'img',
+                        {
+                            cosmoId: element._key,
+                            src: element._props.src?._value
+                        },
+                        element._styles,
+                        element
+                    )
+                    element._children.forEach((c: any) => {
+                        let childEl = this.build(c)
+                        if (childEl !== undefined) {
+                            result?.appendChild(childEl)
+                        }
+                    });
+                    break
+                }
                 case 'card': {
                     result = this.createElement(
                         'card',
@@ -247,6 +266,15 @@ class UiBuilder {
                     switch (propKey) {
                         case 'text': {
                             rendered.textContent = propValue
+                            break
+                        }
+                    }
+                    break
+                }
+                case 'image': {
+                    switch (propKey) {
+                        case 'src': {
+                            rendered.src = propValue
                             break
                         }
                     }

@@ -134,6 +134,7 @@ declare class Applet {
     fill(jsxCode: any): void;
     cache: {
         elements: {};
+        contexts: {};
         mounts: any[];
     };
     oldVersions: {};
@@ -397,6 +398,19 @@ declare class ScriptControl extends BaseControl {
     }, children: Array<BaseElement>): BaseElement;
 }
 
+declare class ImageControl extends BaseControl {
+    static readonly TYPE = "image";
+    static defaultProps: {
+        src: StringProp;
+    };
+    static defaultStyles: {};
+    static instantiate(overridenProps: {
+        [id: string]: any;
+    }, overridenStyles: {
+        [id: string]: any;
+    }, children: Array<BaseElement>): BaseElement;
+}
+
 declare const _default: {
     text: typeof TextControl;
     button: typeof ButtonControl;
@@ -407,6 +421,7 @@ declare const _default: {
     html: typeof HtmlControl;
     body: typeof BodyControl;
     script: typeof ScriptControl;
+    image: typeof ImageControl;
 };
 
 export { Applet, _default as Controls, INative, Module, Runnable, _default$1 as Utils };

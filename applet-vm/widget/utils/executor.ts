@@ -186,6 +186,7 @@ let codeCallbacks = {
 
         let newMetaBranch = Utils.generator.nestedContext(c, { ...meta, parentJsxKey: key })
         meta.creature.module.applet.cache.elements[key] = c
+        meta.creature.module.applet.cache.contexts[key] = newMetaBranch
         newMetaBranch.creature.runtime.stackTop.putUnit('this', c?.thisObj)
         if (isNew) c.getBaseMethod('constructor')(newMetaBranch)
         if (meta.creature.module.applet.firstMount) {
